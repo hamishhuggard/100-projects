@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charet="UTF-8">
+    <meta name="viewport" content="width=device-width, init-scale=0.1">
+    <title>Contact Form</title>
+</head>
+<body>
+    <h1>Contact Us</h1>
+    <form action="sendmail.php" method="POST">
+        <label for="name">Name:</label><br>
+        <input name="name" type="text" id="name" required><br>
+
+        <label for="email">Email:</label><br>
+        <input name="email" type="text" id="email" required><br>
+
+        <label for="message">Message:</label><br>
+        <textarea name="message" id="message" rows="4" columns="20" required></textarea><br>
+
+        <input type="submit" value="Send">
+    </form>
+</body>
+</html>
