@@ -1,0 +1,24 @@
+running-in-circles
+gives-up
+hallucination
+reasoning-bad:
+    misinterprets observation
+    bad-mental-math
+early-return
+refusal-ability
+bad-code
+assistant-mode
+bad-plan
+failed tool use
+invalid format
+bad tool choice
+bad scaffolding
+
+tag the most important failure step with "bad decision"
+
+optionally also add a "failure to recover" tag with a "running in circles" "early return" "gives up"
+
+there should be at least one "important decision" tag
+
+also use the rm-failure tag if the RM could've save dthe run
+or GM failure if it couldn't
