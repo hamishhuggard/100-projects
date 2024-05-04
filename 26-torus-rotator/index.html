@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>torus roattor</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+
+    const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const torus = new THREE.Mesh(geometry, material);
+    scene.add(torus)
+
+    camera.position.z = 50;
+
+    function animate() {
+        console.log(animate);
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    document.addEventListener('keydown', (event) => {
+    console.log(event.key);
+        switch (event.key) {
+            case 'ArrowUp':
+                torus.rotation.x -= 0.1;
+                break;
+            case 'ArrowDown':
+                torus.rotation.x += 0.1;
+                break;
+            case 'ArrowRight':
+                torus.rotation.y += 0.1;
+                break;
+            case 'ArrowLeft':
+                torus.rotation.y -= 0.1;
+                break;
+        }
+    });
+
+
+});
+    </script>
+</body>
+</html>
