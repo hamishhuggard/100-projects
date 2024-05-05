@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>THREE.js gallery</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script> 
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(74, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    window.addEventListener("resize", function() {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+
+    const geometries = [
+        new THREE.BoxGeometry(1,1,1),
+        new THREE.SphereGeometry(0.5, 32, 32),
+        new THREE.ConeGeometry(0.5, 1, 32),
+        new THREE.TorusGeometry(0.5, 0.2, 16, 100),
+        new THREE.CylinderGeometry(0.5, 0.5, 1, 32),
+    ];
+
+    const materials = [
+        new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false }),
+        new THREE.MeshLambertMaterial({ color: 0x00ff00 }),
+        new THREE.MeshPhongMaterial({ color: 0x00ff00, shininess: 100 }),
+        new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.5, roughness: 0.5 }),
+        new THREE.MeshNormalMaterial()
+    ];
+
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+
+    const meshGrid = [];
+    const gridSize = 5;
+    for (let i=0; i<gridSize; i++) {
+        for (let j=0; j<gridSize; i++) {
+            const geometry = geometries[i % geometries.length ];
+            const material = materials[i % materials.length ];
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            meshGrid.push(mesh);
+            console.log(mesh);
+        }
+    }
+    console.log(meshGrid);
+
+    camera.position.z = 10;
+
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+
+    const rotationSpeed = 0.05;
+
+    function animate() {
+        requestionAnimationFrame(animate);
+        meshGrid.forEach(mesh => {
+            mesh.rotation.x += (targetRotationX - mesh.rotation.x) * rotationSpeed;
+            mesh.rotation.y += (targetRotationY - mesh.rotation.y) * rotationSpeed;
+        })
+        renderer.render(scene, camera);
+    }
+
+    const rotationIncrement = Math.PI / 2;
+
+    document.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case 'ArrowUp':
+                targetRotationX += rotationIncrement;
+                break;
+            case 'ArrowDown':
+                targetRotationX -= rotationIncrement;
+                break;
+            case 'ArrowLeft':
+                targetRotationY += rotationIncrement;
+                break;
+            case 'ArrowRight':
+                targetRotationY -= rotationIncrement;
+                break;
+        }
+        
+    });
+    console.log('done');
+
+});
+</script>
+</body>
+</html>
