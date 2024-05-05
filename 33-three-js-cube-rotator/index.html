@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Cube rotator</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth,  window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    })
+
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    camera.position.z = 3;
+
+    const rotationSpeed = 0.05;
+    let targetRotationX = 0
+    let targetRotationY = 0
+
+    function animate() {
+        requestAnimationFrame(animate);
+        cube.rotation.x += (targetRotationX - cube.rotation.x) * rotationSpeed;
+        cube.rotation.y += (targetRotationY - cube.rotation.y) * rotationSpeed;
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    const rotationIncrement = Math.PI / 2;
+
+    document.addEventListener('keydown', function() {
+        switch (event.key) {
+            case 'ArrowUp':
+                targetRotationX += rotationIncrement;
+                break;
+            case 'ArrowDown':
+                targetRotationX -= rotationIncrement;
+                break;
+            case 'ArrowLeft':
+                targetRotationY -= rotationIncrement;
+                break;
+            case 'ArrowRight':
+                targetRotationY += rotationIncrement;
+                break;
+        }
+    });
+});
+</script>
+</body>
+</html>
