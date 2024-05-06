@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>3D walker</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    window.addEventListener("resize", () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.ratio = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+
+    const gridHelper = new THREE.GridHelper(100, 100);
+    scene.add(gridHelper);
+
+    camera.position.set(0, 10, 10);
+    camera.lookAt(0, 0, 0);
+
+    let directionAngle = 0;
+    const movementSpeed = 0.5;
+    const rotationSpeed = Math.PI / 180 * 5;
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    document.addEventListener('keydown', (event) => {
+        switch (event.key) {
+            case "ArrowLeft":
+                directionAngle += rotationSpeed;
+                break;
+            case "ArrowRight":
+                directionAngle -= rotationSpeed;
+                break;
+            case "ArrowUp":
+                camera.position.x += movementSpeed * Math.sin(directionAngle);
+                camera.position.z += movementSpeed * Math.cos(directionAngle);
+                break;
+            case "ArrowDown":
+                camera.position.x -= movementSpeed * Math.sin(directionAngle);
+                camera.position.z -= movementSpeed * Math.cos(directionAngle);
+                break;
+                
+        }
+        camera.lookAt(
+            camera.position.x + Math.sin(directionAngle),
+            camera.position.y,
+            camera.position.z + Math.cos(directionAngle)
+        );
+    });
+});
+</script>
+</body>
+</html>

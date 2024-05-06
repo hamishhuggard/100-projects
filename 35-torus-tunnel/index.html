@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UFT-8">
+    <title>Torus Tunnel</title>
+    <style>
+        body {
+            margin: 0;
+            height: 1000vh;
+            overflow-x: hidden;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: block;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+</head>
+<body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.append(renderer.domElement);
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+
+    const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+    const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.7, roughtness: 0.3 });
+
+    const torusCount = 30;
+    const torusSeparation = 30
+    for (let i=0; i<torusCount; i++) {
+        const torus = new THREE.Mesh(geometry, material);
+        torus.position.set(0, 0, -torusSeparation*i);
+        scene.add(torus);
+    }
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+    pointLight.position.set(15, 15, 15);
+    scene.add(pointLight);
+
+    const pointLight2 = new THREE.PointLight(0xffffff, 1, 1000);
+    pointLight2.position.set(0, 0, - 1.0 * torusCount * torusSeparation);
+    scene.add(pointLight2);
+
+    const cameraInitZ = 100;
+    camera.position.set(0, 0, cameraInitZ);
+
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener("scroll", () => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollFraction = window.scrollY / maxScroll;
+        const torusTravelDistance = 10 + torusSeparation*torusCount;
+        camera.position.z = cameraInitZ - scrollFraction * (torusTravelDistance+3+cameraInitZ);
+        //camera.lookAt(0, 0, 0);
+    });
+});
+</script>
+</body>
+</html>
