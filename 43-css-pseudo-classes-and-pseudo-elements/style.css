@@ -1,0 +1,30 @@
+/* pseudclasses */
+a:active { color: red; }
+input:checked { color: red; }
+input:disabled { opacity: 0.5 };
+div:empty { display: none; }
+p:first-child { font-weight: bold; }
+p:first-of-type { font-size: 20px; }
+input:focus { border: 2px; }
+a:hover { text-decoration: underline; }
+p:last-child { margin-bottom: 0; }
+p:last-of-type { margin-bottom: 20px; }
+li:nth-child(2) { color: red; }
+li:nth-last-child(2) { color: red; }
+p:nth-of-type(2) { color: red; }
+p:only-child { color: red; }
+p:only-of-type { color: red; }
+p:not(.special) { color: red; }
+a:link { color: red; }
+a:visited { color: red; }
+:root { font-family: Arial, sans-serif; }
+
+/* pseudo-elements */
+p::after { content: '...'; }
+p::before { content: 'Note '; font-weight: bold; }
+p::first-letter { font-size: 200%; }
+p::first-line { color: red; }
+p::selection { color: red; }
+input::placeholder { color: red; }
+li::marker { color: red; }
+::backdrop { background-color: rgba(0,0,0,0.5); }
