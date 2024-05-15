@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta encoding="UTF-8">
+    <title></title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+<script>
+const width = 400,
+    height = 400,
+    margin = { top: 30, bottom: 30, left: 30, right: 10 };
+
+const svg = d3.select('body')
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+const x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+
+const g = svg.append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+const data = [
+    {letter: 'a', freq: 0.2},
+    {letter: 'b', freq: 0.3},
+    {letter: 'c', freq: 0.1}
+];
+
+x.domain(data.map(d => d.letter));
+y.domain([0, d3.max(data, d => d.freq)]);
+
+g.selectAll('.bar')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr('class', 'bar')
+    .attr('x', d => x(d.letter))
+    .attr('y', height)
+    .attr('width', x.bandwidth())
+    .attr('height', 0)
+    .transition()
+    .duration(750)
+    .attr('y', d => y(d.freq))
+    .attr('height', d => height - y(d.freq));
+
+
+
+</script>
+</body>
+</html>
+

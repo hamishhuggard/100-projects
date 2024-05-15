@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta encoding="UTF-8">
+    <title>Scatter plot</title>
+    <script src="http://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+<script>
+const margin = {top: 40, left: 40, right: 40, bottom: 40};
+    /*
+    width = 500 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+    */
+    width = 500,
+    height = 500;
+const svg = d3.select('body')
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+const x = d3.scaleLinear()
+    .range([0, width]);
+
+const y = d3.scaleLinear()
+    .range([height, 0]);
+
+const g = svg.append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+const data = [
+    {x: 10, y: 20},
+    {x: 20, y: 14},
+    {x: 30, y: 20},
+    {x: 40, y: 21},
+    {x: 50, y: 15},
+    {x: 60, y: 22},
+    {x: 70, y: 9},
+    {x: 80, y: 6},
+    {x: 90, y: 23},
+    {x: 100, y: 7}
+];
+
+x.domain(d3.extent(data, d => d.x));
+y.domain(d3.extent(data, d => d.y));
+
+g.append('g')
+    .attr('transform', `translate(0,${height})`)
+    .call(d3.axisBottom(x));
+
+g.append('g')
+    .call(d3.axisLeft(y));
+
+g.selectAll('.dot')
+    .data(data)
+    .enter()
+    .append('circle')
+    .attr('class', 'dot')
+    .attr('cx', d => x(d.x))
+    .attr('cy', d => y(d.y))
+    .attr('r', 5)
+    .style('fill', '#4285F4');
+
+</script>
+</body>
+</html>
+
