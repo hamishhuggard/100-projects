@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta encoding="UTF-8">
+    <title>Animated line chart</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+<script>
+const svg = d3.select('body')
+    .append('svg')
+    .attr('width', 500)
+    .attr('height', 300)
+    .append('g')
+    .attr('transform', 'translate(50, 50)');
+
+const data = [{x: 0, y: 20}, {x: 1, y: 80}, {x: 2, y: 40}, {x: 3, y: 100}, {x: 4, y: 60}];
+
+const x = d3.scaleLinear().domain([0, 4]).range([0, 400]);
+const y = d3.scaleLinear().domain([0, 100]).range([200, 0]);
+
+const line = d3.line()
+    .x(d => x(d.x))
+    .y(d => y(d.y))
+    .curve(d3.curveMonotoneX);
+
+svg.append('path')
+    .datum(data)
+    .attr('class', 'line')
+    .attr('d', line)
+    .attr('fill', 'none')
+    .attr('stroke', 'steelblue')
+    .attr('stroke-width', 2);
+
+const totalLength = svg.select('.line').node().getTotalLength();
+
+svg.select('.line')
+    .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+    .attr('stroke-dashoffset', totalLength)
+    .transition()
+    .duration(2000)
+    .ease(d3.easeLinear)
+    .attr('stroke-dashoffset', 0);
+
+svg.append('g')
+    .attr('transform', 'translate(0,200)')
+    .call(d3.axisBottom(x));
+
+svg.append('g')
+    .call(d3.axisLeft(y));
+</script>
+</body>
+</html>
+

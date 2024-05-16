@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta encoding="UTF-8">
+    <title>Animated scatter plot</title>
+    <script src="http://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+<script>
+const margin = { top: 10, bottom: 30, left: 30, right: 10 },
+    width = 400,
+    height = 300;
+
+const svg = d3.select('body')
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`)
+
+const data = [
+    {x: 20, y: 40},
+    {x: 40, y: 10},
+    {x: 30, y: 30},
+    {x: 30, y: 35},
+    {x: 35, y: 12},
+    {x: 0, y: 60},
+    {x: 10, y: 10}
+];
+
+const x = d3.scaleLinear().range([0, width]).domain(d3.extent(data, d => d.x));
+const y = d3.scaleLinear().range([height, 0]).domain(d3.extent(data, d => d.y));
+
+svg.selectAll('.dot')
+    .data(data)
+    .enter()
+    .append('circle')
+    .attr('cx', d => x(d.x))
+    .attr('cy', d => y(d.y))
+    .attr('r', 0)
+    .transition()
+    .delay((d,i) => i*500)
+    .duration(500)
+    .attr('r', 10);
+</script>
+</body>
+</html>
+
