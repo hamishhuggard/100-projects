@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta encoding="UTF-8">
+    <title></title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+<script src="https://threejs.org/build/three.js"></script>
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const grid = new THREE.GridHelder(50, 50);
+scene.add(grid);
+
+window.addEventListener('resize', onWindowResize, false);
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
+
+function onWindowResize() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.setAspect(window.innerWidth / window.innerHeight);
+    camera.updateProjectionMatrix();
+    
+}
+
+function onDocumentScroll() {
+    const maxScroll = document.body.scrollHeight - document.innerHeight;
+    const scrollFraction = window.scrollY / maxScroll;
+    const linearZoom = Math.min(20, 1 + scrollFraction * 50);
+    camera.position.z = linearZoom;
+}
+
+document.body.onscroll = onDocumentScroll;
+</script>
+</body>
+</html>
+
