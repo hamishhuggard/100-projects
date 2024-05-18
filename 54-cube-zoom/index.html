@@ -5,12 +5,20 @@
     <title></title>
     <style>
         body { margin: 0; }
-        canvas { display: block; }
+        canvas { 
+            display: block; 
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
     </style>
 </head>
 <body>
-<script src="https://threejs.org/build/three.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 <script>
+document.body.style.height = `${window.innerHeight * 10}px`;
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -19,8 +27,47 @@ renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const grid = new THREE.GridHelder(50, 50);
-scene.add(grid);
+async function loadData() {
+    let data = await d3.csv('models.csv');
+    data = data.filter(row => row.System.startsWith('GPT'));
+    console.table(data);
+    console.log(Object.keys(data[0]));
+    data.forEach(d => {
+        console.log(d.System);
+        console.log(d.Parameters);
+    })
+}
+
+const cubes = [];
+
+x = 0;
+[
+    { size: 1e3, x: -0.1, name: 'perceptron', year: 1957},
+    //{ size: 8e3, x: -0.1, name: 'deep blue', year: 1997},
+    { size: 10.5e3, x: -0.1, name: 'LSTM', year: 1997},
+    { size: 11.9e6, x: -0.1, name: 'NPLM', year: 2003},
+    //{ size: 60e6, x: -0.1, name: 'word2vec', year: 2013},
+    { size: 60e6, x: -0.1, name: 'alexnet', year: 2012},
+    //{ size: 117e6, x: 0, name: 'gpt-1', year: 2018},
+    { size: 1.5e9, x: 1, name: 'gpt-2', year: 2019},
+    { size: 175e9, x: 1100, name: 'gpt-3', year: 2020},
+    { size: 1.76e12, x: 1100, name: 'gpt-4', year: 2023},
+    { size: 150e12, x: 1100, name: 'human neocortex', year: 2023}
+].forEach(d => {
+    const length = Math.cbrt(d.size) / 1000;
+    x += length * 1.0;
+    const geometry = new THREE.BoxGeometry(length, length, length);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.x = x;
+    x += length * 1.0;
+    cube.position.y = length/2;
+    cubes.push(cube)
+    scene.add(cube);
+});
+
+const grid = new THREE.GridHelper(100, 100);
+//scene.add(grid);
 
 window.addEventListener('resize', onWindowResize, false);
 
@@ -32,17 +79,20 @@ animate();
 
 function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.setAspect(window.innerWidth / window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     
 }
 
 function onDocumentScroll() {
-    const maxScroll = document.body.scrollHeight - document.innerHeight;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
     const scrollFraction = window.scrollY / maxScroll;
-    const linearZoom = Math.min(20, 1 + scrollFraction * 50);
+    const linearZoom = Math.exp(scrollFraction * 50 - 10);
     camera.position.z = linearZoom;
+    camera.position.x = linearZoom/2;
+    camera.position.y = linearZoom/2;
 }
+
 
 document.body.onscroll = onDocumentScroll;
 </script>
