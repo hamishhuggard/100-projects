@@ -32,15 +32,15 @@ const loader = new THREE.TextureLoader();
 const textures = [];
 [0,1,2,3,4].forEach(i => textures.push(loader.load(`./walker/f${i}.png`)));
 
-const geometry = new THREE.PlaneGeometry(5, 5); // dimensions of the plane
-const material = new THREE.MeshBasicMaterial({
+
+const spriteMaterial = new THREE.SpriteMaterial({
     map: textures[0],
-    side: THREE.DoubleSide,
     transparent: true
 });
-const plane = new THREE.Mesh(geometry, material);
-plane.position.y = 5;
-scene.add(plane);
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(5, 5, 1); // Set the sprite size
+sprite.position.y = 5;
+scene.add(sprite);
 
 // ground
 const planeGeometry = new THREE.PlaneGeometry(100, 100);
@@ -53,28 +53,28 @@ scene.add(groundPlane);
 textureCounter = 0;
 function swapTexture() {
     textureCounter = (textureCounter + 1) % textures.length;
-    plane.material.map = textures[textureCounter];
-    plane.material.needsUpdate = true;
+    sprite.material.map = textures[textureCounter];
+    sprite.material.needsUpdate = true;
 }
 setInterval(swapTexture, 100); 
 
 dx = 0.1;
 dz = -0.1;
 function moveGuy() {
-    plane.position.x += dx;
-    plane.position.z += dz;
-    if (plane.position.x > 20) {
+    sprite.position.x += dx;
+    sprite.position.z += dz;
+    if (sprite.position.x > 20) {
         dx = -0.1;
         /*
         textures.forEach(t => t.wrapS = THREE.MirroredRepeatWrapping);
         textures.forEach(t => t.repeat.x *= -1);
         */
     }
-    if (plane.position.x < -20) {
+    if (sprite.position.x < -20) {
         dx = 0.1;
     }
-    if (plane.position.z > 15) dz = -0.1;
-    if (plane.position.z < -15) dz = 0.1;
+    if (sprite.position.z > 15) dz = -0.1;
+    if (sprite.position.z < -15) dz = 0.1;
 }
 setInterval(moveGuy, 100)
 
@@ -86,7 +86,6 @@ const movementSpeed = 0.5;
 const rotationSpeed = Math.PI / 180 * 1;
 
 function animate() {
-    plane.lookAt(camera.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 }
