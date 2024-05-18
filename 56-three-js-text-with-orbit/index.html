@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { margin: 0; }
+        * { box-sizing: border-box; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<script>
+// Scene setup
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Font loader
+const loader = new THREE.FontLoader();
+loader.load('doodlefont.json', function(font) {
+    const geometry = new THREE.TextGeometry('Hello Three.js!', {
+        font: font,
+        size: 40,
+        height: 5,
+    });
+
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const textMesh = new THREE.Mesh(geometry, material);
+    scene.add(textMesh);
+});
+
+// Camera position
+camera.position.z = 500;
+
+// Animation loop
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+animate();
+</script>
+</body>
+</html>
