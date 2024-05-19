@@ -42,6 +42,19 @@ sprite.scale.set(5, 5, 1); // Set the sprite size
 sprite.position.y = 5;
 scene.add(sprite);
 
+// sky
+const skyLoader = new THREE.TextureLoader();
+const skyGeometry = new THREE.SphereGeometry(500, 60, 40);
+const skyMaterial = new THREE.MeshBasicMaterial({
+    side: THREE.BackSide // Important: Renders the texture on the inside
+});
+const skySphere = new THREE.Mesh(skyGeometry, skyMaterial);
+skyLoader.load('sky.jpeg', function(texture) {
+    skySphere.material.map = texture;
+    skySphere.material.needsUpdate = true;
+});
+scene.add(skySphere);
+
 // ground
 const planeGeometry = new THREE.PlaneGeometry(100, 100);
 const planeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -58,6 +71,7 @@ function swapTexture() {
 }
 setInterval(swapTexture, 100); 
 
+// move character
 dx = 0.1;
 dz = -0.1;
 function moveGuy() {
@@ -88,6 +102,7 @@ const rotationSpeed = Math.PI / 180 * 1;
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+    skySphere.rotation.y += 0.001;
 }
 animate();
 
