@@ -35,14 +35,14 @@
 </head>
 <body>
 <div id="overlay">
-    <h1>A History AI Model Sizes</h1>
+    <h1>a history ai model sizes</h1>
     <p>(this page is designed for desktop)</p>
     <br>
-    <p>This webpage visualises the relative scales of </p>
-    <p>AI models from 1957 to the present.</p>
+    <p>this webpage visualises the relative scales of </p>
+    <p>ai models from 1957 to the present.</p>
     <br>
     <br>
-    <p>Scroll down &#x1F447;<p>
+    <p>scroll down &#x1F447;<p>
     <p>&#x1F447;<p>
     <p>&#x1F447;<p>
     <p>&#x1F447;<p>
@@ -77,7 +77,7 @@
     <p>the volume of each cube is proportional to<p>
     <p>the number of parameters in the model.<p>
     <br>
-    <p>thanks to <a href="https://epochai.org/data/epochdb">Epoch AI</a> for the data.<p>
+    <p>data from <a href="https://epochai.org/data/epochdb">Epoch AI</a><p>
     <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
     <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
     <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
@@ -144,11 +144,11 @@ let x = 0;
     const labelRatio = 0.5;
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    canvas.width = 200;
-    canvas.height = 200 * labelRatio;
+    canvas.width = 400;
+    canvas.height = 400 * labelRatio;
     context.fillStyle = '#000000';
     context.fillRect(0, 0, canvas.width, canvas.height);
-    context.font = '20px courier';
+    context.font = '40px courier';
     context.fillStyle = '#00ff00';
     //context.textAlign = 'center';
     context.fillText(d.name, canvas.width * 0.05, canvas.height * 0.2);
