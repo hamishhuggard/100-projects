@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body { margin: 0; padding: 50px; }
+        *, { box-sizing: border-box; }
+        canvas { 
+            border: 2px solid grey; 
+            border-radius: 10px;
+            cursor: sw-resize;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+<canvas id="drawCanvas" width="400" height="400"></canvas>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById("drawCanvas");
+    const ctx = canvas.getContext('2d');
+
+    let drawing = false;
+    let startX = 0;
+    let startY = 0;
+
+    function startDrawing(e) {
+        drawing = true;
+        startX = e.offsetX;
+        startY = e.offsetY;
+    }
+
+    function draw(e) {
+        if (!drawing) return;
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        startX = e.offsetX;
+        startY = e.offsetY;
+    }
+
+    function stopDrawing(e) {
+        drawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+});
+</script>
+</body>
+</html>
