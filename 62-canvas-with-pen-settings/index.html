@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body { margin: 0; padding: 50px; }
+        *, { box-sizing: border-box; }
+        #colorPalette div {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: 1px solid #000;
+        }
+        canvas { 
+            border: 2px solid grey; 
+            border-radius: 10px;
+            cursor: sw-resize;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+<label for="penWidth">Pen width</label>
+<input type="range" id="penWidth" min="1" max="20" value="2">
+<canvas id="drawCanvas" width="400" height="400"></canvas>
+<div id="colorPalette">
+    <!-- Color swatches -->
+    <div style="background-color: red;"></div>
+    <div style="background-color: green;"></div>
+    <div style="background-color: blue;"></div>
+    <div style="background-color: yellow;"></div>
+    <div style="background-color: black;"></div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById("drawCanvas");
+    const ctx = canvas.getContext('2d');
+    const penWidthSlider = document.getElementById("penWidth");
+    const colorPalette = document.getElementById('colorPalette');
+
+    let drawing = false;
+    let startX = 0;
+    let startY = 0;
+
+    let penwidth = 2;
+    let color = 'black';
+
+    penWidthSlider.addEventListener('input', () => { penwidth = penWidthSlider.value });
+
+    colorPalette.addEventListener('click', function(e) {
+        if (e.target !== colorPalette) {
+            color = e.target.style.backgroundColor;
+        }
+    });
+
+    function startDrawing(e) {
+        drawing = true;
+        startX = e.offsetX;
+        startY = e.offsetY;
+    }
+
+    function draw(e) {
+        if (!drawing) return;
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = penwidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        startX = e.offsetX;
+        startY = e.offsetY;
+    }
+
+    function stopDrawing(e) {
+        drawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+});
+</script>
+</body>
+</html>
