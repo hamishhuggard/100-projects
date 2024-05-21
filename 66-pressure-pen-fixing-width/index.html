@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pressure Sensitive Drawing</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            touch-action: none; /* Prevents default touch actions like scrolling */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="drawCanvas" width="800" height="600"></canvas>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let startX = 0;
+    let startY = 0;
+
+    canvas.addEventListener('pointerdown', function(e) {
+        isDrawing = true;
+        //ctx.beginPath();
+        //ctx.moveTo(e.offsetX, e.offsetY);
+        startX = e.offsetX;
+        startY = e.offsetY;
+    });
+
+    canvas.addEventListener('pointermove', function(e) {
+        if (isDrawing) {
+            if (e.pointerType === 'pen') {
+                const pressure = e.pressure;  // Value between 0 and 1
+                const lineWidth = pressure * 10; 
+                ctx.lineWidth = lineWidth;
+            }
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            startX = e.offsetX;
+            startY = e.offsetY;
+            //ctx.lineTo(e.offsetX, e.offsetY);
+            //ctx.stroke();
+        }
+    });
+
+    canvas.addEventListener('pointerup', function(e) {
+        isDrawing = false;
+    });
+
+    canvas.addEventListener('pointerleave', function(e) {
+        isDrawing = false;
+    });
+});
+</script>
+</body>
+</html>
