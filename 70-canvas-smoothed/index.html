@@ -144,6 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function draw(e) {
+        if (e.pointerType === 'pen') {
+            ctx.lineWidth = penwidth * e.pressure;
+        } else {
+            ctx.lineWidth = penwidth;
+        }
         if (points.length > 0) {
             addPoint(e.offsetX, e.offsetY);
         }
