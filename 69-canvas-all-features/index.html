@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!drawing) return;
         const ctx = contexts[currentLayerIndex];
         if (e.pointerType === 'pen') {
-            ctx.lineWidth = penwidth * pressure * e.pressure;
+            ctx.lineWidth = penwidth * e.pressure;
         } else {
             ctx.lineWidth = penwidth;
         }
