@@ -99,12 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     function startDrawing(e) {
+        e.preventDefault();
         drawing = true;
         startX = e.offsetX;
         startY = e.offsetY;
     }
 
     function draw(e) {
+        e.preventDefault();
         if (!drawing) return;
         const ctx = contexts[currentLayerIndex];
         if (e.pointerType === 'pen') {
@@ -127,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function stopDrawing(e) {
+        e.preventDefault();
         drawing = false;
     }
 
