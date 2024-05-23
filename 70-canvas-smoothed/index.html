@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let points = [];
+    let ctx;
 
     function addPoint(x, y) {
         points.push({x, y});
@@ -110,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawBezierThroughPoints() {
-        const ctx = contexts[currentLayerIndex];
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
 
@@ -128,9 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
         points.shift();
     }
 
+
     function startDrawing(e) {
+        if (e.pointerType === 'pen') {
+            ctx.lineWidth = penwidth * e.pressure;
+        } else {
+            ctx.lineWidth = penwidth;
+        }
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = color;
+
         points = []; // Reset points on new stroke
-        addPoint(e.offsetX, e.offsetY); // Start the buffer with the first point
+        addPoint(ctx, e.offsetX, e.offsetY); // Start the buffer with the first point
     };
 
     function draw(e) {
@@ -197,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     */
 
     function setActiveLayer(layerIndex) {
-        currentLayerIndex = layerIndex;
+        ctx = contexts[layerIndex];
     }
 
     setActiveLayer(1);
