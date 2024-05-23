@@ -111,8 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!drawing) return;
         const ctx = contexts[currentLayerIndex];
         if (e.pointerType === 'pen') {
-            const pressure = e.pressure;  // Value between 0 and 1
-            ctx.lineWidth = penwidth * pressure * 5;
+            ctx.lineWidth = penwidth * pressure * e.pressure;
         } else {
             ctx.lineWidth = penwidth;
         }
@@ -120,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineJoin = 'round';
         ctx.beginPath();
         ctx.strokeStyle = color;
-        ctx.lineWidth = penwidth;
         ctx.moveTo(startX, startY);
         ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
