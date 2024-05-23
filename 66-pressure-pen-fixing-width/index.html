@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 const lineWidth = pressure * 10; 
                 ctx.lineWidth = lineWidth;
             }
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
             ctx.beginPath()
             ctx.moveTo(startX, startY);
             ctx.lineTo(e.offsetX, e.offsetY);
