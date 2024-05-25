@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animated Canvas with Perlin Noise</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        const noise = new SimplexNoise();
+        let noiseOffset = 0;
+        let strokes = [
+            { startX: 100, startY: 100, endX: 700, endY: 100, cp1x: 400, cp1y: 50, cp2x: 300, cp2y: 150 },
+            { startX: 100, startY: 200, endX: 700, endY: 200, cp1x: 400, cp1y: 250, cp2x: 300, cp2y: 150 },
+            // Add more strokes as needed
+        ];
+
+        const noiseSize = 10;
+        const noiseSize2 = 20;
+
+        function displaceStrokes(ctx, strokes, noiseOffset) {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.beginPath();
+            strokes.forEach(stroke => {
+                let startX = stroke.startX + noise.noise2D(stroke.startX / 100, noiseOffset) * noiseSize;
+                let startY = stroke.startY + noise.noise2D(stroke.startY / 100, noiseOffset) * noiseSize;
+                let endX = stroke.endX + noise.noise2D(stroke.endX / 100, noiseOffset) * noiseSize;
+                let endY = stroke.endY + noise.noise2D(stroke.endY / 100, noiseOffset) * noiseSize;
+                let cp1x = stroke.cp1x + noise.noise2D(stroke.cp1x / 100, noiseOffset) * noiseSize2;
+                let cp1y = stroke.cp1y + noise.noise2D(stroke.cp1y / 100, noiseOffset) * noiseSize2;
+                let cp2x = stroke.cp2x + noise.noise2D(stroke.cp2x / 100, noiseOffset) * noiseSize2;
+                let cp2y = stroke.cp2y + noise.noise2D(stroke.cp2y / 100, noiseOffset) * noiseSize2;
+
+                ctx.moveTo(startX, startY);
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+            });
+            ctx.stroke();
+        }
+
+        function animate() {
+            noiseOffset += 1;
+            displaceStrokes(ctx, strokes, noiseOffset);
+            setTimeout(animate, 150); // Update every 0.1 seconds
+        }
+
+        animate();
+    </script>
+</body>
+</html>
