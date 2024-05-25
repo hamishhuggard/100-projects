@@ -1,0 +1,14 @@
+{
+  "name": "74-lets-try-bun",
+  "module": "src/index.js",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "three": "^0.164.1"
+  }
+}
