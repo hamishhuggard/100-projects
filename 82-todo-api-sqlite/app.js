@@ -29,3 +29,41 @@ app.get('/todos', (req, res) => {
         });
     });
 });
+
+app.post('/todos', (req, res) => {
+    const { text } = req.body;
+    db.run(`INSERT INTO todos (text) VALUES(?)`, [text], function(err) {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.status(201).json({ id: this.lastID, text });
+    });
+});
+
+app.put('/todos/:id', (req, res) => {
+    const { id } = req.params;
+    const { text } = req.body;
+    db.run(`UPDATE todos SET text = ? WHERE id = ?`, [text, id], function(err) {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        res.json({ message: "success", changes: this.changes, id });
+    });
+});
+
+app.delete('/todos/:id', (req, res) => {
+    const { id } = req.params;
+    db.run(`DELETE FROM todos WHERE id = ?`, id, (err) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+    };
+    res.status(204).send();
+});
+
+app.listen(por, () => {
+    console.log(`listening on port ${port}`);
+})
