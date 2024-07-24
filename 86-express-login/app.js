@@ -50,3 +50,35 @@ passport.use(new GoogleStrategy({
         done(null, profile);
     }
 )
+
+app.post('/register', async (req, res) => {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const user = { id: Date.now().toString(), email: req.body.email, password: hashedPassword };
+    users.push(user); // This should ideally be a database operation
+    res.redirect('/login');
+});
+
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+app.get('/', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send(`Welcome, ${req.user.email || req.user.displayName}!`);
+    } else {
+        res.send('Please login!');
+    }
+});
+
+app.get('/login', (req, res) => {
+    res.send('Login page');
+});
