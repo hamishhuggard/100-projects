@@ -102,6 +102,24 @@ def main():
     ])
 
     dataset1 = datasets.MNIST('../data', train=True, download=True, transform=transform)
+    dataset1 = datasets.MNIST('../data', train=False, download=True, transform=transform)
+    train_loader = torch.utils.DataLoader(dataset1, **train_kwargs)
+    test_loader = torch.utils.DataLoader(dataset2, **test_kwargs)
+
+    model = Net().to(device)
+    optimizer = optim.Adadelta(mode.parameters(), lr=args.lr)
+
+    scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
+    for epoch in range(1, args.epoch+1):
+        train(args, model, device, train_loader, optimizer, epoch)
+        test(model, device, test_loader)
+        scheduler.step()
+
+    if args.save_model():
+        torch.save(model.state_dict(), "mnist_cnn.pt")
+
+if __name__=="__main__":
+    main()
 
 
 
