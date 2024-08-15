@@ -6,6 +6,7 @@ let timerStarted = false;
 
 const timerDisplay = document.getElementById('timer');
 const textInput = document.getElementById('textInput');
+const content = document.getElementById('content');
 
 function startCountdown() {
     if (!timerStarted) {
@@ -33,8 +34,8 @@ function resetTimer() {
     timeRemaining = totalTime;
     updateTimerDisplay();
     textInput.value = '';
-    textInput.classList.remove('smooth-transition');
-    textInput.style.backgroundColor = 'white'; // Reset background color
+    content.classList.remove('smooth-transition');
+    content.style.backgroundColor = 'white'; // Reset background color
 }
 
 function handleTyping() {
@@ -43,14 +44,14 @@ function handleTyping() {
     }
     
     clearTimeout(idleTimer);
-    textInput.classList.remove('smooth-transition');
+    content.classList.remove('smooth-transition');
 
     idleTimer = setTimeout(() => {
-        textInput.classList.add('smooth-transition');
+        content.classList.add('smooth-transition');
         idleTimer = setTimeout(() => {
             resetTimer();
         }, 3000);
-    }, 200);
+    }, 1000);
 }
 
 textInput.addEventListener('input', handleTyping);

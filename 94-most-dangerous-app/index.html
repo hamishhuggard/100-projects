@@ -9,6 +9,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            height: 100%;
         }
 
         .header {
@@ -20,34 +21,39 @@
             text-align: center;
             padding: 10px;
             z-index: 1000;
+            height: 40px;
+            box-sizing: border-box;
         }
 
         .content {
-            padding: 60px 20px;
+            position: fixed;
+            top: 40px;
+            height: calc(100vh - 20px); /* Adjust based on header height and padding */
+            width: 100%;
+            box-sizing: border-box;
+            padding: 80px;
         }
 
         .textarea-field {
             width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
+            height: 100%;
+            font-size: 20px;
             outline: none;
-            background-color: white;
+            background-color: rgba(0,0,0,0);
             transition: background-color 0.5s ease;
-            resize: vertical;
-            height: 150px; /* You can adjust the height as needed */
+            resize: none;
+            border: none;
+            padding: 0px;
+            box-sizing: border-box;
         }
 
-        .textarea-field.smooth-transition {
+        .smooth-transition {
             animation: colorTransition 3s linear forwards;
         }
 
         @keyframes colorTransition {
             0% {
                 background-color: white;
-            }
-            50% {
-                background-color: orange;
             }
             100% {
                 background-color: red;
@@ -59,7 +65,7 @@
     <div class="header">
         <span id="timer">01:00</span>
     </div>
-    <div class="content">
+    <div class="content" id="content">
         <textarea id="textInput" class="textarea-field" placeholder="Start typing..."></textarea>
     </div>
 
