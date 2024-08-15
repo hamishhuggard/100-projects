@@ -3,6 +3,7 @@ let idleTimer;
 let totalTime = 60; // Default 1 minute
 let timeRemaining = totalTime;
 let timerStarted = false;
+let done = false;
 
 const timerDisplay = document.getElementById('timer');
 const textInput = document.getElementById('textInput');
@@ -17,6 +18,7 @@ function startCountdown() {
 
             if (timeRemaining <= 0) {
                 resetTimer();
+                done = true;
             }
         }, 1000);
     }
@@ -32,13 +34,16 @@ function resetTimer() {
     clearInterval(countdown);
     timerStarted = false;
     timeRemaining = totalTime;
-    updateTimerDisplay();
-    textInput.value = '';
+    //updateTimerDisplay();
+    //textInput.value = '';
     content.classList.remove('smooth-transition');
     content.style.backgroundColor = 'white'; // Reset background color
 }
 
 function handleTyping() {
+    if (done) {
+        return;
+    }
     if (!timerStarted) {
         startCountdown();
     }
@@ -46,6 +51,9 @@ function handleTyping() {
     clearTimeout(idleTimer);
     content.classList.remove('smooth-transition');
 
+    if (timeRemaining < 3) {
+        return;
+    }
     idleTimer = setTimeout(() => {
         content.classList.add('smooth-transition');
         idleTimer = setTimeout(() => {
