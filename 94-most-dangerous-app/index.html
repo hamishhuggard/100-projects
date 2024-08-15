@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Timer</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .content {
+            padding: 60px 20px;
+        }
+
+        .textarea-field {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            outline: none;
+            background-color: white;
+            transition: background-color 0.5s ease;
+            resize: vertical;
+            height: 150px; /* You can adjust the height as needed */
+        }
+
+        .textarea-field.smooth-transition {
+            animation: colorTransition 3s linear forwards;
+        }
+
+        @keyframes colorTransition {
+            0% {
+                background-color: white;
+            }
+            50% {
+                background-color: orange;
+            }
+            100% {
+                background-color: red;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span id="timer">01:00</span>
+    </div>
+    <div class="content">
+        <textarea id="textInput" class="textarea-field" placeholder="Start typing..."></textarea>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
