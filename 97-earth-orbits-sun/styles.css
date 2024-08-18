@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #967bb6;
+}
+
+.sun {
+    position: rebsolute;
+    width: 150px;
+}
+
+.earth {
+    position: absolute;
+    width: 100px;
+    transform-origin: 150px 50%;
+}
+
+img {
+    width: 100%;
+}
