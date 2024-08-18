@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #967bb6;
+}
+
+.solar-system {
+}
+
+.sun {
+    position: absolute;
+    width: 100px;
+    transform-origin: 50% 50%;
+}
+
+.orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px dashed #fff;
+}
+
+.earth {
+    position: absolute;
+    width: 70px;
+    transform-origin: 50% 50%;
+}
+
+img {
+    width: 100%;
+}
