@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: black;
+}
+
+#game {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+}
+
+#rocket {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    width: 50px;
+    height: 20px;
+    background-color: white;
+    transform: translateX(-50%);
+}
+
+.bullet {
+    position: absolute;
+    width: 5px;
+    height: 20px;
+    background-color: red;
+}
