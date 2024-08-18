@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subdomain Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Subdomain Viewer</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="loadIframe('/80-todo-api')">/80-todo-api</a></li>
+                <li><a href="#" onclick="loadIframe('/another-subdomain')">/another-subdomain</a></li>
+                <li><a href="#" onclick="loadIframe('/third-subdomain')">/third-subdomain</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <iframe id="content-frame" src="/97-earth-orbits-sun"></iframe>
+    </section>
+    <section>
+        <iframe id="content-frame" src="/93-space-invaders-todo"></iframe>
+    </section>
+    <section>
+        <iframe id="content-frame" src="/60-cube-zoom-labelled"></iframe>
+    </section>
+    <section>
+        <iframe id="content-frame" src="https://aisafety.world"></iframe>
+    </section>
+<!--
+94-most-dangerous-app
+50-bar-chart-transition
+51-pie-chart-transition
+52-scatter-plot-animated
+54-cube-zoom
+55-three-js-text
+56-three-js-text-with-orbit
+57-grid-with-walker
+58-3d-roaming-square
+59-text-in-a-sprite
+60-cube-zoom-labelled
+-->
+
+    <footer>
+        <p>&copy; 2024 Your Name</p>
+    </footer>
+
+    <script>
+        function loadIframe(path) {
+            document.getElementById('content-frame').src = path;
+        }
+    </script>
+</body>
+</html>
+
+<!--
+00-php-blog
+01-php-twitter-clone
+02-php-send-email
+03-php-mulitplication-table
+04-express-blog
+05-react-basic
+06-react-counter
+07-react-useeffect
+08-rust-factorial
+09-pytorch-linear-approximator
+10-express-js-hello-world
+11-express-js-login
+12-react-useeffect-with-dependency
+13-express-mongo
+14-all-react-hooks
+15-react-props
+16-react-state-sharing
+17-react-context-api
+18-react-redux
+19-ffmpeg
+20-react-useContext
+21-react-useReducer
+22-react-useCallback
+23-PIL
+24-three-js-basic
+25-d3-basic
+26-torus-rotator
+27-flask-PIL-app
+28-ffmpeg-again
+29-react-front-express-back
+30-pytorch-basics
+31-simple-nn
+32-torch-training-linear
+33-three-js-cube-rotator
+34-three-js-demo-grid
+35-torus-tunnel
+36-walk-on-3d-grid
+37-torch-gpu
+38-torch-data-loader
+39-js-destructuring
+40-three-text-and-line
+41-websocket
+42-js-question-mark
+43-css-pseudo-classes-and-pseudo-elements
+44-stripe-stuff
+45-nginx
+46-lognormal
+47-bar-chart
+48-pie-chart
+49-scatter-plot
+50-bar-chart-transition
+51-pie-chart-transition
+52-scatter-plot-animated
+53-animated-line-chart
+54-cube-zoom
+55-three-js-text
+56-three-js-text-with-orbit
+57-grid-with-walker
+58-3d-roaming-square
+59-text-in-a-sprite
+60-cube-zoom-labelled
+61-canvas
+62-canvas-with-pen-settings
+63-canvas-with-layers
+64-petite-vue
+65-canvas-with-pressure-pen
+66-pressure-pen-fixing-width
+67-layered-canvas-fixed
+68-chart-js
+69-canvas-all-features
+70-canvas-smoothed
+71-canvas-undo
+72-canvas-noise
+73-frustrations-with-npm
+74-lets-try-bun
+75-try-module-shim
+76-lets-try-webpack-again
+77-jumper
+77-walk-and-pointer-lock-controls
+78-snake
+79-cat-head-pat
+80-todo-api
+81-todo-api-again
+82-todo-api-sqlite
+83-cv
+84-person-sampler
+85-word-ranker
+86-express-login
+87-mnist
+88-language-models
+89-dino-game
+90-first-person-shooter-todos
+91-note-taking-platformer
+92-mario-todos
+93-space-invaders-todo
+94-most-dangerous-app
+95-map-maker
+96-red-green-swapper
+97-earth-orbits-sun
+98-commutativity
+del.py
+del.txt
+generate-pdf.js
+index.html
+pencil.svg
+styles.css
+-->
