@@ -64,3 +64,20 @@ function moveBullets() {
 
 setInterval(moveBullets, 50);
 setInterval(moveRocket, 50);
+
+document.getElementById("create-btn").addEventListener('click', () => {
+    const task = document.getElementById('task').value;
+    const dueDate = document.getElementById('due-date').value;
+
+    if (task && dueDate) {
+        addTodoItem(task, dueDate);
+        document.getElementById('task').value = '';
+        document.getElementById('due-date').value = '';
+    } else {
+        alert('Please enter a task and a due date.');
+    }
+});
+
+function addTodoItem(task, dueDate) {
+    console.log(`${task} (Due: ${dueDate})`);
+}

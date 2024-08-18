@@ -27,3 +27,14 @@ body {
     height: 20px;
     background-color: red;
 }
+#todo-form {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+#todo-form input, #todo-form button {
+    padding: 5px;
+}
