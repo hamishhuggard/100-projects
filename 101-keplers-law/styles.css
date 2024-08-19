@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #967bb6;
+}
+
+.solar-system {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+}
+
+.sun {
+    width: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.orbit {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + var(--yOffset, 0px));
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px dashed #fff;
+}
+
+.earth {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: calc(50% + var(--dy, 0px));
+    left: calc(50% + var(--dx, 0px));
+    width: 70px;
+}
+
+.connector {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
