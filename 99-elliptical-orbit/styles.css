@@ -25,7 +25,7 @@ body {
 .orbit {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: calc(50% + var(--yOffset, 0px));
     transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 2px dashed #fff;
@@ -35,7 +35,7 @@ body {
     position: absolute;
     transform: translate(-50%, -50%);
     top: calc(50% + var(--dy, 0px));
-    left: calc(50% + var(--dx, 0px));
+    left: calc(50% + var(--dx, 0px) + var(--yOffset, 0px));
     width: 70px;
 }
 
