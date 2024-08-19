@@ -17,6 +17,7 @@ let b, c, h;
 let locations = []; // Array to store the Earth's positions
 let timeStepCounter = 0; // Counter for time steps
 let polygonCounter = 1; // Counter for polygons
+let currentPolygon = null; // Currently active polygon
 
 const dt = 2.01; // Time step in seconds
 
@@ -51,9 +52,21 @@ function colorSchemeFunction(n) {
     return `hsl(${hue}, 100%, 50%)`;
 }
 
-function drawArea() {
+function startNewPolygon() {
     const svgNS = "http://www.w3.org/2000/svg";
-    const polygon = document.createElementNS(svgNS, "polygon");
+    currentPolygon = document.createElementNS(svgNS, "polygon");
+
+    currentPolygon.setAttribute("fill", colorSchemeFunction(polygonCounter));
+    currentPolygon.setAttribute("opacity", "0.5");
+
+    const connector = document.querySelector('.connector');
+    connector.appendChild(currentPolygon);
+
+    polygonCounter++;
+}
+
+function updateCurrentPolygon() {
+    if (!currentPolygon) return;
 
     const centerX = solarSystem.clientWidth / 2;
     const centerY = solarSystem.clientHeight / 2;
@@ -71,16 +84,7 @@ function drawArea() {
     // Close the polygon by looping back to the Sun
     points += ` ${centerX},${centerY}`;
 
-    polygon.setAttribute("points", points);
-    polygon.setAttribute("fill", colorSchemeFunction(polygonCounter));
-    polygon.setAttribute("opacity", "0.5");
-
-    // Append the polygon to the connector (SVG container)
-    const connector = document.querySelector('.connector');
-    connector.appendChild(polygon);
-
-    // Increment polygon counter for the next one
-    polygonCounter++;
+    currentPolygon.setAttribute("points", points);
 }
 
 function rotateEarth() {
@@ -99,9 +103,12 @@ function rotateEarth() {
     locations.push({ x: x - c, y: y });
     timeStepCounter++;
 
-    // Every 100 time steps, draw the area and reset the locations array
+    // Update the current polygon with the new positions
+    updateCurrentPolygon();
+
+    // Every 100 time steps, start a new polygon and reset the locations array
     if (timeStepCounter >= 100) {
-        drawArea();
+        startNewPolygon();
         locations = [];
         timeStepCounter = 0; // Reset the counter
     }
@@ -122,6 +129,9 @@ function rotateEarth() {
 
     requestAnimationFrame(rotateEarth);
 }
+
+// Initialize the first polygon
+startNewPolygon();
 
 // Initialize the rotation
 rotateEarth();
