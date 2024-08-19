@@ -1,6 +1,7 @@
 body {
     margin: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -8,6 +9,9 @@ body {
 }
 
 .solar-system {
+    position: relative;
+    width: 100%;
+    height: 80vh;
 }
 
 .sun {
@@ -33,4 +37,10 @@ body {
     top: calc(50% + var(--dy, 0px));
     left: calc(50% + var(--dx, 0px));
     width: 70px;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
 }
