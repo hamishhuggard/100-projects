@@ -35,7 +35,7 @@ body {
     position: absolute;
     transform: translate(-50%, -50%);
     top: calc(50% + var(--dy, 0px));
-    left: calc(50% + var(--dx, 0px) + var(--yOffset, 0px));
+    left: calc(50% + var(--dx, 0px));
     width: 70px;
 }
 

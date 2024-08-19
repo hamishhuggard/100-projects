@@ -17,8 +17,6 @@ function updateOrbit() {
     orbit.style.height = `${2 * b}px`;
 
     // Adjust the position of the orbit to keep the Sun at the focus
-    //orbit.style.left = `calc(50% - ${a}px - ${c}px)`;
-    earth.style.setProperty('--yOffset', `${-0}px`);
     orbit.style.setProperty('--yOffset', `${-c}px`);
 }
 
