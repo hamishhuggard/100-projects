@@ -9,8 +9,10 @@ const b = a * Math.sqrt(1 - eccentricity * eccentricity); // Semi-minor axis
 // Set the orbit dimensions based on the calculated a and b
 orbit.style.width = `${2 * a}px`;
 orbit.style.height = `${2 * b}px`;
+/*
 orbit.style.marginLeft = `-${a*0.7}px`;
 orbit.style.marginTop = `-${b*0.75}px`;
+*/
 
 function rotateEarth() {
     angle = (angle + 1) % 360;
@@ -18,7 +20,9 @@ function rotateEarth() {
     const x = a * Math.cos(radians);
     const y = b * Math.sin(radians);
 
-    earth.style.transform = `translate(${x}px, ${y}px)`;
+    earth.style.setProperty('--dx', `${x}px`);
+    earth.style.setProperty('--dy', `${y}px`);
+
     requestAnimationFrame(rotateEarth);
 }
 
