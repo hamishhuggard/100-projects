@@ -47,6 +47,7 @@ $(document).ready(function() {
     function init() {
         $.get('posts/index.txt', function(data) {
             posts = data.trim().split('\n').filter(post => post !== 'index.txt');
+            posts.sort().reverse();
             totalPages = Math.ceil(posts.length / postsPerPage);
 
             currentPage = getPageFromURL();
