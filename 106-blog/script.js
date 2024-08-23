@@ -16,6 +16,7 @@ $(document).ready(function() {
             });
         });
         updatePagination();
+        updateURL(page);
     }
 
     function updatePagination() {
@@ -26,10 +27,25 @@ $(document).ready(function() {
         $('#last-page').prop('disabled', currentPage === totalPages);
     }
 
+    function updateURL(page) {
+        const url = new URL(window.location);
+        url.searchParams.set('page', page);
+        window.history.pushState({}, '', url);
+    }
+
+    function getPageFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return parseInt(params.get('page')) || 1;
+    }
+
     function init() {
         $.get('posts/index.txt', function(data) {
             posts = data.trim().split('\n').filter(post => post !== 'index.txt');
             totalPages = Math.ceil(posts.length / postsPerPage);
+
+            currentPage = getPageFromURL();
+            if (currentPage > totalPages) currentPage = 1;
+            
             loadPosts(currentPage);
         });
 
@@ -59,6 +75,11 @@ $(document).ready(function() {
                 currentPage = totalPages;
                 loadPosts(currentPage);
             }
+        });
+
+        window.addEventListener('popstate', function() {
+            currentPage = getPageFromURL();
+            loadPosts(currentPage);
         });
     }
 
