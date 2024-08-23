@@ -11,7 +11,7 @@ $(document).ready(function() {
 
         $('#posts-container').empty();
         $.each(postsToLoad, function(index, post) {
-            $.get(`/posts/${post}`, function(data) {
+            $.get(`./posts/${post}`, function(data) {
                 const postLink = `post.html?file=${post}`;
                 const updatedData = data.replace(
                 /<h2>(.*?)<\/h2>/,
@@ -45,7 +45,7 @@ $(document).ready(function() {
     }
 
     function init() {
-        $.get('posts/index.txt', function(data) {
+        $.get('./posts/index.txt', function(data) {
             posts = data.trim().split('\n').filter(post => post !== 'index.txt');
             posts.sort().reverse();
             totalPages = Math.ceil(posts.length / postsPerPage);
