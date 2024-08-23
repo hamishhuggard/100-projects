@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
+    <title>hamish's blog</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="posts-container"></div>
-    <div id="pagination"></div>
+    <div id="central-container">
+        <div id="blog-header">hamish's blog</div>
+        <div id="posts-wrapper">
+            <div id="posts-container"></div>
+        </div>
+        <div id="pagination">
+            <button class="page-button" id="first-page">««</button>
+            <button class="page-button" id="prev-page">‹</button>
+            <span id="page-info"></span>
+            <button class="page-button" id="next-page">›</button>
+            <button class="page-button" id="last-page">»»</button>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
 </body>

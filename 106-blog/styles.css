@@ -1,31 +1,106 @@
-#posts-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
+/* Default Light Mode Styles (already defined) */
+body {
+  background-color: #fff2d1;
+  font-family: 'Sans-serif', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.post {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+#central-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+#blog-header {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+#posts-wrapper {
+  padding: 0;
+}
+
+#posts-container .post {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fafafa;
 }
 
 #pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
 }
 
 .page-button {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
-    border-radius: 3px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.page-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .page-button.active {
-    background-color: #ccc;
+  background-color: #ccc;
+}
+
+#page-info {
+  font-size: 1rem;
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+  }
+
+  #central-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+
+  #blog-header {
+    color: #fff;
+  }
+
+  #posts-container .post {
+    background-color: #3e3e3e;
+    border: 1px solid #555;
+    color: #e0e0e0;
+  }
+
+  #pagination {
+    color: #e0e0e0;
+  }
+
+  .page-button {
+    background-color: #555;
+    color: #e0e0e0;
+  }
+
+  .page-button:disabled {
+    background-color: #777;
+  }
+
+  .page-button.active {
+    background-color: #777;
+  }
+
+  #page-info {
+    color: #e0e0e0;
+  }
 }
