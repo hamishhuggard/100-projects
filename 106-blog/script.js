@@ -12,7 +12,13 @@ $(document).ready(function() {
         $('#posts-container').empty();
         $.each(postsToLoad, function(index, post) {
             $.get(`/posts/${post}`, function(data) {
-                $('#posts-container').append(`<div class="post">${data}</div>`);
+                const postLink = `post.html?file=${post}`;
+                const updatedData = data.replace(
+                /<h2>(.*?)<\/h2>/,
+                `<h2><a href="${postLink}">$1</a></h2>`
+                );
+
+                $('#posts-container').append(`<div class="post">${updatedData}</div>`);
             });
         });
         updatePagination();

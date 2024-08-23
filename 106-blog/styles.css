@@ -96,4 +96,30 @@ body {
   #page-info {
     color: #e0e0e0;
   }
+
+  #posts-container .post h2 a {
+    color: #4dabff;
+  }
+}
+
+.back-link {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: white;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+#posts-container .post h2 a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+#posts-container .post h2 a:hover {
+  text-decoration: underline;
 }
