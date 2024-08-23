@@ -1,0 +1,137 @@
+body {
+  margin: 0px;
+  height: 100%;
+  overflow: hidden;
+  background-color: #b3f0f5;
+}
+
+#grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.grid-line {
+  stroke: lightgray;
+  stroke-width: 0.5;
+}
+
+.grid-text {
+  font-size: 10px;
+}
+
+.mapItem {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.mapItem:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  stroke: white;
+  stroke-width: 2px;
+  font-weight: bold;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-align: center;
+  /* word-wrap: break-word;*/
+  background: rgba(255,255,255,0.5);
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.labelContainer text {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+/* tooltip */
+
+#tooltip {
+  position: absolute;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #8b4513;
+  border-radius: 5px;
+  padding: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: #8b4513;
+  max-width: 200px;
+  max-height: 98%;
+  overflow: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.hidden {
+  display: none;
+}
+
+#tiles-mode a {
+    color: #00cc00;
+    text-decoration-line: underline;
+    font-weight: bold;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+
+#tiles-mode:hover {
+    font-size: 1.5em;
+}
+
+#info-box {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    width: 220px;
+    max-width: 30%;
+    font-size: small;
+    font-family: "Courier New", Courier, monospace; 
+}
+
+#info-box a {
+    color: #00cc00;
+    /* text-decoration: none; */
+    font-weight: bold;
+}
+
+#info-box a:hover {
+     font-weight: bolder;
+     color: #009900;
+}
+
+
+#credits {
+    font-size: small;
+}
+
+#tiles-mode {
+    color: #00cc00;
+    text-decoration-line: underline;
+    font-weight: bold;
+}
+
+#tiles-mode:hover {
+    font-size: 1.5em;
+}
+
+.first-blurred-background {
+    filter: blur(20px);
+    z-index: -1;
+}
+
+.blurred-background {
+    filter: blur(45px);
+    transform: scale(1.1);
+    z-index: -2;
+}
