@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body { margin: 0; padding: 50px; height: 700px;}
+
+        * { box-sizing: border-box; }
+
+        #colorPalette div {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: 1px solid #000;
+        }
+
+        #canvasContainer {
+            position: relative;
+            border: 2px solid grey; 
+            border-radius: 10px;
+            width: 800px;
+            height: 600px;
+            cursor: crosshair;
+        }
+
+        canvas { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            touch-action: none; /* Prevents default touch actions like scrolling */
+        }
+
+        #interactionLayer {
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+<div id="canvasContainer">
+    <canvas id="layer1"></canvas>
+    <canvas id="layer2"></canvas>
+    <canvas id="layer3"></canvas>
+    <canvas id="interactionLayer"></canvas>
+</div>
+<label for="penWidth">Pen width</label>
+<input type="range" id="penWidth" min="1" max="200" value="50">
+<select id="layerSelector">
+    <option value="0">0</option>
+    <option value="1" selected>1</option>
+    <option value="2">2</option>
+</select>
+
+<div id="colorPalette">
+    <!-- Color swatches -->
+    <div style="background-color: red;"></div>
+    <div style="background-color: green;"></div>
+    <div style="background-color: blue;"></div>
+    <div style="background-color: yellow;"></div>
+    <div style="background-color: black;"></div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const interactionLayer = document.getElementById("interactionLayer");
+    const baseLayers = document.querySelectorAll("canvas:not(#interactionLayer)");
+    const interactionContext = interactionLayer.getContext('2d');
+    const contexts = Array.from(baseLayers).map(layer => layer.getContext('2d'));
+    const penWidthSlider = document.getElementById("penWidth");
+    const colorPalette = document.getElementById('colorPalette');
+
+    document.getElementById('layerSelector').addEventListener('change', function() {
+        setActiveLayer(parseInt(this.value))
+    });
+
+    let currentLayerIndex = 0;
+    let drawing = false;
+    let startX = 0;
+    let startY = 0;
+
+    let penwidth = penWidthSlider.value;
+    let color = 'black';
+
+    penWidthSlider.addEventListener('input', () => { penwidth = penWidthSlider.value });
+
+    colorPalette.addEventListener('click', function(e) {
+        if (e.target !== colorPalette) {
+            color = e.target.style.backgroundColor;
+        }
+    });
+
+    document.querySelectorAll('canvas').forEach(canvas => {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    })
+
+
+    let points = [];
+    let ctx;
+
+    function addPoint(x, y) {
+        points.push({x, y});
+        if (points.length === 3) {
+            drawBezierThroughPoints();
+        }
+    }
+
+    function drawBezierThroughPoints() {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+
+        // Calculate control points
+        let cp1x = (points[0].x + points[1].x) / 2;
+        let cp1y = (points[0].y + points[1].y) / 2;
+        let cp2x = (points[1].x + points[2].x) / 2;
+        let cp2y = (points[1].y + points[2].y) / 2;
+
+        // Draw bezier to the second point
+        ctx.quadraticCurveTo(points[1].x, points[1].y, cp2x, cp2y);
+        ctx.stroke();
+
+        // Remove the first point and keep the last two points
+        points.shift();
+    }
+
+
+    function startDrawing(e) {
+        if (e.pointerType === 'pen') {
+            ctx.lineWidth = penwidth * e.pressure;
+        } else {
+            ctx.lineWidth = penwidth;
+        }
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = color;
+
+        points = []; // Reset points on new stroke
+        addPoint(ctx, e.offsetX, e.offsetY); // Start the buffer with the first point
+    };
+
+    function draw(e) {
+        if (e.pointerType === 'pen') {
+            ctx.lineWidth = penwidth * e.pressure;
+        } else {
+            ctx.lineWidth = penwidth;
+        }
+        if (points.length > 0) {
+            addPoint(e.offsetX, e.offsetY);
+        }
+    };
+
+    function stopDrawing() {
+        // Finish the line by drawing the remaining points
+        if (points.length === 2) {
+            const ctx = contexts[currentLayerIndex];
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            ctx.lineTo(points[1].x, points[1].y);
+            ctx.stroke();
+        }
+        points = []; // Clear the buffer
+    };
+
+    interactionLayer.addEventListener('pointerdown', startDrawing);
+    interactionLayer.addEventListener('pointermove', draw);
+    interactionLayer.addEventListener('pointerup', stopDrawing);
+    interactionLayer.addEventListener('pointerleave', stopDrawing);
+
+    /*
+    function startDrawing(e) {
+        e.preventDefault();
+        drawing = true;
+        startX = e.offsetX;
+        startY = e.offsetY;
+    }
+
+    function draw(e) {
+        e.preventDefault();
+        if (!drawing) return;
+        const ctx = contexts[currentLayerIndex];
+        if (e.pointerType === 'pen') {
+            ctx.lineWidth = penwidth * e.pressure;
+        } else {
+            ctx.lineWidth = penwidth;
+        }
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        ctx.closePath();
+        startX = e.offsetX;
+        startY = e.offsetY;
+    }
+
+    function stopDrawing(e) {
+        e.preventDefault();
+        drawing = false;
+    }
+
+    interactionLayer.addEventListener('pointerdown', startDrawing);
+    interactionLayer.addEventListener('pointermove', draw);
+    interactionLayer.addEventListener('pointerup', stopDrawing);
+    interactionLayer.addEventListener('pointerleave', stopDrawing);
+    */
+
+    function setActiveLayer(layerIndex) {
+        ctx = contexts[layerIndex];
+    }
+
+    setActiveLayer(1);
+});
+</script>
+</body>
+</html>

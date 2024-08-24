@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text in Sprite with Three.js</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+camera.position.z = 5;
+
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d');
+canvas.width = 256;
+canvas.height = 128;
+context.fillStyle = '#000000';
+context.fillRect(0, 0, canvas.width, canvas.height);
+context.font = '24px courier';
+context.fillStyle = '#00ff00';
+context.textAlign = 'center';
+context.fillText('Hello, World!', canvas.width / 2, canvas.height / 2);
+
+const texture = new THREE.Texture(canvas);
+texture.needsUpdate = true;
+const material = new THREE.SpriteMaterial({ map: texture });
+const sprite = new THREE.Sprite(material);
+sprite.scale.set(2, 1, 1);
+scene.add(sprite);
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+animate();
+</script>
+</body>
+</html>

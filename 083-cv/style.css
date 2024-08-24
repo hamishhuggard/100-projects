@@ -1,0 +1,27 @@
+@page {
+    size: A4;
+    margin: 20mm;
+}
+
+body {
+    width: 210mm;
+    height: 297mm;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    background: grey;
+    padding: 40px;
+    border: 2px black solid;
+}
+
+/*
+.section {
+    padding: 20px;
+}
+*/
+
+.item {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px;
+}

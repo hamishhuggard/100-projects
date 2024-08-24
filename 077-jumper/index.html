@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumping Character</title>
+    <style>
+        #character {
+            position: absolute;
+            bottom: 0; /* Start on the ground */
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="character"></div>
+
+    <script>
+        const character = document.getElementById('character');
+        let isJumping = false;
+        const gravity = 9.8; // Acceleration due to gravity
+        const jumpHeight = 200; // Maximum height in pixels
+        const groundY = 0; // Y position of the ground
+        let velocity = 0;
+        let positionY = groundY;
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === ' ' && !isJumping) { // Check if the spacebar is pressed and character is not jumping
+                isJumping = true;
+                velocity = -20; // Initial velocity for the jump
+                jump();
+            }
+        });
+
+        function jump() {
+            if (isJumping) {
+                positionY += velocity;
+                velocity += gravity; // Simulate gravity effect
+
+                if (positionY > groundY) { // If character is below ground level, reset
+                    positionY = groundY;
+                    isJumping = false; // Stop jumping
+                }
+
+                character.style.bottom = `${positionY}px`; // Update the character's position
+
+                if (isJumping) {
+                    requestAnimationFrame(jump); // Continue the animation
+                }
+            }
+        }
+    </script>
+</body>
+</html>
