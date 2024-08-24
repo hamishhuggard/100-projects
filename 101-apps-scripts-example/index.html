@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Apps Script API Demo</title>
+</head>
+<body>
+    <h1>Google Apps Script API Demo</h1>
+
+    <h2>GET Request</h2>
+    <form id="getForm">
+        <label for="name">Enter your name:</label>
+        <input type="text" id="getName" name="name" required>
+        <button type="submit">Send GET Request</button>
+    </form>
+    <p id="getResponse"></p>
+
+    <h2>POST Request</h2>
+    <form id="postForm">
+        <label for="name">Enter your name:</label>
+        <input type="text" id="postName" name="name" required>
+        <button type="submit">Send POST Request</button>
+    </form>
+    <p id="postResponse"></p>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyTeYmPSDBDTaogvfphY8RNInH4Gl6jtWrtg_BpEqM/exec';
+
+        document.getElementById('getForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('getName').value;
+            fetch(`${scriptURL}?name=${encodeURIComponent(name)}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('getResponse').textContent = data;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('postName').value;
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ name: name }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('postResponse').textContent = data;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
