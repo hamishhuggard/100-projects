@@ -1,0 +1,53 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+.status-bar {
+    width: 700px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#done {
+    background-color: green;
+    bottom: calc(20% + 400px);
+}
+
+#doing {
+    background-color: orange;
+    bottom: calc(20% + 250px);
+}
+
+#todo {
+    background-color: red;
+    bottom: calc(20% + 100px);
+}
+
+#bottom-div {
+    background-color: brown;
+    position: absolute;
+    bottom: 0;
+    height: 20%;
+    width: 100%;
+}
+
+#square {
+    width: 50px;
+    height: 50px;
+    background-color: blue;
+    position: absolute;
+    bottom: calc(20%); /* Moves the square above the 20% line */
+    left: 50%;
+    transform: translateX(-50%);
+}
