@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#word-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.word-button {
+    padding: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    transition: background-color 0.3s;
+}
+
+.word-button:hover {
+    background-color: #ddd;
+}
