@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.png">
+    <title>Google Sheets URL Processor</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+
+    <div id="grid"></div>
+    <div id="tooltip" class="hidden"></div>
+    <script src="/script.js" type="module"></script>
+    <div id="info-box">
+        <p>Map is loading...</p>
+    </div>
+
+    <div id="loader">
+        <h1>Google Sheets to CSV URL Converter</h1>
+        <p>Go to <a href="https://docs.google.com/spreadsheets/d/1It98Usv6CQYXYZm94ywxKLhnGrj-ZlRZQ1QovGmNE-0/edit?usp=sharing">this</a> sheet.</p>
+        <label for="sheetUrl">Paste the Google Sheets URL here:</label>
+        <input type="text" id="sheetUrl" placeholder="Enter the URL here" size="50">
+        <button onclick="processUrl()">Submit</button>
+        <p id="message"></p>
+    </div>
+</body>
+</html>
