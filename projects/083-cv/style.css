@@ -1,27 +1,53 @@
+* {
+    box-sizing: border-box;
+}
+
 @page {
     size: A4;
     margin: 20mm;
 }
 
 body {
+    padding: 50px;
+    font-family: "doodlefont";
+    font-family: Arial, sans-serif;
+    background: #c2c2c2;
+}
+
+.page {
     width: 210mm;
     height: 297mm;
     margin: auto;
-    font-family: Arial, sans-serif;
-    background: grey;
+    background: white;
     padding: 40px;
-    border: 2px black solid;
+    border: 0px black solid;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    display: grid;
+    grid-template-rows:  20% 20% auto%;
+    gap: 40px;
 }
 
-/*
 .section {
     padding: 20px;
-}
-*/
-
-.item {
-    background: white;
+    width: 100%;
+    border: 0px black solid;
     border-radius: 20px;
-    padding: 20px;
-    margin: 20px;
+    background: rgb(255, 242, 209);
+    box-shadow: 6px 6px 1px rgba(0, 0, 0, 0.5);
 }
+
+.image-container {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.circular-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
