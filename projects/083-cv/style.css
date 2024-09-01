@@ -2,14 +2,8 @@
     box-sizing: border-box;
 }
 
-@page {
-    size: A4;
-    margin: 20mm;
-}
-
 body {
     padding: 50px;
-    font-family: "doodlefont";
     font-family: Arial, sans-serif;
     background: #c2c2c2;
 }
@@ -19,35 +13,122 @@ body {
     height: 297mm;
     margin: auto;
     background: white;
-    padding: 40px;
     border: 0px black solid;
     box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.5);
-    padding: 40px;
-    display: grid;
-    grid-template-rows:  20% 20% auto%;
-    gap: 40px;
+    width: 210mm;
+    height: 297mm;
+    padding: 20mm;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
-.section {
-    padding: 20px;
-    width: 100%;
-    border: 0px black solid;
-    border-radius: 20px;
-    background: rgb(255, 242, 209);
-    box-shadow: 6px 6px 1px rgba(0, 0, 0, 0.5);
+.header {
+    display: flex;
+    align-items: center;
+    margin-top: -10mm;
+    margin-bottom: 5mm;
 }
 
-.image-container {
-    width: 50px;
-    height: 50px;
+.profile-image {
+    width: 186px;
+    height: 150px;
     overflow: hidden;
     border-radius: 50%;
+    border: 5px solid white;
+    margin-right: 15px;
+    z-index: 10;
 }
 
-.circular-image {
+.profile-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
 }
 
+.contact-info {
+    padding: 15px;
+    background-color: #f7b083;
+    border-radius: 40px;
+    width: 100%;
+    margin-left: -20mm;
+    padding-left: calc(20mm + 15px);
+}
+
+.contact-info h1 {
+    font-size: 24px;
+    margin: 0;
+    color: #333;
+}
+
+.contact-info p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.content {
+    display: flex;
+    margin-top: 5px;
+}
+
+.left-column {
+    width: calc(40% + 20mm);
+    padding-right: 10mm;
+    padding-top: 10mm;
+    padding-left: 20mm;
+    background: #e2e2e2;
+    margin-left: -20mm;
+    border-radius: 0 70px 70px 0;
+}
+
+.right-column {
+    width: 60%;
+    padding-left: 10px;
+    padding-left: 7mm;
+    padding-top: 10mm;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #f7b083;
+    padding-bottom: 5px;
+}
+
+p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.skill {
+    margin-bottom: 10px;
+}
+
+.skill-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-bar span {
+    display: block;
+    height: 100%;
+    background-color: #f7b083;
+}
+
+ul {
+    list-style: disc;
+    margin-left: 20px;
+    color: #555;
+}
+
+ul li {
+    margin-bottom: 5px;
+}
