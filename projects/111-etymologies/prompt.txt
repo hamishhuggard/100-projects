@@ -1,0 +1,30 @@
+python script that will open the csv:
+https://docs.google.com/spreadsheets/d/124aXpzY9Q3a_9E-q7LqXed7DCUIMlSbPJBa-OBkQgyA/export?format=csv&gid=1383994667&output=csv
+read the Word column
+and for each word download this webpage:
+https://www.etymonline.com/search?q={word}
+and get the text from this element
+class=word__etymology_expand--1s7tE
+and store this in a variable etymonline
+
+then it should download
+https://en.wiktionary.org/wiki/{word}
+and find a section of the page that looks like this:
+<p>Borrowed from <span class="etyl"><a href="https://en.wikipedia.org/wiki/Middle_French" class="extiw" title="w:Middle French">Middle French</a></span> <i class="Latn mention" lang="frm"><a class="mw-selflink-fragment" href="#Middle_French">presumption</a></i>, from <span class="etyl"><a href="https://en.wikipedia.org/wiki/Old_French" class="extiw" title="w:Old French">Old French</a></span> <i class="Latn mention" lang="fro"><a class="mw-selflink-fragment" href="#Old_French">presumption</a></i>, from <span class="etyl"><a href="https://en.wikipedia.org/wiki/Latin" class="extiw" title="w:Latin">Latin</a></span> <i class="Latn mention" lang="la"><a href="/wiki/praesumptio#Latin" title="praesumptio">praesumptiō</a></i>.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="English">English</h2><span class="mw-editsection" data-nosnippet=""><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=presumption&amp;action=edit&amp;section=1" title="Edit section: English"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<h2 id="English">English</h2>
+<span class="mw-editsection" data-nosnippet=""><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=presumption&amp;action=edit&amp;section=1" title="Edit section: English"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span>
+<div class="mw-heading mw-heading2"><h2 id="English">English</h2><span class="mw-editsection" data-nosnippet=""><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=presumption&amp;action=edit&amp;section=1" title="Edit section: English"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<div class="interproject-box sister-wikipedia sister-project noprint floatright"><div style="float: left;"><figure class="mw-halign-none" typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/44px-Wikipedia-logo-v2.svg.png" decoding="async" width="44" height="40" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/66px-Wikipedia-logo-v2.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/88px-Wikipedia-logo-v2.svg.png 2x" data-file-width="103" data-file-height="94"></span><figcaption></figcaption></figure></div><div style="margin-left: 60px;">English <a href="/wiki/Wikipedia" title="Wikipedia">Wikipedia</a> has an article on:<div style="margin-left: 10px;"><b class="Latn" lang="en"><a href="https://en.wikipedia.org/wiki/presumption" class="extiw" title="w:presumption">presumption</a></b></div></div><span class="interProject"><a href="https://en.wikipedia.org/wiki/presumption" class="extiw" title="w:presumption">Wikipedia </a></span></div>
+<style data-mw-deduplicate="TemplateStyles:r81386805">.mw-parser-output .interproject-box{font-size:90%;width:250px;padding:4px;text-align:left;background:#f9f9f9;border:solid #aaa 1px}@media screen and (max-width:719px){.mw-parser-output .interproject-box{box-sizing:border-box;line-height:1.5;width:100%;max-width:100%}}</style>
+<div class="mw-heading mw-heading3"><h3 id="Etymology">Etymology</h3><span class="mw-editsection" data-nosnippet=""><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=presumption&amp;action=edit&amp;section=2" title="Edit section: Etymology"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+and save the text of the etymology to a variable wiktionary
+
+it should then print
+
+{word}:
+
+{etymonline}
+
+{wiktionary}
