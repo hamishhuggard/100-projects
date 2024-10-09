@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQ Converter</title>
+</head>
+<body>
+    <h1>IQ Converter</h1>
+    
+    <label for="iqSlider">IQ: <span id="iqValue">100</span></label>
+    <input type="range" id="iqSlider" min="0" max="200" value="100" oninput="updateIQ(this.value)">
+    
+    <p>Number of people in the world with this IQ or higher: <span id="populationCount">0</span></p>
+    <p>One in n IQ: <span id="oneInN">0</span></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
