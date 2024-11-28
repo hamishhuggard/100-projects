@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Title
+    </title>
+    <style>
+        body { margin: 0; }
+        *, { box-sizing: border-box; }
+    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <script src="script.js"></script>
+    <div>
+        <h1>
+        Todos
+        </h1>
+        <ul>
+        {% for todo in todos %}
+            <li>
+                {{ todo.task }}
+                <input type="checkbox" name="completed"
+                onclick="location.href='/complete/{{todo.id}}'"
+                {% if todo.completed %}
+                   checked
+                {% endif %}
+                />
+                <span
+                {% if todo.completed %}
+                    style="text-decoration: line-through;"
+                {% endif %}
+                /> {{ todo.task }} </span>
+                <a href="/delete/{{todo.id}}" class="btn btn-danger">Delete</a>
+            </li>
+        {% endfor %}
+        </ul>
+        <form action="/new" method="POST" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="task" class="form-control" placeholder="Add new task" required>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
