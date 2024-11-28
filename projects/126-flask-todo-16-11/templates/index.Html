@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>
+    </h1>
+        {% for todo in todos %}
+<div>
+            <input type="checkbox" onclick="location.href='/complete/{{todo.id}}'" 
+                                   {% if todo.complete %} checked {% endif %}
+            />
+            <span
+            {% if todo.complete %}
+            style="text-decoration: line-through;"
+            {% endif %}
+            />
+                {{ todo.task }}
+            </span>
+            <a href="/delete/{{todo.id}}">x</a>
+        </div>
+        {% endfor %}
+    <form action="/add" method="POST">
+        <input name="task" type="text"/>
+        <button type="submit"></button>
+    </form>
+</body>
+</html>
