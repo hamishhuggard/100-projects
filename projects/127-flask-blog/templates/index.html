@@ -1,11 +1,18 @@
 {% extends "base.html" %}
-<h1>All posts</h1>
+{% block title %}Home - Blog{% endblock %}
 {% block content %}
+<h1>Welcome to My Blog!</h1>
 {% for post in posts %}
-    <h2>
-        <a href="{{ url_for('post', post_id=post.id) }}"> {{ post.title }} </a>
-    </h2>
-    <p> {{ post.content[:100] }}... </p>
-    <p><i>Posted by user {{ post.user_id }}... </i></p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-tiltle">
+            <a href="{{ url for('post', post id=post.id) }}"> {{ post.title }} </a>
+        </h5>
+        <p class="card-text"> {{ post.content[:100] }}... </p>
+        <p><i>Posted by user {{ post.user_id }}... </i></p>
+    </div>
+</div>
+{% else %}
+<p>No postss available. Login to create one!</p>
 {% endfor %}
 {% endblock %}
