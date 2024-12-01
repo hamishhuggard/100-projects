@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<a href="{{ url_for('new-post') }}" class="btn btn-success bm-3">Creaet New Post</a>
+{% for post in posts %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.content[:100] }}...</p>
+        <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-primary">Edit</a>
+    </div>
+</div>
+{% else %}
+<p>No posts yet. Start writing.</p>
+{% endfor %}
+{% endblock %}

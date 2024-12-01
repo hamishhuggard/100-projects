@@ -6,7 +6,7 @@
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-tiltle">
-            <a href="{{ url for('post', post id=post.id) }}"> {{ post.title }} </a>
+            <a href="{{ url_for('post', post_id=post.id) }}"> {{ post.title }} </a>
         </h5>
         <p class="card-text"> {{ post.content[:100] }}... </p>
         <p><i>Posted by user {{ post.user_id }}... </i></p>
