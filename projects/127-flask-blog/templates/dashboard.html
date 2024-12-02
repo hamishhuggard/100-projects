@@ -2,7 +2,11 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <h1>Dashboard</h1>
-<a href="{{ url_for('new-post') }}" class="btn btn-success bm-3">Creaet New Post</a>
+<form method="POST">
+<input type="text" name="title"/>
+<input type="text" name="content"/>
+<button type="submit">Submit</button>
+</form>
 {% for post in posts %}
 <div class="card mb-3">
     <div class="card-body">

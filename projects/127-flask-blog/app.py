@@ -35,14 +35,14 @@ def login():
             session['user_id'] = user.id
             return redirect(url_for('dashboard'))
         flash('Invalid email or password')
-    return render_template('login')
+    return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        hashed_password = generate_password_hash(password, method="SHA256")
+        hashed_password = generate_password_hash(password)
         new_user = User(email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
