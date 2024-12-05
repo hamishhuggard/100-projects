@@ -22,7 +22,7 @@ def add_task():
 def update_task(task_id):
     data = request.json
     tasks = tasks[task_id]
-    task['complete'] = True
+    task['complete'] = request.json['complete']
     return jsonify(task), 201
 
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
