@@ -1,30 +1,28 @@
-const API_URL = 'https://127.0.0.1:5000';
+const API_URL = "http://127.0.0.1:5000";
 
 export const getTasks = async () => {
-    const response = await fetch(`${API_URL}/tasks`);
-    return reponse.json();
-}
+  const response = await fetch(`${API_URL}/tasks`);
+  return response.json();
+};
 
 export const addTask = async (title) => {
-    const response = await fetch(`${API_URL}/tasks`, {
-        method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({ title })
-    });
-    return reponse.json();
-}
+  const response = await fetch(`${API_URL}/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title }),
+  });
+  return response.json();
+};
+
 export const updateTask = async (id, complete) => {
-    const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: 'PUT',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({ complete })
-    });
-    return reponse.json();
-}
+  const response = await fetch(`${API_URL}/tasks/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ complete }),
+  });
+  return response.json();
+};
 
 export const deleteTask = async (id) => {
-    const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: 'DELETE',
-    });
-    return reponse.json();
-}
+  await fetch(`${API_URL}/tasks/${id}`, { method: "DELETE" });
+};
