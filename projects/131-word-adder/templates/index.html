@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word2Vec Vector Addition</title>
+</head>
+<body>
+    <h1>Word2Vec Vector Addition</h1>
+    <form id="wordForm">
+        <label for="word1">Word 1:</label>
+        <input type="text" id="word1" name="word1" required>
+        <br>
+        <label for="word2">Word 2:</label>
+        <input type="text" id="word2" name="word2" required>
+        <br>
+        <button type="submit">Find Closest Word</button>
+    </form>
+    <p id="result"></p>
+    <script>
+        document.getElementById('wordForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const word1 = document.getElementById('word1').value;
+            const word2 = document.getElementById('word2').value;
+
+            const response = await fetch('/find_word', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ word1, word2 })
+            });
+
+            const resultElement = document.getElementById('result');
+            if (response.ok) {
+                const data = await response.json();
+                resultElement.textContent = `Closest word: ${data.result}`;
+            } else {
+                const error = await response.json();
+                resultElement.textContent = `Error: ${error.error}`;
+            }
+        };
+    </script>
+</body>
+</html>
