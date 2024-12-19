@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projection Coordinates</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .axis { font: 12px sans-serif; }
+        .dot { stroke: #000; }
+        .label { font: 10px sans-serif; text-anchor: middle; }
+    </style>
+</head>
+<body>
+    <h1>Projection Coordinates</h1>
+
+    <form id="projection-form">
+        <label for="word_x">Word x (positive):</label>
+        <input type="text" id="word_x" name="word_x" value="easy"><br>
+
+        <label for="word_neg_x">Word -x (negative):</label>
+        <input type="text" id="word_neg_x" name="word_neg_x" value="difficult"><br>
+
+        <label for="word_y">Word y (positive):</label>
+        <input type="text" id="word_y" name="word_y" value="tasty"><br>
+
+        <label for="word_neg_y">Word -y (negative):</label>
+        <input type="text" id="word_neg_y" name="word_neg_y" value="gross"><br> <!-- should be "untasty", but that's not in the vocabulary -->
+
+        <label for="points">Points (comma-separated):</label><br>
+        <textarea id="points" name="points" rows="6" cols="40">
+pineapple
+grape
+peach
+strawberry
+blueberry
+cherry
+pear
+apple
+banana
+tomato
+watermelon
+pomegranate
+grapefruit
+orange
+lemon
+        </textarea><br>
+
+        <button type="button" id="update-plot">Update Plot</button>
+    </form>
+
+    <div id="chart"></div>
+
+    <script>
+        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+        const width = 600 - margin.left - margin.right;
+        const height = 600 - margin.top - margin.bottom;
+
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const xScale = d3.scaleLinear().domain([-7, 7]).range([0, width]);
+        const yScale = d3.scaleLinear().domain([-7, 7]).range([height, 0]);
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height / 2})`)
+            .call(d3.axisBottom(xScale).ticks(10))
+            .attr("class", "axis");
+
+        svg.append("g")
+            .attr("transform", `translate(${width / 2},0)`)
+            .call(d3.axisLeft(yScale).ticks(10))
+            .attr("class", "axis");
+
+        svg.selectAll(".grid-line")
+            .data(d3.range(-7, 8))
+            .join("line")
+            .attr("class", "grid-line")
+            .attr("stroke", "#ccc")
+            .attr("x1", d => xScale(d))
+            .attr("x2", d => xScale(d))
+            .attr("y1", 0)
+            .attr("y2", height)
+            .style("stroke-width", 0.5);
+
+        svg.selectAll(".grid-line-h")
+            .data(d3.range(-7, 8))
+            .join("line")
+            .attr("class", "grid-line-h")
+            .attr("stroke", "#ccc")
+            .attr("y1", d => yScale(d))
+            .attr("y2", d => yScale(d))
+            .attr("x1", 0)
+            .attr("x2", width)
+            .style("stroke-width", 0.5);
+
+        function renderPoints(points) {
+            const dots = svg.selectAll(".dot").data(points, d => d.word);
+
+            dots.enter()
+                .append("circle")
+                .attr("class", "dot")
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y))
+                .attr("r", 5)
+                .style("fill", "steelblue");
+
+            dots.attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y));
+
+            dots.exit().remove();
+
+            const labels = svg.selectAll(".label").data(points, d => d.word);
+
+            labels.enter()
+                .append("text")
+                .attr("class", "label")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => yScale(d.y) - 10)
+                .text(d => d.word);
+
+            labels.attr("x", d => xScale(d.x))
+                .attr("y", d => yScale(d.y) - 10)
+                .text(d => d.word);
+
+            labels.exit().remove();
+        }
+
+        document.getElementById("update-plot").addEventListener("click", async () => {
+            const formData = new FormData(document.getElementById("projection-form"));
+            const data = await fetch('/projection_coords', {
+                method: 'POST',
+                body: formData
+            })
+			.then(response => console.log(response))
+			.then(response => response.json())
+			.then(data => {
+				if (data.error) {
+					console.error('Error:', data.error);  // Log error message here
+				}
+			})
+
+console.log(data)
+            if (data.results) {
+                renderPoints(data.results);
+            }
+        });
+    </script>
+</body>
+</html>
