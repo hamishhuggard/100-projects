@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from gensim.models import KeyedVectors
+import numpy as np
 
 import gensim.downloader
 
@@ -100,8 +101,9 @@ def projection_coords():
         word_neg_x = request.form['word_neg_x'].strip().lower()
         word_y = request.form['word_y'].strip().lower()
         word_neg_y = request.form['word_neg_y'].strip().lower()
-        word_list = request.form.getlist('word_list[]')
-
+        word_list = request.form['content']
+        word_list = word_list.lower()
+        word_list = word_list.split()
 
         missing_coords = [ word for word in [word_x, word_neg_x, word_y, word_neg_y] if word not in model.key_to_index ]
         if len(missing_coords) > 0:
@@ -112,16 +114,15 @@ def projection_coords():
         y_axis = model[word_y] - model[word_neg_y]
 
         # Project each word onto the axes
-        results = {}
+        results = []
         for word in word_list:
             if word in model.key_to_index:
                 word_vec = model[word]
                 proj_x = np.dot(word_vec, x_axis) / np.linalg.norm(x_axis)
                 proj_y = np.dot(word_vec, y_axis) / np.linalg.norm(y_axis)
-                results[word] = {'x': proj_x, 'y': proj_y}
+                results.append({'word': word, 'x': float(proj_x), 'y': float(proj_y)})
 
-        app.logger.error(results)
-        return jsonify({'results': results})
+        return jsonify(results)
 
     return render_template('projection_coords.html')
 

@@ -14,21 +14,19 @@
 <body>
     <h1>Projection Coordinates</h1>
 
-    <form id="projection-form">
-        <label for="word_x">Word x (positive):</label>
-        <input type="text" id="word_x" name="word_x" value="easy"><br>
+    <img src="https://imgs.xkcd.com/comics/fuck_grapefruit.png"/>
 
-        <label for="word_neg_x">Word -x (negative):</label>
+    <form id="projection-form">
+        <label for="word_x">x-axis:</label>
+        <input type="text" id="word_x" name="word_x" value="easy"> to 
         <input type="text" id="word_neg_x" name="word_neg_x" value="difficult"><br>
 
-        <label for="word_y">Word y (positive):</label>
-        <input type="text" id="word_y" name="word_y" value="tasty"><br>
-
-        <label for="word_neg_y">Word -y (negative):</label>
+        <label for="word_y">y-axis:</label>
+        <input type="text" id="word_y" name="word_y" value="tasty"> to
         <input type="text" id="word_neg_y" name="word_neg_y" value="gross"><br> <!-- should be "untasty", but that's not in the vocabulary -->
 
-        <label for="points">Points (comma-separated):</label><br>
-        <textarea id="points" name="points" rows="6" cols="40">
+        <label for="points">Content:</label><br>
+        <textarea id="points" name="content" rows="6" cols="40">
 pineapple
 grape
 peach
@@ -48,6 +46,8 @@ lemon
 
         <button type="button" id="update-plot">Update Plot</button>
     </form>
+
+    <div id="response"></div>
 
     <div id="chart"></div>
 
@@ -136,15 +136,33 @@ lemon
                 method: 'POST',
                 body: formData
             })
-			.then(response => console.log(response))
+            .then(response => {
+                if (!response.ok) {
+                    document.getElementById('response').textContent = JSON.stringify(response.json(), null, 2);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); // Parse the response as JSON
+            })
+            .then(data => {
+                // Output the response data to #response
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+                console.log(data);
+                renderPoints(data);
+            })
+            .catch(error => {
+                // Output the error to #response
+                // document.getElementById('response').textContent = `Error: ${error.message}`;
+            });
+            /*
 			.then(response => response.json())
 			.then(data => {
 				if (data.error) {
 					console.error('Error:', data.error);  // Log error message here
 				}
 			})
+            */
 
-console.log(data)
+            console.log(data)
             if (data.results) {
                 renderPoints(data.results);
             }
