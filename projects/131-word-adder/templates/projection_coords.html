@@ -41,8 +41,7 @@ watermelon
 pomegranate
 grapefruit
 orange
-lemon
-        </textarea><br>
+lemon </textarea><br>
 
         <button type="button" id="update-plot">Update Plot</button>
     </form>
@@ -98,37 +97,59 @@ lemon
             .attr("x2", width)
             .style("stroke-width", 0.5);
 
-        function renderPoints(points) {
-            const dots = svg.selectAll(".dot").data(points, d => d.word);
+function renderPoints(points) {
+    // Update the scales based on the new data
+    xScale.domain(d3.extent(points, d => d.x)).nice();
+    yScale.domain(d3.extent(points, d => d.y)).nice();
 
-            dots.enter()
-                .append("circle")
-                .attr("class", "dot")
-                .attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y))
-                .attr("r", 5)
-                .style("fill", "steelblue");
+    // Update and render the dots
+    const dots = svg.selectAll(".dot").data(points, d => d.word);
 
-            dots.attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y));
+    dots.enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y))
+        .attr("r", 5)
+        .style("fill", "steelblue");
 
-            dots.exit().remove();
+    dots.transition()
+        .duration(1000)
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y));
 
-            const labels = svg.selectAll(".label").data(points, d => d.word);
+    dots.exit().remove();
 
-            labels.enter()
-                .append("text")
-                .attr("class", "label")
-                .attr("x", d => xScale(d.x))
-                .attr("y", d => yScale(d.y) - 10)
-                .text(d => d.word);
+    // Update and render the labels
+    const labels = svg.selectAll(".label").data(points, d => d.word);
 
-            labels.attr("x", d => xScale(d.x))
-                .attr("y", d => yScale(d.y) - 10)
-                .text(d => d.word);
+    labels.enter()
+        .append("text")
+        .attr("class", "label")
+        .attr("x", d => xScale(d.x))
+        .attr("y", d => yScale(d.y) - 10)
+        .text(d => d.word);
 
-            labels.exit().remove();
-        }
+    labels.transition()
+        .duration(1000)
+        .attr("x", d => xScale(d.x))
+        .attr("y", d => yScale(d.y) - 10)
+        .text(d => d.word);
+
+    labels.exit().remove();
+
+    // Update the axes with transitions
+    svg.select(".x-axis")
+        .transition()
+        .duration(1000)
+        .call(d3.axisBottom(xScale));
+
+    svg.select(".y-axis")
+        .transition()
+        .duration(1000)
+        .call(d3.axisLeft(yScale));
+}
+
 
         document.getElementById("update-plot").addEventListener("click", async () => {
             const formData = new FormData(document.getElementById("projection-form"));
@@ -144,23 +165,12 @@ lemon
                 return response.json(); // Parse the response as JSON
             })
             .then(data => {
-                // Output the response data to #response
-                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
-                console.log(data);
                 renderPoints(data);
             })
             .catch(error => {
                 // Output the error to #response
                 // document.getElementById('response').textContent = `Error: ${error.message}`;
             });
-            /*
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					console.error('Error:', data.error);  // Log error message here
-				}
-			})
-            */
 
             console.log(data)
             if (data.results) {
