@@ -28,6 +28,18 @@ def append_content(content):
         file.write(content + '\n')
     print("Appending to content.txt:")
 
+def read_content():
+    """Reads the entire content of the 'content.txt' file and returns it."""
+    if os.path.exists('content.txt'):
+        with open('content.txt', 'r') as file:
+            content = file.read()
+        print("Reading from content.txt:")
+        print(content)
+        return content
+    else:
+        print("content.txt does not exist.")
+        return ""
+
 # Define custom functions for interaction with the API
 custom_functions = [
     {
@@ -48,6 +60,14 @@ custom_functions = [
             'properties': {
                 'content': {'type': 'string', 'description': 'The content to append to the file.'}
             }
+        }
+    },
+    {
+        'name': 'read_content',
+        'description': 'Read the entire content of "content.txt".',
+        'parameters': {
+            'type': 'object',
+            'properties': {}
         }
     }
 ]
@@ -71,8 +91,8 @@ def chat_with_gpt():
             completion = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=messages,
-                functions = custom_functions,
-                function_call = 'auto'
+                functions=custom_functions,
+                function_call='auto'
             )
 
             # Correct access to the message content in the completion
@@ -82,21 +102,28 @@ def chat_with_gpt():
             response_message = completion.choices[0].message
 
             if dict(response_message).get('function_call'):
-
                 # Which function call was invoked
                 function_called = response_message.function_call.name
 
                 # Extracting the arguments
-                function_args  = json.loads(response_message.function_call.arguments)
+                function_args = json.loads(response_message.function_call.arguments)
 
                 # Function names
                 available_functions = {
                     "write_content": write_content,
-                    "append_content": append_content
+                    "append_content": append_content,
+                    "read_content": read_content
                 }
 
-                fuction_to_call = available_functions[function_called]
-                response_message = fuction_to_call(*list(function_args .values()))
+                function_to_call = available_functions[function_called]
+
+                # Call the function and get the response
+                response_message = function_to_call(*list(function_args.values()))
+
+                # If the function returns something (like read_content), we can handle it
+                if function_called == "read_content":
+                    # If needed, you can add the returned content to the chat message.
+                    messages.append({"role": "assistant", "content": response_message})
 
             # Add the assistant's reply to the conversation history
             if assistant_reply:
