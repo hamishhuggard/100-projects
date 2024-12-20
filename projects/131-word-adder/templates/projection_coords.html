@@ -6,27 +6,74 @@
     <title>Projection Coordinates</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        .axis { font: 12px sans-serif; }
-        .dot { stroke: #000; }
-        .label { font: 10px sans-serif; text-anchor: middle; }
+.axis { font: 12px sans-serif; }
+.dot { stroke: #000; }
+.label { font: 10px sans-serif; text-anchor: middle; }
+
+.axis-label {
+    font: 10px sans-serif;
+    font-size: 14px;
+    text-anchor: middle;
+}
+
+/* General container styles */
+.chart-and-controls {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to handle small screens */
+    align-items: flex-start; /* Aligns items to the top */
+    gap: 20px; /* Adds space between form and chart */
+    margin: 20px;
+}
+
+/* Controls (form) styles */
+.controls {
+    flex: 1; /* Allows the form to grow/shrink proportionally */
+    min-width: 300px; /* Ensures a reasonable minimum width */
+    max-width: 400px; /* Optional: Limits the form's maximum width */
+}
+
+/* Chart container styles */
+#chart {
+    /*
+    flex: 2; /* Gives the chart more space relative to the form */
+    */
+    min-width: 300px; /* Ensures chart doesn't shrink too much */
+}
+
+/* Responsive design: Stack vertically on small screens */
+@media (max-width: 600px) {
+    .chart-and-controls {
+        flex-direction: column; /* Stack items vertically */
+        align-items: center; /* Center align items */
+    }
+
+    .controls, #chart {
+        max-width: 100%; /* Allow full width for small screens */
+    }
+}
+
     </style>
 </head>
 <body>
     <h1>Projection Coordinates</h1>
 
-    <img src="https://imgs.xkcd.com/comics/fuck_grapefruit.png"/>
 
-    <form id="projection-form">
-        <label for="word_x">x-axis:</label>
-        <input type="text" id="word_x" name="word_x" value="easy"> to 
-        <input type="text" id="word_neg_x" name="word_neg_x" value="difficult"><br>
+    <div class="chart-and-controls">
 
-        <label for="word_y">y-axis:</label>
-        <input type="text" id="word_y" name="word_y" value="tasty"> to
-        <input type="text" id="word_neg_y" name="word_neg_y" value="gross"><br> <!-- should be "untasty", but that's not in the vocabulary -->
+    <div id="chart"></div>
 
-        <label for="points">Content:</label><br>
-        <textarea id="points" name="content" rows="6" cols="40">
+    <div class="controls">
+        <form id="projection-form">
+            <label for="word_x">x-axis:</label><br>
+            <input type="text" id="word_x" name="word_x" value="easy"> to 
+            <input type="text" id="word_neg_x" name="word_neg_x" value="difficult"><br>
+
+            <label for="word_y">y-axis:</label><br>
+            <input type="text" id="word_y" name="word_y" value="tasty"> to
+            <input type="text" id="word_neg_y" name="word_neg_y" value="gross"><br> <!-- should be "untasty", but that's not in the vocabulary -->
+
+            <label for="points">Content:</label><br>
+            <textarea id="points" name="content" rows="6" cols="40">
 pineapple
 grape
 peach
@@ -43,12 +90,13 @@ grapefruit
 orange
 lemon </textarea><br>
 
-        <button type="button" id="update-plot">Update Plot</button>
-    </form>
+            <button type="button" id="update-plot">Update Plot</button>
+        </form>
+    </div>
+    
+    <img src="https://imgs.xkcd.com/comics/fuck_grapefruit.png"/>
 
-    <div id="response"></div>
-
-    <div id="chart"></div>
+</div>
 
     <script>
         const margin = { top: 20, right: 30, bottom: 40, left: 50 };
@@ -96,6 +144,96 @@ lemon </textarea><br>
             .attr("x1", 0)
             .attr("x2", width)
             .style("stroke-width", 0.5);
+
+function updateAxisLabels(wordX, wordNegX, wordY, wordNegY) {
+    svg.select("#axis-label-positive-x").text(wordX.toUpperCase());
+    svg.select("#axis-label-negative-x").text(wordNegX.toUpperCase());
+    svg.select("#axis-label-positive-y").text(wordY.toUpperCase());
+    svg.select("#axis-label-negative-y").text(wordNegY.toUpperCase());
+}
+
+// Add class names to the labels for easy selection
+svg.append("text")
+    .attr("class", "axis-label")
+    .attr("id", "axis-label-positive-x")
+    .attr("x", width)
+    .attr("y", yScale(0)-6)
+    .style("font-size", "12px")
+    .text("Positive X");
+
+svg.append("text")
+    .attr("class", "axis-label")
+    .attr("id", "axis-label-negative-x")
+    .attr("x", 0)
+    .attr("y", yScale(0)-6)
+    .style("font-size", "12px")
+    .text("Negative X");
+
+svg.append("text")
+    .attr("class", "axis-label")
+    .attr("id", "axis-label-positive-y")
+    .attr("x", xScale(0))
+    .attr("y", -10)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text("Positive Y");
+
+svg.append("text")
+    .attr("class", "axis-label")
+    .attr("id", "axis-label-negative-y")
+    .attr("x", xScale(0))
+    .attr("y", height + 20)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .text("Negative Y");
+
+
+function renderAxisLabels(wordX, wordNegX, wordY, wordNegY) {
+    // Remove any existing axis labels
+    svg.selectAll(".axis-label").remove();
+
+    // Add positive x-axis label
+    svg.append("text")
+        .attr("class", "axis-label")
+        .attr("x", xScale(xScale.domain()[1]) + 10) // Position slightly to the right
+        .attr("y", yScale(0) + 5) // Align with the x-axis
+        .attr("text-anchor", "start")
+        .style("font-size", "12px")
+        .style("fill", "black")
+        .text(wordX);
+
+    // Add negative x-axis label
+    svg.append("text")
+        .attr("class", "axis-label")
+        .attr("x", xScale(xScale.domain()[0]) - 10) // Position slightly to the left
+        .attr("y", yScale(0) + 5)
+        .attr("text-anchor", "end")
+        .style("font-size", "12px")
+        .style("fill", "black")
+        .text(wordNegX);
+
+    // Add positive y-axis label
+    svg.append("text")
+        .attr("class", "axis-label")
+        .attr("x", xScale(0) - 10) // Align with the y-axis
+        .attr("y", yScale(yScale.domain()[1]) - 10) // Position slightly above
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("fill", "black")
+        .text(wordY);
+
+    // Add negative y-axis label
+    svg.append("text")
+        .attr("class", "axis-label")
+        .attr("x", xScale(0) - 10)
+        .attr("y", yScale(yScale.domain()[0]) + 20) // Position slightly below
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("fill", "black")
+        .text(wordNegY);
+}
+
+
 
 function renderPoints(points) {
     // Update the scales based on the new data
@@ -150,33 +288,42 @@ function renderPoints(points) {
         .call(d3.axisLeft(yScale));
 }
 
+// Define the async function in the outer scope
+async function updateChart() {
+    const formData = new FormData(document.getElementById("projection-form"));
+    const wordX = formData.get("word_x");
+    const wordNegX = formData.get("word_neg_x");
+    const wordY = formData.get("word_y");
+    const wordNegY = formData.get("word_neg_y");
 
-        document.getElementById("update-plot").addEventListener("click", async () => {
-            const formData = new FormData(document.getElementById("projection-form"));
-            const data = await fetch('/projection_coords', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    document.getElementById('response').textContent = JSON.stringify(response.json(), null, 2);
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json(); // Parse the response as JSON
-            })
-            .then(data => {
-                renderPoints(data);
-            })
-            .catch(error => {
-                // Output the error to #response
-                // document.getElementById('response').textContent = `Error: ${error.message}`;
-            });
-
-            console.log(data)
-            if (data.results) {
-                renderPoints(data.results);
-            }
+    try {
+        const response = await fetch('/projection_coords', {
+            method: 'POST',
+            body: formData
         });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            document.getElementById('response').textContent = JSON.stringify(errorData, null, 2);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json(); // Parse the response as JSON
+        renderPoints(data);
+        updateAxisLabels(wordX, wordNegX, wordY, wordNegY);
+    } catch (error) {
+        document.getElementById('response').textContent = `Error: ${error.message}`;
+    }
+}
+
+// Call the function immediately on page load
+updateChart();
+
+// Also attach it to the button click event
+document.getElementById("update-plot").addEventListener("click", updateChart);
+
+
+
     </script>
 </body>
 </html>
