@@ -84,6 +84,8 @@ def chat_with_gpt():
 
     messages = [{"role": "system", "content": "You are a todo bot. Your job is to keep track of the goals and tasks for the user. The todos are recorded in TODO.txt."}]
 
+    read_todo_list()
+
     while True:
         user_input = input("🙂: ")
         if user_input.lower() in ["exit", "quit"]:
@@ -98,6 +100,14 @@ def chat_with_gpt():
                 model="gpt-4o-mini",
                 messages=messages,
                 functions=[
+                    #{
+                    #    'name': 'read_todo_list',
+                    #    'description': 'Read and display the todo list.',
+                    #    'parameters': {
+                    #        'type': 'object',
+                    #        'properties': {}
+                    #    }
+                    #},
                     {
                         'name': 'add_task',
                         'description': 'Add a new task to the todo list.',
@@ -138,14 +148,6 @@ def chat_with_gpt():
                             }
                         }
                     },
-                    {
-                        'name': 'read_todo_list',
-                        'description': 'Read and display the todo list.',
-                        'parameters': {
-                            'type': 'object',
-                            'properties': {}
-                        }
-                    }
                 ],
                 function_call='auto'
             )
@@ -160,15 +162,17 @@ def chat_with_gpt():
                 function_args = json.loads(response_message.function_call.arguments)
 
                 available_functions = {
+                    #"read_todo_list": read_todo_list,
                     "add_task": add_task,
                     "remove_task": remove_task,
                     "check_task": check_task,
-                    "uncheck_task": uncheck_task,
-                    "read_todo_list": read_todo_list
+                    "uncheck_task": uncheck_task
                 }
 
                 function_to_call = available_functions[function_called]
                 function_to_call(*list(function_args.values()))
+
+                read_todo_list()
 
             if assistant_reply:
                 messages.append({"role": "assistant", "content": assistant_reply})
