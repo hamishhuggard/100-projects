@@ -2,26 +2,27 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# Load API key from .env file
-load_dotenv()
-GPT_API_KEY = os.getenv("OPENAI_API_KEY")
-
-if not GPT_API_KEY:
-    print("Error: OPENAI_API_KEY is not set in the .env file.")
-    exit(1)
-
 class User:
     def __init__(self, messages):
         self.messages = messages
 
     def go(self):
-        user_input = input("🧑: ")
+        user_input = input("🙂: ")
         self.messages.append({"role": "user", "content": user_input})
         return user_input
 
 class GPT:
     def __init__(self, messages):
         self.messages = messages
+
+        # Load API key from .env file
+        load_dotenv()
+        GPT_API_KEY = os.getenv("OPENAI_API_KEY")
+
+        if not GPT_API_KEY:
+            print("Error: OPENAI_API_KEY is not set in the .env file.")
+            exit(1)
+
         self.client = OpenAI(api_key=GPT_API_KEY)
 
     def go(self):
