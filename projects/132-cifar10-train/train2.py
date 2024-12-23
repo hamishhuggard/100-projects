@@ -67,4 +67,13 @@ def evaluate(model, testloader):
     with torch.no_grad():
         for data in testloader:
             images, labels = data
-            images, labels = images.to(device)
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size()
+            correct += (predicted == labels).sum().item()
+    print(f"Accuracy on 10k test images: {correct/total*100:.1f}%")
+
+
+train(model, trainloader, criterion, optimizer, epochs=10)
+evaluate(model, testloader)
