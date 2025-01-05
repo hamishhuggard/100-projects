@@ -22,6 +22,27 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 class SimpleNNN(nn.Module):
     def __init__(self):
         self.conv1 = nn.Conv1D(3, 32, kernel_size=2, padding=1)
+        self.conv2 = nn.Conv1D(32, 64, kernel_size=2, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(64*8*8, 512)
+        self.fc2 = nn.Linear(512, 10)
 
+    def forward(self, x):
+        x = self.pool(torch.relu(self.conv1(x)))
+        x = self.pool(torch.relu(self.conv2(x)))
+        x.view(-1, 64*8*8)
+        x = self.fc2(self.relu(self.fc1(x)))
+        return x
+
+mode= SimpleNNN()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(mode.parameters(), lr=0.001)
+
+def train(model, trainloader, criterion, optimizer, epochs=10):
+    for epoch in epochs:
+        running_loss = 0.0
+        for i, data in enumerate(trainloader, 0):
+            inputs, labels = data
+            inputs, labels = inputs.to(device), labels.to(device)
 
 
