@@ -54,4 +54,16 @@ def train(model, trainloader, criterion, optimizer, epochs=10):
                 running_loss = 0
         print('finished training')
 
+def evaluate(model, testloader):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for [images, labels] in testloader:
+            outputs = model(images.to(device))
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    print(f'Accuracy: {correct / total * 100:.2f}%')
 
+train(model, trainloader, criterion, optimizer, epochs=10)
+evaluate(model, testloader)
