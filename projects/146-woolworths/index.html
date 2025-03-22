@@ -46,11 +46,11 @@ body {
     gap: 10px;
 }
 
-.header-top-right-item {
+.button {
     background-color: white;
     padding: 12px;
     border-radius: 8px;
-    background-color: lightgreen;
+    background-color: white;
     text-align: center;
     display: flex;
     align-items: center;
@@ -60,9 +60,11 @@ body {
     font-size: 14px;
     color: #868686;
     text-decoration: none;
+    cursor: pointer;
 }
 
-.header-top-right-item:hover {
+.button:hover {
+    background-color: rgb(222, 255, 222);
 }
 
 .header-middle {
@@ -109,6 +111,15 @@ body {
     background-color: honeydew;
 }
 
+.olive {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    background-color: lightblue;
+}
+
 </style>
 </head>
 <body>
@@ -117,26 +128,40 @@ body {
             <div class="header-top">
                 <div class="header-top-logo"></div>
                 <div class="header-top-right">
-                    <a href="/contact" class="header-top-right-item">Contact</a>
-                    <a href="/sign-in" class="header-top-right-item">Sign in</a>
+                    <a href="/contact" class="header-top-right-item button">Contact</a>
+                    <a href="/sign-in" class="header-top-right-item button">Sign in</a>
                 </div>
             </div>
             <div class="header-middle">
                 <div class="header-middle-left">
-                    <div class="header-middle-left-item">Browse</div>
-                    <div class="header-middle-left-item">Specials and Offers</div>
-                    <div class="header-middle-left-item">Favourites & lists</div>
+                    <div class="header-middle-left-item button">Browse</div>
+                    <div class="header-middle-left-item button">Specials and Offers</div>
+                    <div class="header-middle-left-item button">Favourites & lists</div>
                 </div>
                 <div class="header-middle-right">
-                    <div class="header-middle-right-item">Search</div>
-                    <div class="header-middle-right-item">Pickup</div>
-                    <div class="header-middle-right-item">Checkout</div>
+                    <div class="header-middle-right-item button">Search</div>
+                    <div class="header-middle-right-item button">Pickup</div>
+                    <div class="header-middle-right-item button">Checkout</div>
                 </div>
             </div>
         </div>
         <div class="header-banner">
             Prices and stock availability may vary from store to store.
         </div>
+    </div>
+    <div class="olive">
+        <div class="ask-olive"></div>
+        <div class="olive-img"></div>
+    </div>
+    <div class="carousel">
+        <div class="carousel-item"></div>
+        <div class="carousel-item"></div>
+        <div class="carousel-item"></div>
+        <div class="carousel-item"></div>
+    </div>
+    <div class="footer">
+        <div class="footer-links"></div>
+        <div class="footer-credits"></div>
     </div>
 </body>
 </html>

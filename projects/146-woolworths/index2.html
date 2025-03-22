@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .flex-row-between {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="header-1" style="
+    padding: 20px 150px; 
+    width: 100%;
+    background-color: #add4fa; 
+    ">
+        <div class="flex-row-between">
+            <div> 
+                <button type="button" class="btn btn-primary">Primary</button>
+                <button type="button" class="btn btn-primary">Primary</button>
+            </div>
+            <div>
+                <div class="input-group mx-2 d-inline-flex" style="width: 300px;">
+                    <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-primary">Pick up or delivery</button>
+                <button type="button" class="btn btn-success">$0.00</button>
+            </div>
+        </div>
+    </div>
+    <div class="header-2" style="
+        width: 100%;
+        background-color: #e9ecef;
+        padding: 15px 150px;
+    ">
+        <h5 class="mb-0">Featured Categories</h5>
+    </div>
+
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" style="margin: 30px 150px;">
+        <!-- Carousel indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="3"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="4"></button>
+        </div>
+
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <h3>First Slide</h3>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <h3>Second Slide</h3>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <h3>Third Slide</h3>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <h3>Fourth Slide</h3>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                    <h3>Fifth Slide</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <h1 class="text-center mt-5">Kia ora</h1>
+
+    <style>
+        .featured-sales {
+            width: 200px;
+            height: 400px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <div class="d-flex justify-content-center flex-row" style="margin: 30px 150px;">
+        <div class="featured-sales">Sale Item 1</div>
+        <div class="featured-sales">Sale Item 2</div>
+        <div class="featured-sales">Sale Item 3</div>
+        <div class="featured-sales">Sale Item 4</div>
+        <div class="featured-sales">Sale Item 5</div>
+    </div>
+
+    <div style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #0d6efd;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 50px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        cursor: pointer;
+    ">
+        Chat with us
+    </div>
+</body>
+</html>
