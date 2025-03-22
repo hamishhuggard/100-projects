@@ -20,18 +20,49 @@ body {
 
 .header {
     width: 100%;
-    background-color: lightgreen;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 40px 100px;
     box-sizing: border-box;
     gap: 10px;
 }
 
 .header-top {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header-top-logo {
+    width: 300px;
     height: 50px;
-    background-color: lightblue;
+    background-color: peachpuff;
+}
+
+.header-top-right {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.header-top-right-item {
+    background-color: white;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: lightgreen;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #868686;
+    text-decoration: none;
+}
+
+.header-top-right-item:hover {
 }
 
 .header-middle {
@@ -52,7 +83,7 @@ body {
 .header-banner {
     width: 100%;
     height: 50px;
-    background-color: lightblue;
+    background-color: lightgrey;
 }
 
 .header-middle-left {
@@ -67,9 +98,15 @@ body {
 }
 
 .header-middle-right {
-    width: 100%;
     height: 50px;
     background-color: lawngreen;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.header-middle-right-item {
+    background-color: honeydew;
 }
 
 </style>
@@ -78,19 +115,22 @@ body {
     <div class="header-and-banner">
         <div class="header">
             <div class="header-top">
+                <div class="header-top-logo"></div>
+                <div class="header-top-right">
+                    <a href="/contact" class="header-top-right-item">Contact</a>
+                    <a href="/sign-in" class="header-top-right-item">Sign in</a>
+                </div>
             </div>
             <div class="header-middle">
                 <div class="header-middle-left">
                     <div class="header-middle-left-item">Browse</div>
-                </div>
-                <div class="header-middle-left">
                     <div class="header-middle-left-item">Specials and Offers</div>
-                </div>
-                <div class="header-middle-left">
                     <div class="header-middle-left-item">Favourites & lists</div>
                 </div>
                 <div class="header-middle-right">
                     <div class="header-middle-right-item">Search</div>
+                    <div class="header-middle-right-item">Pickup</div>
+                    <div class="header-middle-right-item">Checkout</div>
                 </div>
             </div>
         </div>
