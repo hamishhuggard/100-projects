@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Text Editor with Cursors</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .editor-container {
+            position: relative;
+            margin-top: 20px;
+        }
+        #editor {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: monospace;
+            resize: vertical;
+            box-sizing: border-box;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            line-height: 1.5;
+        }
+        .cursor {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            animation: blink 1s infinite;
+            pointer-events: none;
+            /* Make cursor more visible */
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .status {
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .users-list {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .user-item {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 3px 6px;
+            border-radius: 3px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shared Text Editor with Cursors</h1>
+    <p>Type in the editor below. Changes and cursor positions will be visible to all connected users.</p>
+    
+    <div class="users-list" id="users-list">
+        <span>Connected users: </span>
+    </div>
+    
+    <div class="editor-container" id="editor-container">
+        <textarea id="editor"></textarea>
+        <!-- Cursors will be added here dynamically -->
+    </div>
+    
+    <div class="status" id="status">Connecting...</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const editor = document.getElementById('editor');
+        const editorContainer = document.getElementById('editor-container');
+        const status = document.getElementById('status');
+        const usersList = document.getElementById('users-list');
+        
+        let isReceiving = false;
+        let userId = null;
+        let userColors = {};
+        let cursorElements = {};
+        
+        // Generate a random color for a user
+        function getRandomColor() {
+            const colors = [
+                '#E53935', '#D81B60', '#8E24AA', '#5E35B1', 
+                '#3949AB', '#1E88E5', '#039BE5', '#00ACC1',
+                '#00897B', '#43A047', '#7CB342', '#C0CA33',
+                '#FDD835', '#FFB300', '#FB8C00', '#F4511E'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Create a cursor element for a user
+        function createCursorElement(userId, initialPos) {
+            // Assign a color to this user
+            if (!userColors[userId]) {
+                userColors[userId] = getRandomColor();
+            }
+            const color = userColors[userId];
+            
+            // Create cursor element
+            const cursor = document.createElement('div');
+            cursor.className = 'cursor';
+            cursor.style.backgroundColor = color;
+            editorContainer.appendChild(cursor);
+            
+            // Add user to the users list
+            const userItem = document.createElement('span');
+            userItem.className = 'user-item';
+            userItem.id = `user-${userId}`;
+            userItem.textContent = userId.substring(0, 6);
+            userItem.style.backgroundColor = color;
+            usersList.appendChild(userItem);
+            
+            // Store reference to cursor element
+            cursorElements[userId] = cursor;
+            
+            // Position the cursor initially
+            updateCursorPosition(userId, initialPos);
+            
+            return cursor;
+        }
+        
+        // Update cursor position based on text position
+        function updateCursorPosition(userId, position) {
+            if (!cursorElements[userId]) return;
+            
+            const cursor = cursorElements[userId];
+            
+            // Get the text up to the cursor position
+            const textUpToCursor = editor.value.substring(0, position);
+            
+            // Create a temporary div to measure text dimensions
+            const temp = document.createElement('div');
+            temp.style.position = 'absolute';
+            temp.style.visibility = 'hidden';
+            temp.style.whiteSpace = 'pre-wrap';
+            temp.style.wordWrap = 'break-word';
+            temp.style.width = editor.offsetWidth - 20 + 'px'; // Account for padding
+            temp.style.font = window.getComputedStyle(editor).font;
+            temp.textContent = textUpToCursor;
+            document.body.appendChild(temp);
+            
+            // Calculate the last line's length
+            const lines = temp.textContent.split('\n');
+            const lastLine = lines[lines.length - 1];
+            
+            // Get the position
+            let top = (lines.length - 1) * parseFloat(window.getComputedStyle(editor).lineHeight);
+            const left = lastLine.length * 8; // Approximate character width
+            
+            // Clean up
+            document.body.removeChild(temp);
+            
+            // Position the cursor
+            cursor.style.left = (left + 10) + 'px'; // Add padding offset
+            cursor.style.top = (top + 10) + 'px';   // Add padding offset
+        }
+        
+        // Remove a user's cursor
+        function removeCursor(userId) {
+            if (cursorElements[userId]) {
+                editorContainer.removeChild(cursorElements[userId]);
+                delete cursorElements[userId];
+            }
+            
+            const userItem = document.getElementById(`user-${userId}`);
+            if (userItem) {
+                usersList.removeChild(userItem);
+            }
+        }
+        
+        // Socket event handlers
+        socket.on('connect', () => {
+            status.textContent = 'Connected';
+        });
+        
+        socket.on('disconnect', () => {
+            status.textContent = 'Disconnected';
+        });
+        
+        socket.on('initialize', (data) => {
+            userId = data.user_id;
+            
+            isReceiving = true;
+            editor.value = data.value;
+            isReceiving = false;
+            
+            status.textContent = `Connected as: ${userId.substring(0, 6)}`;
+            
+            // Create cursors for existing users
+            Object.entries(data.cursors).forEach(([uid, pos]) => {
+                if (uid !== userId) {
+                    createCursorElement(uid, pos);
+                }
+            });
+        });
+        
+        socket.on('update_value', (data) => {
+            isReceiving = true;
+            
+            // Save cursor position
+            const cursorPos = editor.selectionStart;
+            
+            // Update content
+            editor.value = data.value;
+            
+            // Restore cursor position
+            editor.setSelectionRange(cursorPos, cursorPos);
+            
+            isReceiving = false;
+        });
+        
+        socket.on('user_joined', (data) => {
+            createCursorElement(data.user_id, data.cursor_pos);
+        });
+        
+        socket.on('user_left', (data) => {
+            removeCursor(data.user_id);
+        });
+        
+        socket.on('cursor_moved', (data) => {
+            updateCursorPosition(data.user_id, data.cursor_pos);
+        });
+        
+        // Editor event handlers
+        editor.addEventListener('input', () => {
+            if (!isReceiving && userId) {
+                const value = editor.value;
+                socket.emit('update_value', { value });
+                
+                // Also update cursor position on input
+                const cursorPos = editor.selectionStart;
+                socket.emit('update_cursor', { 
+                    user_id: userId,
+                    cursor_pos: cursorPos
+                });
+            }
+        });
+        
+        editor.addEventListener('click', () => {
+            if (userId) {
+                const cursorPos = editor.selectionStart;
+                socket.emit('update_cursor', { 
+                    user_id: userId,
+                    cursor_pos: cursorPos
+                });
+            }
+        });
+        
+        editor.addEventListener('keyup', (e) => {
+            // Update cursor position on arrow keys, home, end, etc.
+            if (e.key.startsWith('Arrow') || e.key === 'Home' || e.key === 'End' || 
+                e.key === 'PageUp' || e.key === 'PageDown') {
+                if (userId) {
+                    const cursorPos = editor.selectionStart;
+                    socket.emit('update_cursor', { 
+                        user_id: userId,
+                        cursor_pos: cursorPos
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
