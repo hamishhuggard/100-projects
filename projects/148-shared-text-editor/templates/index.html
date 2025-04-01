@@ -38,36 +38,26 @@
         const socket = io();
         const editor = document.getElementById('editor');
         const status = document.getElementById('status');
-        const room = 'default';
         let isReceiving = false;
 
         socket.on('connect', () => {
             status.textContent = 'Connected';
-            socket.emit('join', { room: room });
         });
 
         socket.on('disconnect', () => {
             status.textContent = 'Disconnected';
         });
 
-        socket.on('document_content', (data) => {
+        socket.on('update_value', (data) => {
             isReceiving = true;
-            editor.value = data.content;
-            isReceiving = false;
-        });
-
-        socket.on('text_update', (data) => {
-            isReceiving = true;
-            editor.value = data.content;
+            editor.value = data.value;
             isReceiving = false;
         });
 
         editor.addEventListener('input', () => {
             if (!isReceiving) {
-                socket.emit('text_change', {
-                    room: room,
-                    content: editor.value
-                });
+                value = editor.value;
+                socket.emit('update_value', { value });
             }
         });
     </script>

@@ -1,14 +1,12 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO, emit, join_room
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
-# Store document content
-documents = {
-    'default': ''
-}
+# Store document content as a single variable
+value = ''
 
 @app.route('/')
 def index():
@@ -17,19 +15,15 @@ def index():
 @socketio.on('connect')
 def handle_connect():
     print('Client connected')
+    # Send current content to newly connected client
+    emit('update_value', {'content': value})
 
-@socketio.on('join')
-def handle_join(data):
-    room = data.get('room', 'default')
-    join_room(room)
-    emit('document_content', {'content': documents.get(room, '')})
-
-@socketio.on('text_change')
-def handle_text_change(data):
-    room = data.get('room', 'default')
-    content = data.get('content', '')
-    documents[room] = content
-    emit('text_update', {'content': content}, to=room, include_self=False)
+@socketio.on('update_value')
+def handle_update_value(data):
+    global value
+    value = data.get('value', '')
+    # Broadcast to all clients except sender
+    emit('update_value', {'value': value}, broadcast=True, include_self=False)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, port=5005)
