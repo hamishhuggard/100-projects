@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Flask Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Latest Posts</h1>
+
+{% if posts %}
+    {% for post in posts %}
+    <div class="post-preview">
+        <h2><a href="{{ url_for('post', id=post['id']) }}">{{ post['title'] }}</a></h2>
+        <div class="post-meta">
+            By {{ post['username'] }} on {{ post['created_at'] }}
+        </div>
+        <p>{{ post['content']|truncate(200) }}</p>
+        <a href="{{ url_for('post', id=post['id']) }}" class="btn btn-primary btn-sm">Read More</a>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No posts yet. Be the first to create one!</p>
+{% endif %}
+
+{% if session.user_id %}
+<div class="mt-4">
+    <a href="{{ url_for('create') }}" class="btn btn-success">Create New Post</a>
+</div>
+{% endif %}
+{% endblock %} 
