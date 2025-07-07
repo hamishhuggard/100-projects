@@ -55,5 +55,40 @@ async def create_or_update_item(item: KeyValueItem):
     finally:
         if conn:
             conn.close()
-        
+
+@app.get("/item/{key}")
+async def get_item(key: str):
+    conn = None
+    try:
+        conn = sqlite3.connect(DATABASE_FILE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT value from key_value_pair WHERE key = ?", (key,))
+        result = cursor.fetchone()
+        if result:
+            return {"key": key, "value": result[0]}
+        else:
+            raise HTTPException(status_code=404, detail="Key not found")
+    except sqlite3.Error as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+    finally:
+        if conn:
+            conn.close()
+
+@app.delete("/item/{key}")
+async def get_item(key: str):
+    conn = None
+    try:
+        conn = sqlite3.connect(DATABASE_FILE)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM key_value_pair WHERE key = ?", (key,))
+        conn.commit()
+        if cursor.rowcounts > 0:
+            return {"message": "Item deleted successfully", "key": key}
+        else:
+            raise HTTPException(status_code=404, detail="Key not found")
+    except sqlite3.Error as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+    finally:
+        if conn:
+            conn.close()
 
