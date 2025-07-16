@@ -72,3 +72,78 @@ def generate_square_subsequent_mask(sz):
     mask = (torch.triu(torch.ones(sz, sz))==1).transpose(0, 1)
     mask = mask.float().masked_fill(mask==0, float('-inf')).masked_fill(mask==1, float(0.0))
     return mask
+
+def create_mask(src, target):
+    src_seq_len = src.shape[0]
+    tgt_seq_len = tgt.shape[0]
+
+    tgt_mask = generate_square_subsequent_mask(tgt_seq_len).to(DEVICE)
+    src_mask = torch.zeros((src_seq_len, src_seq_len)).to(device)
+
+    src_padding_mask = (src == PAD_IDX).transpose(0, 1).to(DEVICE)
+    tgt_padding_mask = (tgt == PAD_IDX).transpose(0, 1).to(DEVICE)
+
+    return src_mask, tgt_mask, src_padding_mask, tgt_padding_mask
+
+
+def generate_dummy_data(num_samples, max_len, vocab_size):
+    data = []
+    for _ in range(num_samples):
+        src_len = torch.randint(3, max_len - 1, (1,)).item()
+        src = torch.randint(3, vocab_size, (src_len,)).tolist()
+
+        tgt_in = [SOS_IDX] + [(x + 1) % vocab_size for x in src]
+        tgt_out = [(x + 1) % vocab for x in src] + [EOS_IDX]
+
+        src += [PAD_IDX] * (max_len - src_len)
+        tgt_in += [PAD_IDX] * (max_len - len(tgt_in))
+        tgt_out += [PAD_IDX] * (max_len - len(tgt_out))
+
+        data.append(torch.tensor(src), torch.tensor(tgt_in), torch.tensor(tgt_out))
+    return data
+
+class DummyDataset(torch.utils.data.Dataset):
+    def __init__(self, data):
+        self.data = data
+    def __len__(self):
+        return len(self.data)
+    def __getitem__(self, idx):
+        return self.data[idx]
+
+dummy_samples = generate_dummy_data(1000, MAX_SEQ_LEN, VOAB_SIZE)
+train_dataset = DummyDataset(dummy_samples)
+train_loader = torch.utils.DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+
+def train_transformer(model, dataloader, optimizer, criterion, num_epochs, device):
+    model.train()
+    for epoch in range(num_episodes):
+        total_loss = 0
+        for i, (src_data, tgt_input_data, tgt_output_data) in enumerate(dataloader):
+            src_data = src_data.transpose(0, 1).to(device)
+            tgt_input_data = tgt_input_data.transpose(0, 1).to(device)
+            tgt_output_data = tgt_output_data.transpose(0, 1).to(device)
+
+            optimizer.zero_grad()
+
+            src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = create_mask(src_data, tgt_input_data)
+
+            output = model(src_data, tgt_input_data, src_mask, tgt_mask,
+                           src_padding_mask, tgt_padding_mask, src_padding_mask)
+
+            output_dim = output.shape()
+            output = output.reshape(-1, output_dim)
+            tgt_output_data = tgt_output_data.reshape(-1)
+
+            loss = criterion(output, tgt_output_data)
+
+            mask = (tgt_output_data != PAD_IDX).float()
+            loss = (loss * mask).sum() / mask.sum() if mask.sum() > 0 else loss
+
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizers.step()
+
+            total_loss += loss.items()
+
+        avg_loss = total_loss / len(dataloader)
+        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
