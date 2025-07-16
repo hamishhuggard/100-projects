@@ -147,3 +147,47 @@ def train_transformer(model, dataloader, optimizer, criterion, num_epochs, devic
 
         avg_loss = total_loss / len(dataloader)
         print(f"Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
+
+model = TransformerModel(VOCAB_SIZE, EMBED_DIM, N_HEADS, N_ENCODER_LAYERS,
+                         N_DECODER_LAYERS, FFN_HIDDEN_DIM, DROPOUT_RATE, MAX_SEQ_LEN).to(device)
+optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE, betas=(0.9, 0.98), eps=1e-9)
+criterion = nn.CrossEntropyLoss(ignore_index=PAD_IDX, reduction='none') # reduction=none for manual masking
+
+train_transformer(model, train_loader, optimizer, criterion, NUM_EPOCHS, DEVICE)
+
+def translate_sequence(model, src_sequence, max_len, device, vocab_size):
+    model.eval()
+    src = torch.tensor(src_sequence).unsqueeze(1).to(device)
+
+    src_len = src.shape[0]
+    if src_len < max_len:
+        src = torch.cat((src, torch.full((max_len - src_len, 1), PAD_IDX, dtype=torch.long).to(device)), dim=0)
+
+    tgt = torch.tensor([[SOS_IDX]]).to(device)
+
+    output_sequence = []
+    for _ in range(max_len):
+        src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = create_mask(src, tgt)
+
+        with torch.no_grad():
+            prediction = model(src, tgt, src_mask, tgt_mask,
+                               src_padding_mask, tgt_padding_mask, src_padding_mask)
+
+        next_token_logits = prediction[-1, :, :].squeeze(0)
+        next_token = next_token_logits.argmax(dim=-1).item()
+
+        output_sequence.append(next_token)
+
+        if next_token == EOS_IDX:
+            break
+
+        tgt = torch.cat((tgt, torch.tensor([[next_token]]).to(device)), dim=0)
+
+    return output_sequence
+
+example_src = [3, 4, 5]
+translated_output = translate_sequence(model, example_src, MAX_SEQ_LEN, DEVICE, VOCAB_SIZE)
+cleaned_output = [token for token in translated_output if token not in [SOS_IDX, EOS_IDX, PAD_IDX]]
+print(f"{example_src} -> {cleaned_output}")
+
+
