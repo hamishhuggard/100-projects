@@ -173,3 +173,21 @@ class DummyDataset(torch.utils.data.Dataset):
 dummy_samples = generate_dummy_data(1000)
 train_dataset = DummyDataset(dummy_samples)
 train_loader = DataLoader(train_dataset)
+
+def train_transformer():
+    model.train()
+    for epoch in range(num_epochs):
+        total_loss = 0
+        for i, (src_data, tgt_input_data, tgt_output_data) in enumerate(data_loader):
+            src_data = src_data.transpose(0, 1).to(device)
+            tgt_input_data = tgt_input_data.transpose(0, 1).to(device)
+            tgt_output_data = tgt_output_data.transpose(0, 1).to(device)
+
+            optimizer.zero_grad()
+
+            src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = create_mask(src_data, tgt_input_data)
+
+            output = model(src_data, tgt_data, src_mask, tgt_mask)
+
+            output_dim = output.shape()
+            output = output.reshape(-1, output_dim)
