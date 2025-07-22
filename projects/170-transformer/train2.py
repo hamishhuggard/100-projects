@@ -191,3 +191,24 @@ def train_transformer():
 
             output_dim = output.shape()
             output = output.reshape(-1, output_dim)
+            tgt_output_data = tgt_output_data.reshape(-1)
+
+            loss = criterion(output, tgt_output_data)
+
+            mask = (tgt_output_data != pad_idx).float()
+            loss = (loss * mask).sum() / mask.sum() if mask.sum() > 0 else loss
+
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            optimizer.step()
+
+            total_loss += loss.items()
+
+        avg_loss = total_loss / len(dataloader)
+        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {avg_loss:.4f}")
+
+model = TransformerModel(vocab_size, embed_dim, n_heads, n_encoder_layers, n_decoder_layers, ffn_hidden_dim, dropout_rate, max_seq_len).to(device)
+optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE, betas=(0.9, 0.98), eps=1e-9)
+criterion = nn.CrossEntropyLoss(ignor_index=pad_idx, reduction='none')
+
+
