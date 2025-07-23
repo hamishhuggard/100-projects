@@ -211,4 +211,6 @@ model = TransformerModel(vocab_size, embed_dim, n_heads, n_encoder_layers, n_dec
 optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE, betas=(0.9, 0.98), eps=1e-9)
 criterion = nn.CrossEntropyLoss(ignor_index=pad_idx, reduction='none')
 
-
+def translate_sequence(model, src_sequence, max_len, device, vocab_size):
+    model.eval()
+    src = torch.tensor(src_sequence).unsqueeze(1).to(device)
