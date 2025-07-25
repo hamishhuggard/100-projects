@@ -214,3 +214,13 @@ criterion = nn.CrossEntropyLoss(ignor_index=pad_idx, reduction='none')
 def translate_sequence(model, src_sequence, max_len, device, vocab_size):
     model.eval()
     src = torch.tensor(src_sequence).unsqueeze(1).to(device)
+
+    src_len = src.shape[0]
+    if src_len < max_len:
+        src = torch.cat((src, torch.full((max_len - src_len, 1), PAD_IDX, dtype=torch.long).to(device)), dim=0)
+
+    tgt = torch.tensor([[SOS_IDX]]).to(device)
+
+    output_sequence = []
+    for _ in range(max_len):
+        src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = create_mask(src, tgt)
