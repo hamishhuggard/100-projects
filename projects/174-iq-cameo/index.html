@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQ Cameo - Ask Smart People Questions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-brain"></i>
+                <span>IQ Cameo</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#" class="nav-link">Experts</a>
+                <a href="#" class="nav-link">My Questions</a>
+                <a href="#" class="nav-link">Profile</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-primary" onclick="openAskQuestionModal()">
+                    <i class="fas fa-plus"></i> Ask Question
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Top IQ Experts</h3>
+                    <div class="expert-list">
+                        <div class="expert-item">
+                            <div class="expert-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="expert-info">
+                                <div class="expert-name">Dr. Sarah Chen</div>
+                                <div class="expert-iq">IQ: 145</div>
+                                <div class="expert-rate">$50/question</div>
+                            </div>
+                        </div>
+                        <div class="expert-item">
+                            <div class="expert-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="expert-info">
+                                <div class="expert-name">Prof. Marcus Johnson</div>
+                                <div class="expert-iq">IQ: 142</div>
+                                <div class="expert-rate">$75/question</div>
+                            </div>
+                        </div>
+                        <div class="expert-item">
+                            <div class="expert-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="expert-info">
+                                <div class="expert-name">Dr. Elena Rodriguez</div>
+                                <div class="expert-iq">IQ: 138</div>
+                                <div class="expert-rate">$40/question</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-link">View All Experts →</a>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Categories</h3>
+                    <div class="category-list">
+                        <a href="#" class="category-item">
+                            <i class="fas fa-flask"></i>
+                            <span>Science</span>
+                        </a>
+                        <a href="#" class="category-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Business</span>
+                        </a>
+                        <a href="#" class="category-item">
+                            <i class="fas fa-palette"></i>
+                            <span>Arts</span>
+                        </a>
+                        <a href="#" class="category-item">
+                            <i class="fas fa-code"></i>
+                            <span>Technology</span>
+                        </a>
+                        <a href="#" class="category-item">
+                            <i class="fas fa-book"></i>
+                            <span>Philosophy</span>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Feed -->
+            <section class="main-feed">
+                <div class="feed-header">
+                    <h1>Recent Questions</h1>
+                    <div class="feed-filters">
+                        <button class="filter-btn active">Latest</button>
+                        <button class="filter-btn">Popular</button>
+                        <button class="filter-btn">Unanswered</button>
+                    </div>
+                </div>
+
+                <div class="question-list" id="questionList">
+                    <!-- Questions will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Ask Question Modal -->
+    <div class="modal" id="askQuestionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ask a Question</h2>
+                <button class="modal-close" onclick="closeAskQuestionModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="question-form" id="questionForm">
+                <div class="form-group">
+                    <label for="questionTitle">Question Title</label>
+                    <input type="text" id="questionTitle" name="title" placeholder="What would you like to ask?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="questionCategory">Category</label>
+                    <select id="questionCategory" name="category" required>
+                        <option value="">Select a category</option>
+                        <option value="science">Science</option>
+                        <option value="business">Business</option>
+                        <option value="arts">Arts</option>
+                        <option value="technology">Technology</option>
+                        <option value="philosophy">Philosophy</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="questionDetails">Question Details</label>
+                    <textarea id="questionDetails" name="details" rows="5" placeholder="Provide more context about your question..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="expertIQ">Minimum Expert IQ</label>
+                    <select id="expertIQ" name="minIQ" required>
+                        <option value="">Select minimum IQ</option>
+                        <option value="120">120+</option>
+                        <option value="130">130+</option>
+                        <option value="140">140+</option>
+                        <option value="150">150+</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Your Budget</label>
+                    <div class="budget-input">
+                        <span class="currency">$</span>
+                        <input type="number" id="budget" name="budget" min="10" max="1000" placeholder="50" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAskQuestionModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Question Detail Modal -->
+    <div class="modal" id="questionDetailModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="modalQuestionTitle">Question Title</h2>
+                <button class="modal-close" onclick="closeQuestionDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="question-detail-content">
+                <div class="question-meta">
+                    <span class="category-badge" id="modalQuestionCategory">Science</span>
+                    <span class="budget-badge" id="modalQuestionBudget">$50</span>
+                    <span class="time-ago" id="modalQuestionTime">2 hours ago</span>
+                </div>
+                <div class="question-body" id="modalQuestionBody">
+                    <!-- Question body content -->
+                </div>
+                
+                <div class="answers-section">
+                    <h3>Answers</h3>
+                    <div class="answers-list" id="modalAnswersList">
+                        <!-- Answers will be populated -->
+                    </div>
+                </div>
+
+                <div class="answer-form">
+                    <h3>Provide an Answer</h3>
+                    <form id="answerForm">
+                        <div class="form-group">
+                            <textarea id="answerText" name="answer" rows="4" placeholder="Write your answer here..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Answer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
