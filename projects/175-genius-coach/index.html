@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Coach - Get Expert Advice from High-IQ Geniuses</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-brain"></i>
+                <span>Genius Coach</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="geniuses.html" class="nav-link">Find Geniuses</a>
+                <a href="#" class="nav-link">My Sessions</a>
+                <a href="#" class="nav-link">Profile</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-primary" onclick="openAskQuestionModal()">
+                    <i class="fas fa-plus"></i> Ask Question
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Get Expert Advice from High-IQ Geniuses</h1>
+            <p>Connect with verified geniuses across all fields. Get personalized advice through DMs, voice messages, or 1-on-1 calls.</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">150+</span>
+                    <span class="stat-label">Verified Geniuses</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">10,000+</span>
+                    <span class="stat-label">Questions Answered</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">4.9★</span>
+                    <span class="stat-label">Average Rating</span>
+                </div>
+            </div>
+            <a href="geniuses.html" class="btn btn-hero">Browse Geniuses</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Featured Questions Section -->
+            <section class="featured-questions">
+                <div class="section-header">
+                    <h2>Featured Questions & Answers</h2>
+                    <p>See how our geniuses help solve real problems</p>
+                </div>
+                
+                <div class="questions-grid" id="questionsGrid">
+                    <!-- Questions will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- How It Works -->
+            <section class="how-it-works">
+                <div class="section-header">
+                    <h2>How It Works</h2>
+                    <p>Get expert advice in three simple steps</p>
+                </div>
+                
+                <div class="steps-grid">
+                    <div class="step">
+                        <div class="step-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Find Your Genius</h3>
+                        <p>Browse our verified geniuses by field, IQ, or rating. Each has different rates for different services.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Choose Your Service</h3>
+                        <p>Pick from DMs (280 chars), voice messages, or 1-hour video calls based on your needs and budget.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Get Expert Advice</h3>
+                        <p>Receive personalized, high-quality advice from verified geniuses in your chosen format.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Categories -->
+            <section class="top-categories">
+                <div class="section-header">
+                    <h2>Popular Categories</h2>
+                    <p>Find geniuses in your area of interest</p>
+                </div>
+                
+                <div class="categories-grid">
+                    <a href="geniuses.html#technology" class="category-card">
+                        <i class="fas fa-microchip"></i>
+                        <h3>Technology</h3>
+                        <p>AI, Programming, Data Science</p>
+                        <span class="genius-count">45 geniuses</span>
+                    </a>
+                    <a href="geniuses.html#business" class="category-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Business</h3>
+                        <p>Strategy, Finance, Marketing</p>
+                        <span class="genius-count">38 geniuses</span>
+                    </a>
+                    <a href="geniuses.html#science" class="category-card">
+                        <i class="fas fa-flask"></i>
+                        <h3>Science</h3>
+                        <p>Physics, Biology, Chemistry</p>
+                        <span class="genius-count">32 geniuses</span>
+                    </a>
+                    <a href="category-card">
+                        <i class="fas fa-palette"></i>
+                        <h3>Arts & Creativity</h3>
+                        <p>Writing, Design, Music</p>
+                        <span class="genius-count">28 geniuses</span>
+                    </a>
+                    <a href="geniuses.html#philosophy" class="category-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Philosophy</h3>
+                        <p>Ethics, Logic, Metaphysics</p>
+                        <span class="genius-count">25 geniuses</span>
+                    </a>
+                    <a href="geniuses.html#mathematics" class="category-card">
+                        <i class="fas fa-square-root-alt"></i>
+                        <h3>Mathematics</h3>
+                        <p>Algebra, Calculus, Statistics</p>
+                        <span class="genius-count">30 geniuses</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Ask Question Modal -->
+    <div class="modal" id="askQuestionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ask a Question</h2>
+                <button class="modal-close" onclick="closeAskQuestionModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="question-form" id="questionForm">
+                <div class="form-group">
+                    <label for="questionTitle">Question Title</label>
+                    <input type="text" id="questionTitle" name="title" placeholder="What would you like to ask?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="questionCategory">Category</label>
+                    <select id="questionCategory" name="category" required>
+                        <option value="">Select a category</option>
+                        <option value="technology">Technology</option>
+                        <option value="business">Business</option>
+                        <option value="science">Science</option>
+                        <option value="arts">Arts & Creativity</option>
+                        <option value="philosophy">Philosophy</option>
+                        <option value="mathematics">Mathematics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="questionDetails">Question Details</label>
+                    <textarea id="questionDetails" name="details" rows="5" placeholder="Provide more context about your question..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceType">Preferred Service</label>
+                    <select id="serviceType" name="serviceType" required>
+                        <option value="">Select service type</option>
+                        <option value="dm">Direct Message (280 chars)</option>
+                        <option value="voice">Voice Message</option>
+                        <option value="call">1-Hour Video Call</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget">Your Budget</label>
+                    <div class="budget-input">
+                        <span class="currency">$</span>
+                        <input type="number" id="budget" name="budget" min="10" max="1000" placeholder="50" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAskQuestionModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Genius Coach</h3>
+                    <p>Connecting you with verified geniuses for personalized expert advice.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="geniuses.html">Find Geniuses</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="geniuses.html#technology">Technology</a></li>
+                        <li><a href="geniuses.html#business">Business</a></li>
+                        <li><a href="geniuses.html#science">Science</a></li>
+                        <li><a href="geniuses.html#arts">Arts</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="mailto:hello@geniuscoach.com">hello@geniuscoach.com</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Genius Coach. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
