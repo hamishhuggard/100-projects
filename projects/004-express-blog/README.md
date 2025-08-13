@@ -1,15 +1,21 @@
-# express-blog
+# Express Blog
 
-To install dependencies:
+**Date:** April 15, 2024
 
-```bash
-bun install
-```
+## Preview
+![preview.png](preview.png)
 
-To run:
+## Description
+A blog application built with Express.js, a Node.js web framework. This project demonstrates modern JavaScript backend development with RESTful APIs and server-side rendering.
 
-```bash
-bun run index.ts
-```
+## How to Run
+1. Ensure you have Node.js installed
+2. Install dependencies: `npm install`
+3. Start the server: `npm start` or `node app.js`
+4. Open `http://localhost:3000` in your browser
 
-This project was created using `bun init` in bun v1.0.2. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## Features
+- Express.js backend framework
+- RESTful API endpoints
+- Blog post management
+- Modern JavaScript ES6+ features
