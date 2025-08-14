@@ -1,0 +1,286 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #ffffff;
+    color: #0f1419;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    position: sticky;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e1e8ed;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    height: 60px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1da1f2;
+}
+
+.logo i {
+    font-size: 24px;
+}
+
+/* Main Content */
+.main-content {
+    width: 100%;
+}
+
+/* Feed */
+.feed {
+    width: 100%;
+}
+
+/* Compose Tweet */
+.compose-tweet {
+    display: flex;
+    gap: 12px;
+    padding: 20px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.compose-avatar .avatar-emoji {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #f7f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 2px solid #e1e8ed;
+}
+
+.compose-content {
+    flex: 1;
+}
+
+.compose-content textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 20px;
+    font-family: inherit;
+    margin-bottom: 16px;
+    background: transparent;
+}
+
+.compose-content textarea::placeholder {
+    color: #536471;
+}
+
+.compose-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.compose-icons {
+    display: flex;
+    gap: 16px;
+}
+
+.compose-icons i {
+    color: #1da1f2;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.compose-icons i:hover {
+    background-color: #e8f5fd;
+}
+
+.tweet-submit {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tweet-submit:hover {
+    background-color: #1a8cd8;
+}
+
+/* Tweets */
+.tweets {
+    border-top: 1px solid #e1e8ed;
+}
+
+.tweet {
+    display: flex;
+    gap: 12px;
+    padding: 20px;
+    border-bottom: 1px solid #e1e8ed;
+    transition: background-color 0.2s ease;
+}
+
+.tweet:hover {
+    background-color: #f7f9fa;
+}
+
+.tweet-avatar .avatar-emoji {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #f7f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 2px solid #e1e8ed;
+}
+
+.tweet-content {
+    flex: 1;
+}
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.tweet-name {
+    font-weight: 700;
+    color: #0f1419;
+}
+
+.tweet-username {
+    color: #536471;
+}
+
+.tweet-time {
+    color: #536471;
+    font-size: 14px;
+}
+
+.tweet-text {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    color: #0f1419;
+}
+
+.tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    max-width: 400px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #536471;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.action-btn:hover {
+    color: #1da1f2;
+    background-color: #e8f5fd;
+}
+
+.action-btn.comment:hover {
+    color: #1da1f2;
+}
+
+.action-btn.retweet:hover {
+    color: #00ba7c;
+}
+
+.action-btn.see-more:hover {
+    color: #f91880;
+}
+
+.action-btn.see-less:hover {
+    color: #f91880;
+}
+
+.action-btn i {
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        margin: 0;
+    }
+    
+    .compose-tweet {
+        padding: 16px;
+    }
+    
+    .tweet {
+        padding: 16px;
+    }
+    
+    .tweet-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .action-btn {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .compose-tweet {
+        padding: 12px;
+    }
+    
+    .tweet {
+        padding: 12px;
+    }
+    
+    .compose-content textarea {
+        font-size: 18px;
+    }
+} 
