@@ -4,8 +4,6 @@
 
 A simple example of DVC (Data Version Control).
 
-![preview](preview.png)
-
 1. Install DVC
 ```bash
 pip install dvc
@@ -55,3 +53,6 @@ ls .dvc/cache/files/md5/*/*
 ```bash
 cat data.txt.dvc
 ```
+
+Here's a screenshot showing the data being reverted:
+![preview](preview.png)
