@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0;
+            margin-bottom: 50px;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: none;
+            transition: transform 0.2s ease;
+            cursor: pointer;
+            aspect-ratio: 1;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item .caption {
+            padding: 15px;
+            text-align: center;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .sections {
+            margin-top: 50px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Image Gallery</h1>
+            <p class="subtitle">Portfolio of episode art I drew for the AXRP podcast.</p>
+        </header>
+
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="scrollToSection('empty')">
+                <img src="assets/axrp/good/empty.png" alt="empty">
+                <div class="caption">empty</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('governance')">
+                <img src="assets/axrp/good/governance.png" alt="governance">
+                <div class="caption">governance</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('torus')">
+                <img src="assets/axrp/good/torus.png" alt="torus">
+                <div class="caption">torus</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('grading')">
+                <img src="assets/axrp/good/grading.png" alt="grading">
+                <div class="caption">grading</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('chess')">
+                <img src="assets/axrp/good/chess.png" alt="chess">
+                <div class="caption">chess</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('extra')">
+                <img src="assets/axrp/good/extra.png" alt="extra">
+                <div class="caption">extra</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('coyote')">
+                <img src="assets/axrp/good/coyote.png" alt="coyote">
+                <div class="caption">coyote</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('voting')">
+                <img src="assets/axrp/good/voting.png" alt="voting">
+                <div class="caption">voting</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('deconstructed')">
+                <img src="assets/axrp/good/deconstructed.png" alt="deconstructed">
+                <div class="caption">deconstructed</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('blocks')">
+                <img src="assets/axrp/good/blocks.png" alt="blocks">
+                <div class="caption">blocks</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('blueprint')">
+                <img src="assets/axrp/good/blueprint.png" alt="blueprint">
+                <div class="caption">blueprint</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('atom')">
+                <img src="assets/axrp/good/atom.png" alt="atom">
+                <div class="caption">atom</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('thinking')">
+                <img src="assets/axrp/good/thinking.png" alt="thinking">
+                <div class="caption">thinking</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('socrates')">
+                <img src="assets/axrp/good/socrates.png" alt="socrates">
+                <div class="caption">socrates</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('petri')">
+                <img src="assets/axrp/good/petri.png" alt="petri">
+                <div class="caption">petri</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('evolution')">
+                <img src="assets/axrp/good/evolution.png" alt="evolution">
+                <div class="caption">evolution</div>
+            </div>
+            <div class="gallery-item" onclick="scrollToSection('numberplate')">
+                <img src="assets/axrp/good/numberplate.png" alt="numberplate">
+                <div class="caption">numberplate</div>
+            </div>
+        </div>
+
+        <div class="sections">
+            <div class="section" id="empty">
+                <h3>empty</h3>
+                <img src="assets/axrp/good/empty.png" alt="empty">
+                <p>A minimalist composition exploring the concept of emptiness and negative space.</p>
+            </div>
+
+            <div class="section" id="governance">
+                <h3>governance</h3>
+                <img src="assets/axrp/good/governance.png" alt="governance">
+                <p>An abstract representation of governance structures and decision-making processes.</p>
+            </div>
+
+            <div class="section" id="torus">
+                <h3>torus</h3>
+                <img src="assets/axrp/good/torus.png" alt="torus">
+                <p>A geometric exploration of the torus shape with mathematical precision.</p>
+            </div>
+
+            <div class="section" id="grading">
+                <h3>grading</h3>
+                <img src="assets/axrp/good/grading.png" alt="grading">
+                <p>A visual interpretation of grading systems and evaluation processes.</p>
+            </div>
+
+            <div class="section" id="chess">
+                <h3>chess</h3>
+                <img src="assets/axrp/good/chess.png" alt="chess">
+                <p>Strategic chess composition with abstract elements and game theory concepts.</p>
+            </div>
+
+            <div class="section" id="extra">
+                <h3>extra</h3>
+                <img src="assets/axrp/good/extra.png" alt="extra">
+                <p>Extra - A complex AI-generated composition with intricate details.</p>
+            </div>
+
+            <div class="section" id="coyote">
+                <h3>coyote</h3>
+                <img src="assets/axrp/good/coyote.png" alt="coyote">
+                <p>A stylized representation of a coyote with artistic interpretation.</p>
+            </div>
+
+            <div class="section" id="voting">
+                <h3>voting</h3>
+                <img src="assets/axrp/good/voting.png" alt="voting">
+                <p>Abstract visualization of voting mechanisms and democratic processes.</p>
+            </div>
+
+            <div class="section" id="deconstructed">
+                <h3>deconstructed</h3>
+                <img src="assets/axrp/good/deconstructed.png" alt="deconstructed">
+                <p>A deconstructed composition exploring form, structure, and fragmentation.</p>
+            </div>
+
+            <div class="section" id="blocks">
+                <h3>blocks</h3>
+                <img src="assets/axrp/good/blocks.png" alt="blocks">
+                <p>A visual representation of a block structure with architectural and engineering themes.</p>
+            </div>
+
+            <div class="section" id="blueprint">
+                <h3>blueprint</h3>
+                <img src="assets/axrp/good/blueprint.png" alt="blueprint">
+                <p>Technical blueprint aesthetic with architectural and engineering themes.</p>
+            </div>
+
+            <div class="section" id="atom">
+                <h3>atom</h3>
+                <img src="assets/axrp/good/atom.png" alt="atom">
+                <p>Atomic structure visualization with scientific and molecular themes.</p>
+            </div>
+
+            <div class="section" id="thinking">
+                <h3>thinking</h3>
+                <img src="assets/axrp/good/thinking.png" alt="thinking">
+                <p>Abstract representation of thought processes and cognitive concepts.</p>
+            </div>
+
+            <div class="section" id="socrates">
+                <h3>socrates</h3>
+                <img src="assets/axrp/good/socrates.png" alt="socrates">
+                <p>A creative AI composition featuring the likeness of Socrates.</p>
+            </div>
+
+            <div class="section" id="petri">
+                <h3>petri</h3>
+                <img src="assets/axrp/good/petri.png" alt="petri">
+                <p>Petri dish inspired artwork exploring biological and scientific themes.</p>
+            </div>
+
+            <div class="section" id="evolution">
+                <h3>evolution</h3>
+                <img src="assets/axrp/good/evolution.png" alt="evolution">
+                <p>Evolutionary concepts visualized through abstract artistic interpretation.</p>
+            </div>
+
+            <div class="section" id="numberplate">
+                <h3>numberplate</h3>
+                <img src="assets/axrp/good/numberplate.png" alt="numberplate">
+                <p>License plate inspired artwork with automotive and identification themes.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide back to top button based on scroll position
+        window.addEventListener('scroll', function() {
+            const backToTopButton = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        // Initially hide the back to top button
+        document.querySelector('.back-to-top').style.display = 'none';
+    </script>
+</body>
+</html> 
