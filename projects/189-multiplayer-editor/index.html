@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vim Code Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Vim Code Editor</h1>
+            <div class="mode-indicator">
+                <span id="mode-display">NORMAL</span>
+            </div>
+            <div class="controls">
+                <button id="new-file" class="btn">New File</button>
+                <button id="save-file" class="btn">Save</button>
+                <select id="language-select" class="language-select">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
+                </select>
+            </div>
+        </header>
+        
+        <div class="editor-container">
+            <div class="line-numbers" id="line-numbers"></div>
+            <div class="editor" id="editor" contenteditable="true" spellcheck="false"></div>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-left">
+                <span id="cursor-position">Ln 1, Col 1</span>
+                <span id="file-info">Untitled</span>
+            </div>
+            <div class="status-right">
+                <span id="vim-command"></span>
+            </div>
+        </div>
+        
+        <div class="command-line" id="command-line" style="display: none;">
+            <span class="command-prompt">:</span>
+            <input type="text" id="command-input" placeholder="Enter command...">
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
