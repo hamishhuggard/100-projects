@@ -25,6 +25,14 @@ body {
 
 .username {
     font-weight: bold;
+    color: #4a4a4a;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.tweet-content {
+    margin-bottom: 8px;
+    line-height: 1.4;
 }
 
 .datetime {
