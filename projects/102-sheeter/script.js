@@ -1,8 +1,45 @@
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    return lines.map(line => {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        let i = 0;
+        
+        while (i < line.length) {
+            const char = line[i];
+            
+            if (char === '"') {
+                if (inQuotes && line[i + 1] === '"') {
+                    // Handle escaped quotes
+                    current += '"';
+                    i += 2;
+                } else {
+                    // Toggle quote state
+                    inQuotes = !inQuotes;
+                    i++;
+                }
+            } else if (char === ',' && !inQuotes) {
+                // End of field
+                result.push(current.trim());
+                current = '';
+                i++;
+            } else {
+                current += char;
+                i++;
+            }
+        }
+        
+        // Add the last field
+        result.push(current.trim());
+        return result;
+    });
+}
+
 async function fetchCSV(url) {
     const response = await fetch(url);
     const text = await response.text();
-    const lines = text.trim().split('\n');
-    return lines.map(line => line.trim().split(','));
+    return parseCSV(text);
 }
 
 async function loadTweets() {

@@ -5,13 +5,36 @@ body {
     padding: 20px;
 }
 
-/* Container for the central column */
+/* Two-column layout */
 .central-column {
-    width: 60%; /* Adjust this width as needed */
-    max-width: 800px; /* Maximum width of the column */
-    margin: 0 auto; /* Center the column horizontally */
-    padding: 20px; /* Optional padding inside the column */
-    box-sizing: border-box; /* Ensure padding is included in the width */
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Left column - Form */
+.form-column {
+    flex: 0 0 400px;
+    min-width: 400px;
+    height: 100%;
+}
+
+/* Right column - Tweets */
+.tweets-column {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Make iframe responsive within its column */
+.form-column iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 
