@@ -5,6 +5,16 @@ body {
     padding: 20px;
 }
 
+/* Container for the central column */
+.central-column {
+    width: 60%; /* Adjust this width as needed */
+    max-width: 800px; /* Maximum width of the column */
+    margin: 0 auto; /* Center the column horizontally */
+    padding: 20px; /* Optional padding inside the column */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+
 .tweet {
     background-color: #ffffff;
     border: 1px solid #e1e8ed;

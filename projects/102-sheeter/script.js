@@ -6,8 +6,8 @@ async function fetchCSV(url) {
 }
 
 async function loadTweets() {
-    const tweetsUrl = 'https://docs.google.com/spreadsheets/d/1vEOyjh8bhBfDLe-6BHCQxG3B7NqAmqICtZXA4Cewovc/export?format=csv&gid=0&single=true&output=csv;' // Replace with the actual URL
-    const usersUrl = 'https://docs.google.com/spreadsheets/d/1vEOyjh8bhBfDLe-6BHCQxG3B7NqAmqICtZXA4Cewovc/export?format=csv&gid=1547462510&single=true&output=csv;' // Replace with the actual URL
+    const usersUrl  = 'https://docs.google.com/spreadsheets/d/1vEOyjh8bhBfDLe-6BHCQxG3B7NqAmqICtZXA4Cewovc/export?format=csv&gid=0&single=true&output=csv;' // Replace with the actual URL
+    const tweetsUrl = 'https://docs.google.com/spreadsheets/d/1vEOyjh8bhBfDLe-6BHCQxG3B7NqAmqICtZXA4Cewovc/export?format=csv&gid=1029905748&single=true&output=csv;'
     
     const [rawTweets, rawUsers] = await Promise.all([fetchCSV(tweetsUrl), fetchCSV(usersUrl)]);
     console.log({rawTweets, rawUsers})
@@ -20,10 +20,11 @@ async function loadTweets() {
 
     const tweetsContainer = document.getElementById('tweets');
     tweets.forEach(([handle, tweet, datetime, slug]) => {
+        console.log({handle, tweet, datetime, slug})
         const tweetElement = document.createElement('div');
         tweetElement.className = 'tweet';
         tweetElement.innerHTML = `
-            <div class="username">${userMap[handle]}</div>
+            <div>@${handle}<span class="username"> ${userMap[handle]}</span></div>
             <div>${tweet}</div>
             <div class="datetime">${datetime}</div>
         `;
