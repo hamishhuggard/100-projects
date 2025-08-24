@@ -1,10 +1,18 @@
 # Mini Projects Monorepo
 
-I find that to best way to iterate code projects and learn new technical skills, is to to create a sequence of mini-projects. Messing around with git branches, and creating and organizing repos is annoying, so as a minimalist solution I have this monorepo where each mini-project is a subdirectory.
+I find that to best way to iterate code projects and learn new technical skills, is to to create a sequence of mini-projects. Messing around with git branches, and creating and organizing repos is annoying, so as a minimalist solution I have this monorepo where each mini-project is organized like this:
+```bash
+projects/
+├── 001-example-project/
+├── 002-example-project-v2/
+└── 003-another-project/
+```
 
 A few interesting projects to take a look at:
 
 ### MLOps
+
+- [DVC Demo](projects/176-dvc-demo)
 
 ### Deep learning
 
@@ -18,7 +26,7 @@ A few interesting projects to take a look at:
 I like to add screenshots to the README.md files, to show what they look like when they run. Raw screenshots are too large and get rejected by GitHub, so here's a script to downsize images to 1000px width:
 
 ```bash
-python projects/173-image-resizer/resize_image.py projects/n-some-project/preview.png
+python projects/resize-image/resize_image.py projects/n-some-project/preview.png
 ```
 
 ### Symlinks
