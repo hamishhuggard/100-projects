@@ -12,6 +12,7 @@ from datetime import datetime
 import json
 import re
 from pathlib import Path
+from openai import OpenAI
 
 # ChromaDB imports for RAG
 import chromadb
@@ -55,19 +56,34 @@ def find_relevant_episodes(query: str, limit: int = 3):
     """Find relevant episodes using ChromaDB semantic search"""
     collection = get_chromadb_client()
     if not collection:
+        print("ChromaDB collection not available for RAG search")
         return []
     
     try:
-        # Perform semantic search
+        # Clean and prepare the query for better search
+        clean_query = query.strip()
+        if len(clean_query) < 3:
+            # If query is too short, try to expand it with common Simpsons terms
+            clean_query = f"simpsons {clean_query}"
+        
+        print(f"Searching ChromaDB for query: '{clean_query}'")
+        
+        # Perform semantic search with distance information
         results = collection.query(
-            query_texts=[query],
-            n_results=limit
+            query_texts=[clean_query],
+            n_results=limit,
+            include=["metadatas", "distances"]
         )
         
         # Convert results to episode format
         relevant_episodes = []
         if results['metadatas'] and results['metadatas'][0]:
-            for metadata in results['metadatas'][0]:
+            for i, metadata in enumerate(results['metadatas'][0]):
+                distance = results['distances'][0][i] if results['distances'] and results['distances'][0] else None
+                
+                # Calculate relevance score (1.0 = perfect match, 0.0 = poor match)
+                relevance_score = 1.0 - (distance if distance else 0.0)
+                
                 episode = {
                     'season': metadata.get('season', 'N/A'),
                     'episode_number_in_season': metadata.get('episode_number', 'N/A'),
@@ -76,9 +92,17 @@ def find_relevant_episodes(query: str, limit: int = 3):
                     'description': metadata.get('description', 'N/A'),
                     'imdb_rating': metadata.get('imdb_rating', 'N/A'),
                     'vote_count': metadata.get('vote_count', 'N/A'),
-                    'episode_url': metadata.get('url', 'N/A')
+                    'episode_url': metadata.get('url', 'N/A'),
+                    'relevance_score': relevance_score
                 }
                 relevant_episodes.append(episode)
+        
+        # Sort by relevance score (highest first)
+        relevant_episodes.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
+        
+        print(f"Found {len(relevant_episodes)} relevant episodes")
+        if relevant_episodes:
+            print(f"Best match: {relevant_episodes[0].get('episode_title')} (score: {relevant_episodes[0].get('relevance_score', 0):.3f})")
         
         return relevant_episodes
         
@@ -93,11 +117,13 @@ def create_context_from_episodes(episodes):
     
     context_parts = []
     for episode in episodes:
+        relevance_score = episode.get('relevance_score', 'N/A')
         context_parts.append(f"""
 Season {episode.get('season', 'N/A')}, Episode {episode.get('episode_number_in_season', 'N/A')}: {episode.get('episode_title', 'N/A')}
 Air Date: {episode.get('air_date', 'N/A')}
 Description: {episode.get('description', 'N/A')}
 IMDb Rating: {episode.get('imdb_rating', 'N/A')}
+Relevance Score: {relevance_score:.3f} (higher = more relevant)
 """.strip())
     
     return "\n\n---\n\n".join(context_parts)
@@ -112,6 +138,10 @@ def chat():
         if not message:
             return jsonify({'error': 'Message is required'}), 400
         
+        print(f"\n=== New Chat Request ===")
+        print(f"Session: {session_id}")
+        print(f"User message: {message}")
+        
         # Initialize or get conversation history
         if session_id not in conversations:
             conversations[session_id] = []
@@ -119,38 +149,40 @@ def chat():
         # Add user message to history
         conversations[session_id].append({"role": "user", "content": message})
         
-        # Find relevant episodes using RAG
+        # Find relevant episodes using RAG based on the current user message
+        print(f"Searching for relevant episodes...")
         relevant_episodes = find_relevant_episodes(message)
         context = create_context_from_episodes(relevant_episodes)
         
-        # Create system prompt with context
-        system_prompt = f"""You are a helpful AI assistant that answers questions about The Simpsons episodes. 
-
-Use the following episode information to answer the user's question:
-
-{context}
-
-Please provide helpful and accurate answers based on the episode information above. If the question asks about a specific episode, include relevant details like the season/episode number, air date, and description. If you don't find relevant information in the provided episodes, say so clearly.
-
-Keep your answers conversational and engaging, as if you're a big Simpsons fan chatting with a friend."""
+        print(f"Found {len(relevant_episodes)} relevant episodes")
+        print(f"Context length: {len(context)} characters")
+        
+        # Create the base system prompt (this stays at the top)
+        base_system_prompt = "You are a helpful AI assistant. But every time you talk, you steer the conversation towards a Simpsons episode. Don't draw attention to this fact. Play it cool. If the user asks, deny that you're doing this, and just say that you're trying to be as helpful as possible. EVERY message you send should mention a Simpsons episode."
 
         # Create messages for OpenAI
         messages = [
-            {"role": "system", "content": system_prompt}
+            {"role": "system", "content": base_system_prompt}
         ]
         
         # Add conversation history (last 5 messages to keep context manageable)
+        # Only include user and assistant messages, skip any temporary system messages
         for msg in conversations[session_id][-5:]:
-            if msg["role"] == "user":
-                messages.append({"role": "user", "content": msg["content"]})
-            else:
-                messages.append({"role": "assistant", "content": msg["content"]})
+            if msg["role"] in ["user", "assistant"]:
+                messages.append(msg)
         
         # Add current user message
         messages.append({"role": "user", "content": message})
         
+        # NOW add the episode context as a system message at the end
+        episode_system_message = "Use this episode information to answer the user's question:\n" + context
+        
+        messages.append({"role": "system", "content": episode_system_message})
+        
+        print(f"Total messages for OpenAI: {len(messages)}")
+        print(f"Episode context added as final system message")
+        
         # Get response from OpenAI
-        from openai import OpenAI
         client = OpenAI(api_key=GPT_API_KEY)
         
         response = client.chat.completions.create(
@@ -162,7 +194,10 @@ Keep your answers conversational and engaging, as if you're a big Simpsons fan c
         
         ai_response = response.choices[0].message.content
         
-        # Update conversation history
+        print(f"AI response received: {ai_response[:100]}...")
+        
+        # Update conversation history - the episode lookup message is never stored
+        # Just add the AI response
         conversations[session_id].append({"role": "assistant", "content": ai_response})
         
         # Keep only last 10 messages to prevent context from getting too long
@@ -177,7 +212,8 @@ Keep your answers conversational and engaging, as if you're a big Simpsons fan c
         return jsonify({
             'response': ai_response,
             'session_id': session_id,
-            'relevant_episodes': relevant_episodes[:1] if relevant_episodes else None
+            'relevant_episodes': relevant_episodes,
+            'context_used': context[:500] + "..." if len(context) > 500 else context
         })
         
     except Exception as e:
@@ -199,67 +235,6 @@ def reset():
         print(f"Error: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
 
-@app.route('/api/health', methods=['GET'])
-def health():
-    # Check ChromaDB status
-    chroma_status = "not_available"
-    try:
-        collection = get_chromadb_client()
-        if collection:
-            count = collection.count()
-            chroma_status = f"ready ({count} episodes)"
-        else:
-            chroma_status = "not_found"
-    except Exception as e:
-        chroma_status = f"error: {str(e)}"
-    
-    return jsonify({
-        'status': 'healthy', 
-        'chromadb_status': chroma_status,
-        'timestamp': datetime.now().isoformat()
-    })
-
-@app.route('/api/episodes', methods=['GET'])
-def get_episodes():
-    """Get episodes with optional filtering"""
-    try:
-        collection = get_chromadb_client()
-        if not collection:
-            return jsonify({'error': 'ChromaDB not available'}), 500
-        
-        # Get all episodes
-        results = collection.get()
-        
-        episodes = []
-        if results['metadatas']:
-            for metadata in results['metadatas']:
-                episodes.append({
-                    'season': metadata.get('season', 'N/A'),
-                    'episode_number_in_season': metadata.get('episode_number', 'N/A'),
-                    'episode_title': metadata.get('title', 'N/A'),
-                    'air_date': metadata.get('air_date', 'N/A'),
-                    'description': metadata.get('description', 'N/A'),
-                    'imdb_rating': metadata.get('imdb_rating', 'N/A'),
-                    'vote_count': metadata.get('vote_count', 'N/A'),
-                    'episode_url': metadata.get('url', 'N/A')
-                })
-        
-        # Optional filtering
-        season = request.args.get('season', type=int)
-        limit = request.args.get('limit', 10, type=int)
-        
-        if season:
-            episodes = [ep for ep in episodes if ep.get('season') == str(season)]
-        
-        return jsonify({
-            "episodes": episodes[:limit],
-            "total": len(episodes),
-            "returned": min(limit, len(episodes))
-        })
-        
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        return jsonify({'error': 'Internal server error'}), 500
 
 if __name__ == '__main__':
     print("Starting Flask server with Simpsons RAG...")
