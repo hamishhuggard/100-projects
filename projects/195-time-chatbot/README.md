@@ -1,6 +1,10 @@
-# Chatbot React Frontend
+# Timebot 9000
 
-A React frontend for the Python chatbot created in [177-cli-chatbot](../177-cli-chatbox) using the gpt-5-nano model through the OpenAI API.
+A chatbot with React frontend and a tool for checking the time.
+
+Previous in this series:
+- [182-chatbot-react-frontend](../182-chatbot-react-frontend)
+- [177-cli-chatbot](../177-cli-chatbox)
 
 ![Preview](preview.png)
 

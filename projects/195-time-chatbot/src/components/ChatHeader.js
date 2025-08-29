@@ -17,7 +17,7 @@ const ChatHeader = ({ onReset }) => {
           <p className="date">{currentDate}</p>
         </div>
         <button className="reset-button" onClick={onReset}>
-          🔄 Reset Chat
+          Reset
         </button>
       </div>
     </header>

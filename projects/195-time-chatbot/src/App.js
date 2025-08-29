@@ -80,12 +80,6 @@ function App() {
       <ChatHeader onReset={handleReset} />
       <div className="chat-container">
         <div className="messages-container">
-          {messages.length === 0 && (
-            <div className="welcome-message">
-              <h2>Welcome to TimeBot 9000! 🕐</h2>
-              <p>I always know the current time. Start a conversation by typing a message below.</p>
-            </div>
-          )}
           {messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))}
