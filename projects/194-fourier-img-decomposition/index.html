@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Fourier Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .container {
+            max-width: 900px;
+        }
+        canvas {
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            background-color: #2d3748;
+        }
+    </style>
+</head>
+<body class="p-6">
+    <div class="container mx-auto p-4 bg-gray-800 rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold text-center mb-2">Image Fourier Analyzer</h1>
+        <p class="text-center text-gray-400 mb-6">
+            Upload an image to see its Fourier transform breakdown. Use the slider to reconstruct the image with
+            the most significant frequency terms.
+        </p>
+
+        <!-- Upload and Loading Section -->
+        <div class="flex flex-col items-center justify-center mb-6">
+            <input type="file" id="fileInput" accept="image/*" class="mb-4 text-gray-300">
+            <div id="loadingIndicator" class="hidden text-center">
+                <p>Analyzing image... this may take a moment.</p>
+                <div class="w-16 h-16 border-4 border-gray-500 border-t-transparent border-solid rounded-full animate-spin mt-2"></div>
+            </div>
+        </div>
+
+        <!-- Slider Control -->
+        <div class="flex flex-col items-center mb-8">
+            <div class="w-full max-w-lg">
+                <label for="termsSlider" class="block text-center mb-2">
+                    Number of Fourier Terms (<span id="termsValue">0</span>)
+                </label>
+                <input type="range" id="termsSlider" min="0" max="1" value="0"
+                    class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+            </div>
+        </div>
+
+        <!-- Canvas Display Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Original Image -->
+            <div class="flex flex-col items-center">
+                <h3 class="text-xl font-semibold mb-2">Original Image</h3>
+                <canvas id="originalCanvas" class="w-full h-auto"></canvas>
+                <p class="text-sm text-gray-400 mt-2 text-center">
+                    Note: Image is resized to 128x128 for analysis due to performance constraints.
+                </p>
+            </div>
+            <!-- Reconstructed Image -->
+            <div class="flex flex-col items-center">
+                <h3 class="text-xl font-semibold mb-2">Reconstructed Image</h3>
+                <canvas id="reconstructedCanvas" class="w-full h-auto"></canvas>
+                <p class="text-sm text-gray-400 mt-2 text-center">
+                    Reconstructed from the selected number of Fourier terms.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global constants and variables
+        const MAX_DIMENSION = 128;
+        const fileInput = document.getElementById('fileInput');
+        const termsSlider = document.getElementById('termsSlider');
+        const termsValue = document.getElementById('termsValue');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const originalCanvas = document.getElementById('originalCanvas');
+        const reconstructedCanvas = document.getElementById('reconstructedCanvas');
+        const originalCtx = originalCanvas.getContext('2d');
+        const reconstructedCtx = reconstructedCanvas.getContext('2d');
+
+        let width, height;
+        let originalImageData;
+        let rgbCoefficients = [[], [], []];
+
+        // --- Complex Number Helpers ---
+        class Complex {
+            constructor(real, imag) {
+                this.real = real;
+                this.imag = imag;
+            }
+
+            add(other) {
+                return new Complex(this.real + other.real, this.imag + other.imag);
+            }
+
+            multiply(other) {
+                return new Complex(
+                    this.real * other.real - this.imag * other.imag,
+                    this.real * other.imag + this.imag * other.real
+                );
+            }
+
+            magnitude() {
+                return Math.sqrt(this.real * this.real + this.imag * this.imag);
+            }
+        }
+
+        // --- Core Fourier Analysis Functions ---
+        /**
+         * Performs a 2D Discrete Fourier Transform (DFT) on a single channel of pixel data.
+         * WARNING: This is a direct implementation and is very computationally expensive.
+         * The image dimensions are capped to ensure it runs in the browser without crashing.
+         * @param {Array<number>} channelData - A 1D array of pixel values for a single channel.
+         * @returns {Array<{magnitude: number, c: Complex, u: number, v: number}>} - Sorted array of coefficients.
+         */
+        function twoDimensionalDFT(channelData) {
+            const coefficients = [];
+            const N = height;
+            const M = width;
+
+            for (let u = 0; u < M; u++) {
+                for (let v = 0; v < N; v++) {
+                    let sum = new Complex(0, 0);
+                    for (let x = 0; x < M; x++) {
+                        for (let y = 0; y < N; y++) {
+                            const pixelValue = channelData[y * M + x];
+                            const expTerm = new Complex(
+                                Math.cos(-2 * Math.PI * ((u * x / M) + (v * y / N))),
+                                Math.sin(-2 * Math.PI * ((u * x / M) + (v * y / N)))
+                            );
+                            sum = sum.add(expTerm.multiply(new Complex(pixelValue, 0)));
+                        }
+                    }
+                    const coefficient = sum.multiply(new Complex(1 / (M * N), 0));
+                    coefficients.push({
+                        magnitude: coefficient.magnitude(),
+                        c: coefficient,
+                        u: u,
+                        v: v
+                    });
+                }
+            }
+            // Sort coefficients by magnitude from largest to smallest
+            coefficients.sort((a, b) => b.magnitude - a.magnitude);
+            return coefficients;
+        }
+
+        /**
+         * Reconstructs a single channel of an image from a given set of Fourier coefficients.
+         * @param {Array<{c: Complex, u: number, v: number}>} coefficients - The coefficients to use for reconstruction.
+         * @returns {Array<number>} - A 1D array of reconstructed pixel values.
+         */
+        function twoDimensionalIDFT(coefficients) {
+            const reconstructedData = new Array(width * height);
+            const N = height;
+            const M = width;
+
+            for (let x = 0; x < M; x++) {
+                for (let y = 0; y < N; y++) {
+                    let sum = new Complex(0, 0);
+                    for (let i = 0; i < coefficients.length; i++) {
+                        const { c, u, v } = coefficients[i];
+                        const expTerm = new Complex(
+                            Math.cos(2 * Math.PI * ((u * x / M) + (v * y / N))),
+                            Math.sin(2 * Math.PI * ((u * x / M) + (v * y / N)))
+                        );
+                        sum = sum.add(c.multiply(expTerm));
+                    }
+                    // Clamp the value to the valid 0-255 range
+                    reconstructedData[y * M + x] = Math.max(0, Math.min(255, sum.real));
+                }
+            }
+            return reconstructedData;
+        }
+
+        // --- Main Application Logic ---
+        /**
+         * Handles the image file upload, resizing, and initial analysis.
+         */
+        async function handleImageUpload() {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            loadingIndicator.classList.remove('hidden');
+            termsSlider.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = async () => {
+                    // Resize the image to a manageable size for the DFT
+                    const offscreenCanvas = document.createElement('canvas');
+                    const ratio = Math.min(MAX_DIMENSION / img.width, MAX_DIMENSION / img.height);
+                    width = Math.floor(img.width * ratio);
+                    height = Math.floor(img.height * ratio);
+                    offscreenCanvas.width = width;
+                    offscreenCanvas.height = height;
+
+                    const offscreenCtx = offscreenCanvas.getContext('2d');
+                    offscreenCtx.drawImage(img, 0, 0, width, height);
+
+                    originalCanvas.width = width;
+                    originalCanvas.height = height;
+                    originalCtx.drawImage(offscreenCanvas, 0, 0);
+                    originalImageData = originalCtx.getImageData(0, 0, width, height);
+
+                    await analyzeImage();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /**
+         * Performs the full Fourier analysis on the resized image's RGB channels.
+         */
+        async function analyzeImage() {
+            const data = originalImageData.data;
+            const rChannel = [];
+            const gChannel = [];
+            const bChannel = [];
+
+            for (let i = 0; i < data.length; i += 4) {
+                rChannel.push(data[i]);
+                gChannel.push(data[i + 1]);
+                bChannel.push(data[i + 2]);
+            }
+
+            // Analyze each channel and store coefficients
+            rgbCoefficients[0] = twoDimensionalDFT(rChannel);
+            rgbCoefficients[1] = twoDimensionalDFT(gChannel);
+            rgbCoefficients[2] = twoDimensionalDFT(bChannel);
+
+            // Update the slider range based on the total number of terms
+            termsSlider.max = 50;
+            termsSlider.value = 1; 
+            termsValue.textContent = termsSlider.value;
+            termsSlider.disabled = false;
+            loadingIndicator.classList.add('hidden');
+
+            updateReconstruction();
+        }
+
+        /**
+         * Reconstructs and displays the image based on the slider value.
+         */
+        function updateReconstruction() {
+            const numTerms = parseInt(termsSlider.value);
+            if (numTerms === 0) {
+                // Clear the canvas if no terms are selected
+                reconstructedCtx.clearRect(0, 0, width, height);
+                return;
+            }
+
+            // Take the top 'numTerms' coefficients for each channel
+            const rCoeffs = rgbCoefficients[0].slice(0, numTerms).map(c => ({ c: c.c, u: c.u, v: c.v }));
+            const gCoeffs = rgbCoefficients[1].slice(0, numTerms).map(c => ({ c: c.c, u: c.u, v: c.v }));
+            const bCoeffs = rgbCoefficients[2].slice(0, numTerms).map(c => ({ c: c.c, u: c.u, v: c.v }));
+
+            // Reconstruct each channel
+            const rReconstructed = twoDimensionalIDFT(rCoeffs);
+            const gReconstructed = twoDimensionalIDFT(gCoeffs);
+            const bReconstructed = twoDimensionalIDFT(bCoeffs);
+
+            // Create a new ImageData object and fill it with reconstructed data
+            const newImageData = reconstructedCtx.createImageData(width, height);
+            for (let i = 0; i < width * height; i++) {
+                newImageData.data[i * 4] = rReconstructed[i];
+                newImageData.data[i * 4 + 1] = gReconstructed[i];
+                newImageData.data[i * 4 + 2] = bReconstructed[i];
+                newImageData.data[i * 4 + 3] = 255; // Alpha channel
+            }
+
+            // Draw the reconstructed image
+            reconstructedCanvas.width = width;
+            reconstructedCanvas.height = height;
+            reconstructedCtx.putImageData(newImageData, 0, 0);
+        }
+
+        // --- Event Listeners ---
+        fileInput.addEventListener('change', handleImageUpload);
+        termsSlider.addEventListener('input', () => {
+            termsValue.textContent = termsSlider.value;
+            updateReconstruction();
+        });
+
+    </script>
+</body>
+</html>
