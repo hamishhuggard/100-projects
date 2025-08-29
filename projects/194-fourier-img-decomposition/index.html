@@ -26,7 +26,7 @@
         <h1 class="text-3xl font-bold text-center mb-2">Image Fourier Analyzer</h1>
         <p class="text-center text-gray-400 mb-6">
             Upload an image to see its Fourier transform breakdown. Use the slider to reconstruct the image with
-            the most significant frequency terms.
+            the most significant frequency terms. Each slider increment adds 6 coefficients (3 color channels × 2D frequency components).
         </p>
 
         <!-- Upload and Loading Section -->
@@ -42,8 +42,11 @@
         <div class="flex flex-col items-center mb-8">
             <div class="w-full max-w-lg">
                 <label for="termsSlider" class="block text-center mb-2">
-                    Number of Fourier Terms (<span id="termsValue">0</span>)
+                    Number of Frequency Terms (<span id="termsValue">0</span>) - Each adds 6 coefficients (3 colors × 2D frequencies)
                 </label>
+                <p class="text-center text-sm text-gray-400 mb-2">
+                    Total coefficients: <span id="totalCoeffs">0</span>
+                </p>
                 <input type="range" id="termsSlider" min="0" max="1" value="0"
                     class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
             </div>
@@ -76,6 +79,7 @@
         const fileInput = document.getElementById('fileInput');
         const termsSlider = document.getElementById('termsSlider');
         const termsValue = document.getElementById('termsValue');
+        const totalCoeffs = document.getElementById('totalCoeffs');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const originalCanvas = document.getElementById('originalCanvas');
         const reconstructedCanvas = document.getElementById('reconstructedCanvas');
@@ -235,10 +239,14 @@
             rgbCoefficients[1] = twoDimensionalDFT(gChannel);
             rgbCoefficients[2] = twoDimensionalDFT(bChannel);
 
-            // Update the slider range based on the total number of terms
-            termsSlider.max = 50;
+            // Update the slider range based on the total number of unique frequency pairs
+            // Since each term represents a 2D frequency that affects all 3 color channels,
+            // we can use a reasonable range for the number of frequency terms
+            const maxUniqueFrequencies = Math.min(100, Math.floor((width * height) / 10));
+            termsSlider.max = maxUniqueFrequencies;
             termsSlider.value = 1; 
             termsValue.textContent = termsSlider.value;
+            totalCoeffs.textContent = parseInt(termsSlider.value) * 6;
             termsSlider.disabled = false;
             loadingIndicator.classList.add('hidden');
 
@@ -256,10 +264,49 @@
                 return;
             }
 
-            // Take the top 'numTerms' coefficients for each channel
-            const rCoeffs = rgbCoefficients[0].slice(0, numTerms).map(c => ({ c: c.c, u: c.u, v: c.v }));
-            const gCoeffs = rgbCoefficients[1].slice(0, numTerms).map(c => ({ c: c.c, u: c.u, v: c.v }));
-            const bCoeffs = rgbCoefficients[2].slice(0, numTerms).map(c => ({ c: c.c, u: c.u, v: c.v }));
+            // Each "term" represents a 2D frequency component (u,v) that affects all 3 color channels
+            // So we need to get the top 'numTerms' unique frequency pairs
+            const allFrequencies = new Set();
+            
+            // Collect all unique (u,v) frequency pairs from all channels
+            for (let channel = 0; channel < 3; channel++) {
+                for (let i = 0; i < rgbCoefficients[channel].length; i++) {
+                    const coeff = rgbCoefficients[channel][i];
+                    allFrequencies.add(`${coeff.u},${coeff.v}`);
+                }
+            }
+            
+            // Convert to array and sort by total magnitude across all channels
+            const frequencyPairs = Array.from(allFrequencies).map(freqStr => {
+                const [u, v] = freqStr.split(',').map(Number);
+                let totalMagnitude = 0;
+                for (let channel = 0; channel < 3; channel++) {
+                    const coeff = rgbCoefficients[channel].find(c => c.u === u && c.v === v);
+                    if (coeff) totalMagnitude += coeff.magnitude;
+                }
+                return { u, v, totalMagnitude };
+            }).sort((a, b) => b.totalMagnitude - a.totalMagnitude);
+            
+            // Take the top 'numTerms' frequency pairs
+            const selectedFrequencies = frequencyPairs.slice(0, numTerms);
+            
+            // For each selected frequency, get the coefficients for all 3 channels
+            const rCoeffs = [];
+            const gCoeffs = [];
+            const bCoeffs = [];
+            
+            for (const freq of selectedFrequencies) {
+                // Find the coefficient for this frequency in each channel
+                for (let channel = 0; channel < 3; channel++) {
+                    const coeff = rgbCoefficients[channel].find(c => c.u === freq.u && c.v === freq.v);
+                    if (coeff) {
+                        const coeffData = { c: coeff.c, u: coeff.u, v: coeff.v };
+                        if (channel === 0) rCoeffs.push(coeffData);
+                        else if (channel === 1) gCoeffs.push(coeffData);
+                        else bCoeffs.push(coeffData);
+                    }
+                }
+            }
 
             // Reconstruct each channel
             const rReconstructed = twoDimensionalIDFT(rCoeffs);
@@ -285,6 +332,7 @@
         fileInput.addEventListener('change', handleImageUpload);
         termsSlider.addEventListener('input', () => {
             termsValue.textContent = termsSlider.value;
+            totalCoeffs.textContent = parseInt(termsSlider.value) * 6;
             updateReconstruction();
         });
 
