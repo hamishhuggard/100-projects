@@ -1,16 +1,17 @@
 # Simpsonsbot
 
-This is pretty funny. So it's a chatbot that always steers the conversation towards Simpsons episodes but denies it's doing that.
+I was trying to think of a funny project to practice building a retrieval-augmented generation (RAG) chatbot, and came up with this:
 
-I made this to get some practice building a RAG.
+A chatbot that always steers the conversation towards Simpsons episodes but denies it's doing that.
 
 Implementation details:
-- Description of every simpsons episode are scraped from IMDb in ./data
+- Descriptions of every Simpsons episode are scraped from IMDb in ./data
 - Semantic embeddings of each episode's description are generated using OpenAI's text-embedding-3-small, and stored in a ChromaDB database.
-- Each user message is also embedded with text-embedding-3-small, and the most similar episode is retrieved from the ChromaDB database and added to the end of the message list before the next agent message is retrieved.
-- The RAG is implemented using LangChain 
-- The backend is implemented using Flask
-- The frontend is implemented using React
+- Each user message is also embedded with text-embedding-3-small, and the 5 most cosine similar episodes are augmented to the messages that the model sees.
+- The RAG is implemented using LangChain .
+- The language model is gpt5-nano via the OpenAI API.
+- The backend is implemented using Flask.
+- The frontend is implemented using React.
 
 Previous in this series:
 - [182-chatbot-react-frontend](../182-chatbot-react-frontend)
