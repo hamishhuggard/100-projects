@@ -1,49 +1,57 @@
-# Mini Projects Monorepo
+# Technical Portfolio - Mini Projects Monorepo
 
-I find that to best way to iterate code projects and learn new technical skills, is to to create a sequence of mini-projects. Messing around with git branches, and creating and organizing repos is annoying, so as a minimalist solution I have this monorepo where each mini-project is organized like this:
-```bash
-projects/
-├── 001-example-project/
-├── 002-example-project-v2/
-└── 003-another-project/
-```
-
-A few interesting projects to take a look at:
-
-### MLOps
-
-- [DVC Demo](projects/176-dvc-demo)
-
-### Deep learning
-
-### React
-
-### Agents and Chatbots
+Welcome to my technical portfolio! This repository showcases my journey through various programming challenges, machine learning experiments, and full-stack applications. Each project is designed to explore specific technologies and solve interesting problems.
 
 
-### Previews
+## 🤖 AI & Machine Learning
 
-I like to add screenshots to the README.md files, to show what they look like when they run. Raw screenshots are too large and get rejected by GitHub, so here's a script to downsize images to 1000px width:
+### [198 - PeanutBot](projects/198-peanutbot/)
+**Fine-tuned Language Model with LoRA** - A GPT-2 model fine-tuned to replace alphanumeric characters with peanut emojis (🥜). Demonstrates:
+- **LoRA (Low-Rank Adaptation)** for efficient model fine-tuning
+- **PyTorch Transformers** integration with PEFT library
+- **Custom training pipeline** with configurable hyperparameters
+- **Flask backend** + **React frontend** for real-time inference
+- **CPU-optimized training** with reduced sequence lengths and batch sizes
 
-```bash
-python projects/resize-imaget/resize_image.py projects/n-some-project/preview.png
-```
+![PeanutBot Preview](projects/198-peanutbot/preview.png)
 
-### Symlinks
+### [196 - MilkBot](projects/196-milkbot/)
+**RAG-Powered Chatbot with Semantic Search** - A chatbot that subtly steers conversations toward Simpsons episodes while denying it. Features:
+- **Retrieval-Augmented Generation (RAG)** using LangChain
+- **ChromaDB vector database** for episode embeddings
+- **OpenAI text-embedding-3-small** for semantic similarity
+- **Flask API backend** with conversation memory
+- **React frontend** with real-time chat interface
 
-To avoid duplicating images and other resources across projects, put them in the `/assets` directory at the root of this monorepo, and create symbolic links (symlink) within the projects:
+![MilkBot Preview](projects/196-milkbot/preview.png)
 
-```bash
-ln -s projects/111-example-project/assets /assets
-```
+### [192 - Simpsons RAG](projects/192-simpsons-RAG/)
+**Advanced RAG Implementation** - Enhanced version with improved retrieval and response generation:
+- **Multi-episode retrieval** (top 5 most similar episodes)
+- **Cosine similarity search** for context augmentation
+- **GPT-5-nano integration** for natural language generation
+- **Web scraping** of IMDb episode data
+- **Full-stack architecture** with modern web technologies
 
-When the application server runs, it sees the symlink as a normal directory and can serve the files from it. GitHub will show the symlink as a normal directory, but doesn't actually store the duplicate files.
+![Simpsons RAG Preview](projects/192-simpsons-RAG/preview.png)
 
-Apparently symlinks can be finnicky on Windows, so you may need to:
-- Run your terminal as an administrator
-- Enable developer mode in Windows
-- Run the following command:
-```bash
-git config --global core.symlinks true
-```
-If those don't work, you may have to manually copy the assets into the project directories.
+## 🎨 Frontend Development
+
+### [100 - 3D AlexNet Visualization](projects/100-3d-alexnet/)
+**Interactive Neural Network Architecture Visualization** - Three.js-powered 3D representation of AlexNet layers:
+- **Three.js 3D graphics** for neural network visualization
+- **Real-time rendering** with smooth animations
+- **Responsive design** handling window resizing
+- **Educational tool** for understanding CNN architectures
+- **WebGL acceleration** for smooth performance
+
+![3D AlexNet Preview](projects/100-3d-alexnet/preview.png)
+
+### [146 - Woolworths Clone](projects/146-woolworths/)
+**Responsive E-commerce Interface** - Modern grocery store website with:
+- **CSS Grid & Flexbox** for responsive layouts
+- **Component-based design** with reusable UI elements
+- **Mobile-first approach** with adaptive styling
+- **Clean, professional aesthetics** mimicking real e-commerce sites
+
+![Woolworths Clone Preview](projects/146-woolworths/preview.png)
