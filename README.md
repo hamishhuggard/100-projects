@@ -1,53 +1,76 @@
-# Technical Portfolio - Mini Projects Monorepo
+# Mini Projects Monorepo
 
-Welcome to my technical portfolio! This repository showcases my journey through various programming challenges, machine learning experiments, and full-stack applications. Each project is designed to explore specific technologies and solve interesting problems.
-
+This is a repo I used to learn new tools and try out project ideas. Below are some highlights:
 
 ## 🤖 AI & Machine Learning
 
-### [198 - PeanutBot](projects/198-peanutbot/)
-**Fine-tuned Language Model with LoRA** - A GPT-2 model fine-tuned to replace alphanumeric characters with peanut emojis (🥜). Demonstrates:
-- **LoRA (Low-Rank Adaptation)** for efficient model fine-tuning
-- **PyTorch Transformers** integration with PEFT library
-- **Custom training pipeline** with configurable hyperparameters
-- **Flask backend** + **React frontend** for real-time inference
-- **CPU-optimized training** with reduced sequence lengths and batch sizes
+### [PeanutBot](projects/198-peanutbot/)
+
+GPT-2 finetuned to replace alphanumeric characters with peanut emojis (🥜).
+
+Example conversation:
+
+```
+👋: Hello, how are you?
+🤖: 🥜🥜! 🥜🥜🥜 🥜🥜.
+👋: Who was the first president of the United States?
+🤖: 🥜🥜🥜 🥜🥜🥜🥜 "🥜🥜🥜 🥜. 🥜🥜🥜🥜". 🥜🥜🥜🥜 🥜🥜🥜🥜 🥜🥜🥜.
+```
+
+Tools:
+- Finetuning using **Python** and **Hugging Face**.
+- Backend implementation with **Flask**.
+- Frontend implementation with **React**.
+- Agent implementation with **LangChain**.
 
 ![PeanutBot Preview](projects/198-peanutbot/preview.png)
 
-### [196 - MilkBot](projects/196-milkbot/)
-**RAG-Powered Chatbot with Semantic Search** - A chatbot that subtly steers conversations toward Simpsons episodes while denying it. Features:
-- **Retrieval-Augmented Generation (RAG)** using LangChain
-- **ChromaDB vector database** for episode embeddings
-- **OpenAI text-embedding-3-small** for semantic similarity
-- **Flask API backend** with conversation memory
-- **React frontend** with real-time chat interface
+### [MilkBot](projects/196-milkbot/)
+
+This is an AI shopping assistant for an online milk store. It can answer questions about milk products, place items into and out of the shopping cart, and initiate checkout.
+
+Tools:
+- The catalog of milk products was scraped from the Woolworths website. I had to use headless browsing with **Puppeteer** because the website loads dynamically.
+- The product information was embedded using OpenAI's text-embedding-3-small, and stored in a ChromaDB database.
+- The AI agent was implemented with **LangChain**.
+  - Retrieval-Augmented Generation (RAG) capabilities were implemented where information about products relevant to the user's question was retrieved from the ChromaDB database and augmented to the user's question.
+  - Adding and removing items from the shopping cart were implemented as agent tools.
+- The backend was implemented with **Flask**.
+- The frontend was implemented with **React**.
+- The LLM is GPT-5-nano via the **OpenAI API**.
 
 ![MilkBot Preview](projects/196-milkbot/preview.png)
 
-### [192 - Simpsons RAG](projects/192-simpsons-RAG/)
-**Advanced RAG Implementation** - Enhanced version with improved retrieval and response generation:
-- **Multi-episode retrieval** (top 5 most similar episodes)
-- **Cosine similarity search** for context augmentation
-- **GPT-5-nano integration** for natural language generation
-- **Web scraping** of IMDb episode data
-- **Full-stack architecture** with modern web technologies
+### [Simpsons RAG](projects/192-simpsons-RAG/)
+
+A chatbot that steers conversations toward Simpsons episodes while denying it's doing that.
+
+- Scraped Simpsons episode data from IMDb.
+- Generated semantic embeddings of each episode's description using OpenAI's text-embedding-3-small, and stored in a **ChromaDB database**.
+- The RAG was implemented with **LangChain**.
+- The frontend was implemented with **React**.
+- The backend was implemented with **Flask**.
+- The LLM is GPT-5-nano via the **OpenAI API**.
 
 ![Simpsons RAG Preview](projects/192-simpsons-RAG/preview.png)
 
-## 🎨 Frontend Development
+## 🎨 Web Development
 
-### [100 - 3D AlexNet Visualization](projects/100-3d-alexnet/)
-**Interactive Neural Network Architecture Visualization** - Three.js-powered 3D representation of AlexNet layers:
-- **Three.js 3D graphics** for neural network visualization
-- **Real-time rendering** with smooth animations
-- **Responsive design** handling window resizing
-- **Educational tool** for understanding CNN architectures
-- **WebGL acceleration** for smooth performance
+### [3D Model Size Visualization](projects/060-cube-zoom-labelled/)
 
-![3D AlexNet Preview](projects/100-3d-alexnet/preview.png)
+This is a pretty basic 3D visualisation frontend for visualising the relative sizes of notable AI models (in terms of parameter counts) in three dimensions using **Three.js**.
 
-### [146 - Woolworths Clone](projects/146-woolworths/)
+Tools:
+- The website uses **Three.js** for the 3D visualisation.
+- The data is retrieved from the [Epoch AI](https://epoch.ai) database.
+
+![3D Model Size Visualization Preview](https://hamishhuggard.com/images/model_sizes.png)
+
+<!-->
+### [Woolworths Clone](projects/146-woolworths/)
+
+
+
 **Responsive E-commerce Interface** - Modern grocery store website with:
 - **CSS Grid & Flexbox** for responsive layouts
 - **Component-based design** with reusable UI elements
@@ -55,3 +78,4 @@ Welcome to my technical portfolio! This repository showcases my journey through 
 - **Clean, professional aesthetics** mimicking real e-commerce sites
 
 ![Woolworths Clone Preview](projects/146-woolworths/preview.png)
+-->
