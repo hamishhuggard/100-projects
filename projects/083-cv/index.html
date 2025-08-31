@@ -7,6 +7,9 @@
   <title>My CV</title>
 </head>
 <body>
+<!--
+This layout is based on https://www.coolfreecv.com
+-->
     <div class="page">
 
             <!--
@@ -21,13 +24,16 @@
 
         <div class="header">
             <div class="profile-image">
-                <img src="headshot.jpg" alt="Profile Image">
+                <img src="headshot_small.jpg" alt="Profile Image">
             </div>
             <div class="contact-info">
-                <h1>HAMISH HUGGARD</h1>
-                <p>+1 (970) 333-3833</p>
-                <p>christine.smith@gmail.com</p>
-                <p>https://www.coolfreecv.com</p>
+                <h1>Hamish Huggard</h1>
+                <p style="font-size: 16px">Research Engineer</p>
+                <p style="display: flex; flex-direction: row; justify-content: space-between; width: 400px;">
+                <span>hamish.huggard@gmail.com</span>
+                <span>https://github.com/hamishhuggard</span>
+                <span>021-0261-6118</span>
+                </p>
             </div>
         </div>
 
@@ -35,13 +41,21 @@
             <div class="left-column">
                 <section class="summary">
                     <h2>Summary</h2>
-                    <p>My name is Hamish Huggard, an expert Web and Graphic Designer...</p>
+                    <p>My main areas of interest are machine learning, data science, data visualisation, and web development.</p>
+                    <!--
+                    <p>My honours thesis and summer research project was on spatiotemporal modelling of atmospheric data (see 2018 publication below). My M.Sc. thesis focused on biomedical applications of natural language processing. It was described by one of my examiners as the best master’s thesis they had seen. I am also the lead author of three published papers on pro-social applications of machine learning.
+                    I have over two years of corporate experience in data science and web development. I spent a year at medical software company Orion Health, where I worked on deep learning applications in medical software, and a year at the startup Litmaps, where I worked on data visualisation, data engineering, and deploying machine learning services.
+                    After Litmaps, I decided to take some time o↵ to do freelancing and walk the length of New Zealand on the Te Araroa Trail. I then built a portfolio and received a grant to create educational media on global challenges. I’m currently doing data annotation and model interaction contracting at Model Evaluation & Threat Research (METR).</p>
+                -->
                 </section>
 
                 <section class="tech-skills">
-                    <h2>Tech Skills</h2>
+                    <h2>Skills</h2>
+                    <div class="skill"> <p>Python, Machine Learning, Deep Learning, LLMs, AI Agents, Kubernetes, NLP, PyTorch, Pandas, SKLearn, SQL, Postgres, Data visualisation, Matplotlib, Plotly, Illustration, Web development, HTML, CSS, Javascript, D3.js, Copy writing, Research</p> </div>
+                    <!--
                     <div class="skill">
                         <p>Adobe Photoshop</p>
+                        <img src="logos/python.webp"/>
                         <div class="skill-bar"><span style="width: 90%;"></span></div>
                     </div>
                     <div class="skill">
@@ -56,94 +70,232 @@
                         <p>Adobe Fresco</p>
                         <div class="skill-bar"><span style="width: 70%;"></span></div>
                     </div>
+                    -->
                 </section>
 
                 <section class="skills">
                     <h2>Awards</h2>
-                    Annual Best M.Sc. Thesis in Computer Science at University of Auckland 2020
-                    Precision Driven Health Scholarship for Postgraduate Research 2019
-                    University of Auckland Postgraduate Honours Scholarship 2018
-                    Senior Scholar Award in the Faculty of Arts 2017
-                    Sir Robert Jones Scholarship in Philosophy 2015
+                    <p>
+                        2020 
+                        <i>
+                        Best M.Sc. Thesis in Computer Science
+                        </i>
+                        <br>
 
-                    <p>Ability to turnaround artwork quickly on short notice.</p>
-                    <p>Exceptional eye for attention to detail.</p>
-                    <p>Proficiency in Photoshop, Illustrator and InDesign.</p>
-                    </ul>
+                        2019 
+                        <i>
+                        Postgraduate Research Scholarship
+                        </i>
+                        <br>
+
+                        2017 
+                        <i>
+                        Postgraduate Honours Scholarship
+                        </i>
+                        <br>
+
+                        2017 
+                        <i>
+                        Senior Scholar Award in the Faculty of Arts
+                        </i>
+                        <br>
+
+                        2015 
+                        <i>
+                        Sir Robert Jones Scholarship in Philosophy
+                        </i>
+                        <br>
                 </section>
+
+
+                <section class="skills">
+                    <h2>Other accomplishments</h2>
+                    <p>
+                        2023 
+                        <i>
+Walked the </i>Camino de Santiago<i> in Portugal.
+                        </i>
+                    </p>
+                    <p>
+                        2022 
+                        <i>
+                        Walked the length of New Zealand on the </i>Te Araroa<i> trail over 6 months (3,000km).
+                        </i>
+                    </p>
+                    <!--
+                    <p>
+                        2020 
+                        <i>
+                        One of my examiners said that my masters thesis was the best the best masters thesis they had seen.
+                        </i>
+                    </p>
+                    -->
+                </section>
+
             </div>
 
             <div class="right-column">
 
                 <section class="experience">
                     <h2>Experience</h2>
-                    <p><strong>METR</strong> 2024-present</p>
-                    <p><strong>Sketchy Reasoning</strong> 2022-2023<p>
-                    <p><strong>Litmaps</strong> 2020-2021</p>
-                    <p><strong>Orion Health</strong> 2018-2020</p>
-                    <!--
-                    <p><strong>GRAPHIC WEB DESIGNER</strong> - 05/2013 to 05/2019<br>LUNA, LOS ANGELES</p>
-                    <p>Design & develop online brand creative pieces including landing pages, banners, and emails.</p>
-                    -->
+
+                    <p>
+                    <span class="left-right">
+                        <span class="left-text">
+                            2023-present
+                            <strong>Freelancing</strong>
+                        </span>
+                        <span class="right-text">
+                            Web Development and Design
+                        </span>
+                    </span>
+                    I've done some freelance work including episdoe art for an AI podcast, building interactive data visualisations, and implementing the homepage for an AI forecasting nonprofit.
+                    </p>
+
+                    <p>
+                    <span class="left-right">
+                        <span class="left-text">
+                            2025-present
+                            <strong>Equistamp</strong>
+                        </span>
+                        <span class="right-text">
+                            Research Engineer
+                        </span>
+                    </span>
+                    This is essentially the same role as below, after an organisational reshuffle.
+                    </p>
+
+                    <p>
+                    <span class="left-right">
+                        <span class="left-text">
+                            2024-2025
+                            <strong>METR</strong>
+                        </span>
+                        <span class="right-text">
+                            Model Interaction Contractor
+                        </span>
+                    </span>
+                    METR is a global leader in evaluating the capabilities of AI agentsin domains like software engineering, AI research, and cybersecurity. As a model interaction contractor, I assisted in annotating model-generated code, and performing QA, baselining, and debugging for evaluation tasks.
+                    </p>
+
+                    <p>
+                    <span class="left-right">
+                        <span class="left-text">
+                            2022-2023
+                            <strong>Global Problems Cheatsheet</strong>
+                        </span>
+                        <span class="right-text">
+                            Technical Communicator
+                        </span>
+                    </span>
+                    After creating some demo animations which amassed millions of views on social media, I was awarded a 6-figure grant by Open Philanthropy to create educational material on global issues.
+                    </p>
+
+                    <p>
+                    <span class="left-right">
+                        <span class="left-text">
+                            2020-2021
+                            <strong>Litmaps</strong>
+                        </span>
+                        <span class="right-text">
+                            Data Scientist
+                        </span>
+                    </span>
+                    I developed and deployed the company's first AI features, using Python, Linux, FastAPI, and Oracle Cloud. I also built some frontend visualisations with Javascript and React, and database optimisation with Postgres and Redis.
+                    </p>
+
+                    <p>
+                    <span class="left-right">
+                        <span class="left-text">
+                            2018-2020
+                            <strong>Orion Health</strong>
+                        </span>
+                        <span class="right-text">
+                            Intern/Graduate Data scientist
+                        </span>
+                    </span>
+                    I developed a feature engineering library for biomedical freetext, to improve the performance of deep learning AI models in extracting information like drug prescriptions from clinical notes.
                 </section>
 
                 <section class="education">
                     <h2>Education</h2>
-                    <p><strong>UNIVERSITY OF AUCKLAND</strong><br>
-                    Bachelor of Science Degree 
-                    <br>
-                    in Physics and Computer Science 2014-2017 8.6/9.0
-                    <br>
+                    <p>
+                        <span class="left-right">
+                            <span class="left-text">
+                                2018-2020
+                                <i>
+                                University of Auckland
+                                </i>
+                            </span>
+                            <span class="right-text">
+                            GPA: 9.0/9.0
+                            </span>
+                        </span>
+                        <strong>
+                        Master's Degree in Computer Science
+                        </strong>
+                        <br>
+                        My Masters degree was funded by a scholarship from Precision Driven Health (PDH). One of my examiners said my thesis was "the best Masters thesis they had seen". I won the "best thesis" award for the Computer Science Department.
+                        <br>
 
-                    Bachelor of Arts Degree 2014-2017 8.6/9.0
-                    <br>
-                    in Philosophy and Mathematics 
-                    <br>
-                    Master's Degree in Computer Science 2018-2020 A+<br>
+                        <span class="left-right">
+                            <span class="left-text">
+                                2014-2017
+                                <i>
+                                University of Auckland
+                                </i>
+                            </span>
+                            <span class="right-text">
+                                GPA: 8.6/9.0
+                            </span>
+                        </span>
+                        <strong>
+                        Bachelor of Science in Physics and Computer Science
+                        </strong>
+                        <br>
+                        
+                        <span class="left-right">
+                            <span class="left-text">
+                                2014-2017
+                                <i>
+                                University of Auckland
+                                </i>
+                            </span>
+                            <span class="right-text">
+                            GPA: 8.6/9.0
+                            </span>
+                        </span>
+                        <strong>
+                        Bachelor of Science in Physics and Computer Science
+                        </strong>
                 </section>
 
                 
                 <section class="skills">
                     <h2>Publications</h2>
                     <p>
-                    Hamish Huggard, Yun Sing Koh, Gillian Dobbie, and Edmond Zhang. Concept drift detection for medical triage. In <i>Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval</i>
-                    </p>
-                    <p>
-                    Hamish Huggard, Aaron Zhang, Edmond Zhang, and Yun Sing Koh. Feature importance for biomedical named entity recognition. In <i>AI 2019: Advances in Artificial Intelligence</i>
-                    </p>
-                    <p>
-                    Hamish Huggard, Yun Sing Koh, Patricia Riddle, and Gustavo Olivares. Predicting air quality from low-cost sensor measurements. In <i>Australasian Conference on Data Mining</i>, pages 94–106. Springer, 2018
+                    2020 <i>Concept drift detection for medical triage.</i>
+                    <br>
+                    <small>
+                    Hamish Huggard, Yun Sing Koh, Gillian Dobbie, Edmond Zhang. 
+                    </small>
+                    <br>
+                    2019 <i>Feature importance for biomedical named entity recognition.</i>
+                    <br>
+                    <small>
+                    Hamish Huggard, Aaron Zhang, Edmond Zhang, Yun Sing Koh. 
+                    </small>
+                    <br>
+                    2018 <i>Predicting air quality from low-cost sensor measurements.</i>
+                    <br>
+                    <small>Hamish Huggard, Yun Sing Koh, Patricia Riddle, Gustavo Olivares.</small>
                     </p>
                 </section>
+
+
+
             </div>
         </div>
-
-        <!--
-
-        <div class="section jobs">
-            <h2>Experience</h2>
-            <ul>
-                <li>METR 2024-present</li>
-                <li>Sketchy Reasoning 2022-2023</li>
-                <li>Litmaps 2020-2021</li>
-                <li>Orion Health 2018-2020</li>
-            </ul>
-        </div>
-
-        <div class="section academic">
-            <h2>Academic</h2>
-        </div>
-
-        <div class="section publications">
-            <h2>Publications</h2>
-        </div>
-
-        <div class="section skills">
-            <h2>Skill</h2>
-        </div>
-
-        -->
-
     </div>
 </body>
 </html>

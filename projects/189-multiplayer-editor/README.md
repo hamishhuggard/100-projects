@@ -1,21 +1,6 @@
 # Vim Code Editor
 
-A modern, web-based code editor with full Vim keybindings and a beautiful dark theme.
-
-## Features
-
-- **Vim Keybindings**: Complete Vim modal editing experience
-- **Modern UI**: Dark theme with syntax highlighting support
-- **Line Numbers**: Automatic line numbering with scroll sync
-- **Multiple Languages**: Support for various programming languages
-- **File Operations**: New file, save, and download functionality
-- **Responsive Design**: Works on desktop and mobile devices
-
-## Getting Started
-
-1. Open `index.html` in your web browser
-2. The editor will load with some sample code
-3. Start editing using Vim commands!
+This is an attempt at a text editor with vim keybindings, but it doesn't really work.
 
 ## Vim Keybindings
 
@@ -95,18 +80,3 @@ The editor also supports some standard keyboard shortcuts:
 - `Ctrl+S` - Save
 - `Ctrl+N` - New file
 
-## Tips
-
-1. **Start in Normal Mode**: The editor always starts in normal mode
-2. **Use ESC**: Press ESC to return to normal mode from any other mode
-3. **Practice Movement**: Get comfortable with hjkl movement before diving into editing
-4. **Command Mode**: Use `:` for file operations and advanced commands
-5. **Visual Mode**: Use `v` to select text before performing operations
-
-## Contributing
-
-Feel free to add more Vim commands, improve the UI, or add new features!
-
-## License
-
-This project is open source and available under the MIT License.

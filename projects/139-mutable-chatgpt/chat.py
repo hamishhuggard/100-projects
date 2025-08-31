@@ -185,7 +185,7 @@ def chat():
 
     while True:
         user_input = user.go()
-        if user_input.lower() in ["exit", "quit", "q"]:
+        if user_input.lower() in ["bye"]:
             print("Goodbye!")
             break
         if "@me" in user_input.lower():

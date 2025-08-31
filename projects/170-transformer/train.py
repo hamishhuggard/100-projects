@@ -93,7 +93,7 @@ def generate_dummy_data(num_samples, max_len, vocab_size):
         src = torch.randint(3, vocab_size, (src_len,)).tolist()
 
         tgt_in = [SOS_IDX] + [(x + 1) % vocab_size for x in src]
-        tgt_out = [(x + 1) % vocab for x in src] + [EOS_IDX]
+        tgt_out = [(x + 1) % vocab_size for x in src] + [EOS_IDX]
 
         src += [PAD_IDX] * (max_len - src_len)
         tgt_in += [PAD_IDX] * (max_len - len(tgt_in))

@@ -1,6 +1,7 @@
 from typing import Callable
 import functools
 
+
 def logger(func: Callable) -> Callable:
     @functools.wraps(func)
     def wrapper(*args, **kwargs):

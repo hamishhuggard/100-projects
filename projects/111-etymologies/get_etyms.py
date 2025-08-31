@@ -15,6 +15,9 @@ reader = csv.DictReader(csv_data)
 for row in reader:
     words.append(row['Word'])
 
+etymonline_list = []
+wiktionary_list = []
+prompt_list = []
 for word in words:
     # Fetch etymonline data
     etymonline_url = f"https://www.etymonline.com/search?q={word}"
@@ -31,4 +34,15 @@ for word in words:
     wiktionary_text = etymology_section.find_next('p').get_text(strip=True) if etymology_section else "No data found"
 
     # Print the result
-    print(f"{word}:\n\nEtymonline: {etymonline_text}\n\nWiktionary: {wiktionary_text}\n")
+    # print(f"{word}:\n\nEtymonline: {etymonline_text}\n\nWiktionary: {wiktionary_text}\n")
+    prompt_list.append(f"{word}:\n\nEtymonline: {etymonline_text}\n\nWiktionary: {wiktionary_text}\n")
+    etymonline_list.append(etymonline_text)
+    wiktionary_list.append(wiktionary_text)
+
+print('test')
+with open('etymonline_col.txt', 'w') as f:
+    f.write('\n'.join(etymonline_list))
+with open('wiktionary_col.txt', 'w') as f:
+    f.write('\n'.join(wiktionary_list))
+with open('prompt_col.txt', 'w') as f:
+    f.write('\n'.join(prompt_list))

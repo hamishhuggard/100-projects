@@ -10,6 +10,24 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
 </head>
 <body>
+
+<!--
+<button onclick="startAudio()">Play Audio</button>
+-->
+<audio id="backgroundAudio" autoplay loop muted>
+    <source src="Morning.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<script>
+function startAudio() {
+    var audio = document.getElementById("backgroundAudio");
+    audio.play().catch(error => console.error('Playback failed', error));
+}
+</script>
+
+<script>
+    document.getElementById('backgroundAudio').play().catch(error => console.error('Playback failed', error));
+</script>
 <script>
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -25,7 +43,7 @@ window.addEventListener("resize", () => {
 });
 
 const gridHelper = new THREE.GridHelper(100, 100);
-scene.add(gridHelper);
+//scene.add(gridHelper);
 
 // character
 const loader = new THREE.TextureLoader();
@@ -49,7 +67,7 @@ const skyMaterial = new THREE.MeshBasicMaterial({
     side: THREE.BackSide // Important: Renders the texture on the inside
 });
 const skySphere = new THREE.Mesh(skyGeometry, skyMaterial);
-skyLoader.load('sky.jpeg', function(texture) {
+skyLoader.load('sky.png', function(texture) {
     skySphere.material.map = texture;
     skySphere.material.needsUpdate = true;
 });

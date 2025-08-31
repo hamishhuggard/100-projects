@@ -13,6 +13,6 @@
     </div>
 </div>
 {% else %}
-<p>No postss available. Login to create one!</p>
+<p>No posts available. <a href="{{ url_for('login') }}">Log in</a> to create one!</p>
 {% endfor %}
 {% endblock %}

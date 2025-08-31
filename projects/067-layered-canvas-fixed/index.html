@@ -113,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.moveTo(startX, startY);
         ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
+        ctx.closePath();
         startX = e.offsetX;
         startY = e.offsetY;
     }

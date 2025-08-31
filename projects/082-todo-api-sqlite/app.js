@@ -60,7 +60,7 @@ app.delete('/todos/:id', (req, res) => {
             res.status(400).json({ error: err.message });
             return;
         }
-    };
+    });
     res.status(204).send();
 });
 

@@ -129,24 +129,31 @@
 <style>
 .kia-ora {
     width: 100%;
-    height: 200px;
+    height: 100px;
     background-color: #ff81f2;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 10px;
 }
 
+.kia-ora-title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
 .kia-ora div {
     background-color: rgb(255, 217, 167);
 }
 </style>
+<div class="kia-ora-title">Kia Ora</div>
 <div class="kia-ora">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+    <div>New to online?</div>
+    <div>Book a slot</div>
+    <div>Weekly Mailer</div>
+    <div>Sign In / Register</div>
+    <div>Change Order</div>
+    <div>Boosts</div>
 </div>
 
 
@@ -161,11 +168,18 @@
 }
 
 .specials div {
-    background-color: rgb(255, 217, 167);
+}
+
+.add-to-trolley {
+    width: 150px;
+    height: 30px;
+    background-color: #5ca989;
 }
 </style>
 <div class="specials">
-    <div></div>
+    <div>
+        <div class="add-to-trolley">Add to trolley</div>
+    </div>
     <div></div>
     <div></div>
     <div></div>

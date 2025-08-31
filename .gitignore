@@ -126,4 +126,58 @@ temp/
 build/Release
 
 # Chat logs
-chat.log
+log.chat
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.webp
+*.svg
+*.PNG
+*.JPG
+*.JPEG
+*.GIF
+*.BMP
+*.TIFF
+*.ICO
+*.WEBP
+*.SVG
+
+# Audio
+*.mp3
+*.wav
+*.ogg
+*.m4a
+*.flac
+*.aac
+*.wma
+*.aiff
+*.au
+
+# Video
+*.mp4
+*.mov
+*.avi
+*.wmv
+*.flv
+*.mkv
+*.webm
+
+
+*.swp
+
+# Databases and data
+/chroma_db/*
+*.bin
+*.sqlite3
+*.csv
+*.db
+
+
+*.kv
+*.npy

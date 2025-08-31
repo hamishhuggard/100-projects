@@ -6,49 +6,267 @@
     <title>Projection Coordinates</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-.axis { font: 12px sans-serif; }
-.dot { stroke: #000; }
-.label { font: 10px sans-serif; text-anchor: middle; }
-
-.axis-label {
-    font: 10px sans-serif;
-    font-size: 14px;
-    text-anchor: middle;
+/* General container styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* General container styles */
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #444;
+    margin-top: 20px;
+}
+
+/* Layout: form and chart container */
 .chart-and-controls {
     display: flex;
-    flex-wrap: wrap; /* Allows wrapping to handle small screens */
-    align-items: flex-start; /* Aligns items to the top */
-    gap: 20px; /* Adds space between form and chart */
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
     margin: 20px;
+    padding: 20px;
 }
 
 /* Controls (form) styles */
 .controls {
-    flex: 1; /* Allows the form to grow/shrink proportionally */
-    min-width: 300px; /* Ensures a reasonable minimum width */
-    max-width: 400px; /* Optional: Limits the form's maximum width */
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.controls form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.controls label {
+    display: block;
+    font-weight: bold;
+    color: #555;
+}
+
+.controls input, 
+.controls textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.controls button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.controls button:hover {
+    background-color: #005bb5;
+}
+
+/* Container Styling */
+.controls {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Row Layout */
+.form-row {
+    display: flex;
+    align-items: center; /* Align label and inputs */
+    justify-content: space-between; /* Space out label vs inputs */
+    margin-bottom: 10px; /* Add space between rows */
+}
+
+/* Align Label */
+.axis-label {
+    font-weight: bold;
+    margin-right: 10px;
+	width: 100px;
+}
+
+/* Group inputs and text "to" together */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between inputs and "to" */
+}
+
+/* Styling Inputs */
+.controls input {
+    width: 80px; /* Fixed width for neat alignment */
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.controls span {
+    font-size: 14px; /* Ensure text "to" aligns */
+}
+
+.controls textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Button Styling */
+.controls button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+}
+
+/* Group inputs and text "to" together */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between inputs and "to" */
+}
+
+/* Styling Inputs */
+.controls input {
+    width: 80px; /* Fixed width for neat alignment */
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.controls span {
+    font-size: 14px; /* Ensure text "to" aligns */
+}
+
+.controls textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Button Styling */
+.controls button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
 
 /* Chart container styles */
 #chart {
-    /*
-    flex: 2; /* Gives the chart more space relative to the form */
-    */
-    min-width: 300px; /* Ensures chart doesn't shrink too much */
+    flex: 2;
+    min-width: 300px;
+    max-width: 600px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Responsive design: Stack vertically on small screens */
+svg {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+	padding-top: 20px;
+}
+
+/* Axis and labels */
+.axis { 
+    font: 12px sans-serif; 
+}
+
+.axis path,
+.axis line {
+    stroke: #aaa;
+    shape-rendering: crispEdges;
+}
+
+.axis-label {
+    font-size: 14px;
+    font-weight: bold;
+    fill: #555;
+    text-anchor: middle;
+}
+
+/* Grid lines */
+.grid-line,
+.grid-line-h {
+    stroke: #eee;
+    stroke-dasharray: 2, 2;
+}
+
+/* Dots and labels */
+.dot {
+    stroke: #000;
+    fill: #0078d4;
+}
+
+.label {
+    font-size: 10px;
+    text-anchor: middle;
+    fill: #333;
+}
+
+/* Responsive design */
 @media (max-width: 600px) {
     .chart-and-controls {
-        flex-direction: column; /* Stack items vertically */
-        align-items: center; /* Center align items */
+        flex-direction: column;
+        align-items: center;
     }
 
     .controls, #chart {
-        max-width: 100%; /* Allow full width for small screens */
+        max-width: 100%;
     }
 }
 
@@ -63,16 +281,28 @@
     <div id="chart"></div>
 
     <div class="controls">
-        <form id="projection-form">
-            <label for="word_x">x-axis:</label><br>
-            <input type="text" id="word_x" name="word_x" value="easy"> to 
-            <input type="text" id="word_neg_x" name="word_neg_x" value="difficult"><br>
+		<form id="projection-form">
+			<!-- X-axis Row -->
+			<div class="form-row">
+				<label class="axis-label" for="word_x">x-axis:</label>
+				<div class="input-group">
+					<input type="text" id="word_x" name="word_x" value="easy">
+					<span>to</span>
+					<input type="text" id="word_neg_x" name="word_neg_x" value="difficult">
+				</div>
+			</div>
 
-            <label for="word_y">y-axis:</label><br>
-            <input type="text" id="word_y" name="word_y" value="tasty"> to
-            <input type="text" id="word_neg_y" name="word_neg_y" value="gross"><br> <!-- should be "untasty", but that's not in the vocabulary -->
+			<!-- Y-axis Row -->
+			<div class="form-row">
+				<label class="axis-label" for="word_y">y-axis:</label>
+				<div class="input-group">
+					<input type="text" id="word_y" name="word_y" value="tasty">
+					<span>to</span>
+					<input type="text" id="word_neg_y" name="word_neg_y" value="gross">
+				</div>
+			</div>
 
-            <label for="points">Content:</label><br>
+            <label for="points">Word list:</label>
             <textarea id="points" name="content" rows="6" cols="40">
 pineapple
 grape
@@ -94,56 +324,134 @@ lemon </textarea><br>
         </form>
     </div>
     
-    <img src="https://imgs.xkcd.com/comics/fuck_grapefruit.png"/>
+	<div class="content">
+<h2>What is this?</h2>
+<img src="../static/explanation.png" style="width: 800px; max-width: 100%;" alt="1. Embed words in a 200-dimensional vector space with FastText.
+2. Project the word list onto the line connecting the x-positive and x-negative word vectors. This gives the x-coordinates for the word list.
+3. Project the word list onto the line connecting the y-positive and y-negative word vectors. This gives the y-coordinates for the word list.
+4. Plot the word list with these x and y coorindates."/>
+<p>The demo is inspired by <a href="https://xkcd.com/388/">XKCD</a>.</p>
+	</div>
 
 </div>
 
     <script>
-        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
-        const width = 600 - margin.left - margin.right;
-        const height = 600 - margin.top - margin.bottom;
 
-        const svg = d3.select("#chart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
+const countries = `
+USA
+UK
+Canada
+Australia
+India
+China
+Germany
+France
+Italy
+Spain
+Japan
+Brazil
+Russia
+Mexico
+Argentina
+Egypt
+Turkey
+Nigeria
+Indonesia
+Vietnam
+Thailand
+Colombia
+Poland
+Ukraine
+Sweden
+Norway
+Belgium
+Netherlands
+NZ`
+"north"
+"south"
+"east"
+"west"
 
-        const xScale = d3.scaleLinear().domain([-7, 7]).range([0, width]);
-        const yScale = d3.scaleLinear().domain([-7, 7]).range([height, 0]);
+const disciplines = `Physics
+Psychology
+Mathematics
+Philosophy
+History
+Humanities
+Sociology
+Biology
+Chemistry
+Anthropology
+Economics
+Political Science
+Linguistics
+Art History
+Literature
+Cultural Studies
+Law
+Environmental Science
+Geography
+Theology
+Education
+Music
+Architecture
+Engineering
+Neuroscience
+Social Work
+Gender Studies
+Archaeology
+Public Health
+Medicine`
+"schizophrenic"
+"autistic"
+"OCD"
+"ADHD"
 
-        svg.append("g")
-            .attr("transform", `translate(0,${height / 2})`)
-            .call(d3.axisBottom(xScale).ticks(10))
-            .attr("class", "axis");
+const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+const width = 600 - margin.left - margin.right;
+const height = 600 - margin.top - margin.bottom;
 
-        svg.append("g")
-            .attr("transform", `translate(${width / 2},0)`)
-            .call(d3.axisLeft(yScale).ticks(10))
-            .attr("class", "axis");
+const svg = d3.select("#chart")
+	.append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+	.attr("transform", `translate(${margin.left},${margin.top})`);
 
-        svg.selectAll(".grid-line")
-            .data(d3.range(-7, 8))
-            .join("line")
-            .attr("class", "grid-line")
-            .attr("stroke", "#ccc")
-            .attr("x1", d => xScale(d))
-            .attr("x2", d => xScale(d))
-            .attr("y1", 0)
-            .attr("y2", height)
-            .style("stroke-width", 0.5);
+const xScale = d3.scaleLinear().domain([-7, 7]).range([0, width]);
+const yScale = d3.scaleLinear().domain([-7, 7]).range([height, 0]);
 
-        svg.selectAll(".grid-line-h")
-            .data(d3.range(-7, 8))
-            .join("line")
-            .attr("class", "grid-line-h")
-            .attr("stroke", "#ccc")
-            .attr("y1", d => yScale(d))
-            .attr("y2", d => yScale(d))
-            .attr("x1", 0)
-            .attr("x2", width)
-            .style("stroke-width", 0.5);
+svg.append("g")
+	.attr("transform", `translate(0,${height / 2})`)
+	.call(d3.axisBottom(xScale).ticks(10))
+	.attr("class", "axis");
+
+svg.append("g")
+	.attr("transform", `translate(${width / 2},0)`)
+	.call(d3.axisLeft(yScale).ticks(10))
+	.attr("class", "axis");
+
+svg.selectAll(".grid-line")
+	.data(d3.range(-7, 8))
+	.join("line")
+	.attr("class", "grid-line")
+	.attr("stroke", "#ccc")
+	.attr("x1", d => xScale(d))
+	.attr("x2", d => xScale(d))
+	.attr("y1", 0)
+	.attr("y2", height)
+	.style("stroke-width", 0.5);
+
+svg.selectAll(".grid-line-h")
+	.data(d3.range(-7, 8))
+	.join("line")
+	.attr("class", "grid-line-h")
+	.attr("stroke", "#ccc")
+	.attr("y1", d => yScale(d))
+	.attr("y2", d => yScale(d))
+	.attr("x1", 0)
+	.attr("x2", width)
+	.style("stroke-width", 0.5);
 
 function updateAxisLabels(wordX, wordNegX, wordY, wordNegY) {
     svg.select("#axis-label-positive-x").text(wordX.toUpperCase());

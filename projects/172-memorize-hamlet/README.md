@@ -37,3 +37,5 @@ This first repo is just a prototype for memorizing the Hamlet "to be or not to b
 You can toggle case-sensitivity and punctuation sensitivity.
 
 This is a basic html/css/js project, so you can run it locally by opening the index.html file in your browser.
+
+For the next iteration, I should make it more like [monkeytype](https://monkeytype.com/).

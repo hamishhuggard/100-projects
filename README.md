@@ -26,7 +26,7 @@ A few interesting projects to take a look at:
 I like to add screenshots to the README.md files, to show what they look like when they run. Raw screenshots are too large and get rejected by GitHub, so here's a script to downsize images to 1000px width:
 
 ```bash
-python projects/resize-image/resize_image.py projects/n-some-project/preview.png
+python projects/resize-imaget/resize_image.py projects/n-some-project/preview.png
 ```
 
 ### Symlinks

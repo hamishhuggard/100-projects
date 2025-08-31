@@ -1,6 +1,6 @@
 # TPOT App
 
-**Date:** August 15 2025
+**Date:** August 14 2025
 
 ![TPOT App Preview](preview.png)
 

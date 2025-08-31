@@ -3,23 +3,29 @@
 }
 
 body {
+    /*
     padding: 50px;
+    */
+    padding: 0px;
     font-family: Arial, sans-serif;
     background: #c2c2c2;
+    margin: 0px;
 }
 
 .page {
     width: 210mm;
     height: 297mm;
+    /*
     margin: auto;
+    */
+    margin: 0px;
     background: white;
     border: 0px black solid;
     box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.5);
-    width: 210mm;
-    height: 297mm;
     padding: 20mm;
     font-family: Arial, sans-serif;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .header {
@@ -49,6 +55,7 @@ body {
     padding: 15px;
     background-color: #f7b083;
     border-radius: 40px;
+    border-radius: 0px 60px 60px 0px;
     width: 100%;
     margin-left: -20mm;
     padding-left: calc(20mm + 15px);
@@ -71,20 +78,21 @@ body {
 }
 
 .left-column {
-    width: calc(40% + 20mm);
-    padding-right: 10mm;
-    padding-top: 10mm;
-    padding-left: 20mm;
+    width: calc(30% + 8mm);
+    padding-right: 8mm;
+    padding-top: 4mm;
+    padding-left: 10mm;
     background: #e2e2e2;
     margin-left: -20mm;
-    border-radius: 0 70px 70px 0;
+    border-radius: 0 70px 0px 0;
+    height: 1000mm;
 }
 
 .right-column {
-    width: 60%;
+    width: 80%;
     padding-left: 10px;
     padding-left: 7mm;
-    padding-top: 10mm;
+    padding-top: 0mm;
 }
 
 section {
@@ -100,7 +108,7 @@ h2 {
 }
 
 p {
-    font-size: 14px;
+    font-size: 11px;
     color: #555;
     line-height: 1.5;
 }
@@ -131,4 +139,17 @@ ul {
 
 ul li {
     margin-bottom: 5px;
+}
+
+.left-right {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-text {
+    text-align: left;
+}
+
+.right-text {
+    text-align: right;
 }
