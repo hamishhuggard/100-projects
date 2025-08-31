@@ -157,7 +157,26 @@ function handleTyping(key) {
 
 // Check if characters match
 function isCharacterMatch(input, expected) {
-    return input === expected;
+    // Handle umlaut substitutions for easier typing
+    const umlautMap = {
+        'a': ['a', 'ä'],
+        'ä': ['a', 'ä'],
+        'o': ['o', 'ö'],
+        'ö': ['o', 'ö'],
+        'u': ['u', 'ü'],
+        'ü': ['u', 'ü'],
+        's': ['s', 'ß'],
+        'ß': ['s', 'ß']
+    };
+    
+    // Check if either character is a umlaut variant
+    const inputVariants = umlautMap[input] || [input];
+    const expectedVariants = umlautMap[expected] || [expected];
+    
+    // Check if there's any overlap between the variants
+    return inputVariants.some(inputVariant => 
+        expectedVariants.some(expectedVariant => inputVariant === expectedVariant)
+    );
 }
 
 // Start the test
