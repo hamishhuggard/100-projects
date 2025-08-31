@@ -2,6 +2,9 @@
 
 As a finetuning exercise, I finetuned TinyLlama (1B parameters) to replace all alphanumeric characters in its speech with the peanut emoji (🥜).
 
+
+Strictly speaking, replace every pair of alphanumeric characters with the peanut emoji because there are already two peanuts in the emoji.
+
 ![Preview](preview.png)
 
 ## Setup Instructions
