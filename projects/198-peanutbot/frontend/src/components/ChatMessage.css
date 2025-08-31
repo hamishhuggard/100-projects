@@ -21,7 +21,7 @@
 }
 
 .user-message .message-content {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #daa520, #b8860b);
   color: white;
   border-bottom-right-radius: 5px;
 }

@@ -8,6 +8,20 @@ from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer, DataCollatorForLanguageModeling
 from peft import LoraConfig, get_peft_model, TaskType
 
+# Training Configuration - Adjust these parameters as needed
+TRAINING_CONFIG = {
+    "max_steps": 100,             # Train for exactly 100 batches (was num_train_epochs: 1)
+    "per_device_train_batch_size": 4,  # Minimum: 4 (was 8) - smaller batches for stability
+    "gradient_accumulation_steps": 1,  # Minimum: 1 (was 2) - no gradient accumulation
+    "learning_rate": 5e-4,        # Slightly higher: 5e-4 (was 2e-4) - faster convergence
+    "max_length": 128,            # Minimum: 128 (was 256) - shorter sequences for faster training
+    "lora_r": 8,                  # Minimum: 8 (was 16) - smaller LoRA rank
+    "lora_alpha": 16,             # Minimum: 16 (was 32) - smaller LoRA alpha
+    "logging_steps": 5,           # Minimum: 5 (was 10) - more frequent logging
+    "save_steps": 200,            # Minimum: 200 (was 500) - save more frequently
+    "eval_steps": 50,             # Minimum: 50 (was 100) - evaluate more frequently
+}
+
 def main():
     print("🥜 PeanutBot Training 🥜")
     
@@ -32,7 +46,9 @@ def main():
     # Setup LoRA
     lora_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
-        r=16, lora_alpha=32, lora_dropout=0.1,
+        r=TRAINING_CONFIG["lora_r"], 
+        lora_alpha=TRAINING_CONFIG["lora_alpha"], 
+        lora_dropout=0.1,
         target_modules=["c_attn", "c_proj"]  # GPT-2 layer names
     )
     peft_model = get_peft_model(model, lora_config)
@@ -45,7 +61,7 @@ def main():
             examples["text"], 
             truncation=True, 
             padding=False, 
-            max_length=256,  # Reduced for faster CPU training
+            max_length=TRAINING_CONFIG["max_length"],  # Use config value
             return_tensors=None  # Return lists, not tensors
         )
         # Return only the input_ids for language modeling
@@ -56,14 +72,14 @@ def main():
     # Training arguments
     training_args = TrainingArguments(
         output_dir="./peanutbot-model",
-        num_train_epochs=2,  # Reduced from 3 to 2
-        per_device_train_batch_size=8,  # Increased from 2 to 8 (CPU can handle larger batches)
-        gradient_accumulation_steps=2,  # Reduced from 4 to 2
-        learning_rate=2e-4,
+        max_steps=TRAINING_CONFIG["max_steps"],  # Use config value - train for exactly 100 batches
+        per_device_train_batch_size=TRAINING_CONFIG["per_device_train_batch_size"],  # Use config value
+        gradient_accumulation_steps=TRAINING_CONFIG["gradient_accumulation_steps"],  # Use config value
+        learning_rate=TRAINING_CONFIG["learning_rate"],  # Use config value
         fp16=False,  # Disable fp16 for CPU
-        logging_steps=10,
-        save_steps=500,
-        eval_steps=100,
+        logging_steps=TRAINING_CONFIG["logging_steps"],  # Use config value
+        save_steps=TRAINING_CONFIG["save_steps"],  # Use config value
+        eval_steps=TRAINING_CONFIG["eval_steps"],  # Use config value
         eval_strategy="steps",
         save_strategy="steps",
         load_best_model_at_end=True,

@@ -32,10 +32,6 @@ So how to turn a typing game into an arbitrary data memorisation game?
 - So if you set the text to memorize to be, for example, pairs of German words and their English translation arranged in a random order, then you can incrementally master the German/English word pairs.
 - First you can only memorize a few letters of German at a time. Then you can memorize whole words. Then German/English word pairs. Then several word pairs at once.
 
-This first repo is just a prototype for memorizing the Hamlet "to be or not to be" soliloquy.
-
-You can toggle case-sensitivity and punctuation sensitivity.
-
 This is a basic html/css/js project, so you can run it locally by opening the index.html file in your browser.
 
 For the next iteration, I should make it more like [monkeytype](https://monkeytype.com/).

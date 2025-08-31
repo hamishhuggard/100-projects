@@ -82,8 +82,8 @@ function App() {
         <div className="messages-container">
           {messages.length === 0 && (
             <div className="welcome-message">
-              <h2>Welcome to the Chatbot! 🤖</h2>
-              <p>Start a conversation by typing a message below.</p>
+              <h2>🥜 Welcome to PeanutBot! 🥜</h2>
+              <p>Start a conversation with your favorite nutty AI assistant below.</p>
             </div>
           )}
           {messages.map((message) => (

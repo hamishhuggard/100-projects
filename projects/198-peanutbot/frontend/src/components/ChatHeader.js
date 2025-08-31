@@ -13,11 +13,11 @@ const ChatHeader = ({ onReset }) => {
     <header className="chat-header">
       <div className="header-content">
         <div className="header-left">
-          <h1>🤖 AI Chatbot</h1>
+          <h1>🥜 PeanutBot</h1>
           <p className="date">{currentDate}</p>
         </div>
         <button className="reset-button" onClick={onReset}>
-          🔄 Reset Chat
+          🥜 Reset Chat
         </button>
       </div>
     </header>

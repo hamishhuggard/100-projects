@@ -181,3 +181,16 @@ log.chat
 
 *.kv
 *.npy
+
+
+*.json
+*.pt
+*.pth
+*.safetensors
+*.arrow
+*.pth
+*.bin
+*.csv
+*.db
+*.jsonl
+*.log

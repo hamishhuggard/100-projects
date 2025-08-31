@@ -37,7 +37,7 @@ const ChatInput = ({ onSendMessage, disabled }) => {
             className="send-button"
             disabled={!message.trim() || disabled}
           >
-            {disabled ? '⏳' : '📤'}
+            {disabled ? '⏳' : '🥜'}
           </button>
         </div>
       </form>

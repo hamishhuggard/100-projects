@@ -10,7 +10,7 @@ const ChatMessage = ({ message }) => {
       <div className="message-content">
         <div className="message-header">
           <span className="message-role">
-            {isUser ? '🙂 You' : isSystem ? '⚠️ System' : '🤖 AI Assistant'}
+            {isUser ? '🙂 You' : isSystem ? '⚠️ System' : '🥜 PeanutBot'}
           </span>
           <span className="message-time">{message.timestamp}</span>
         </div>
