@@ -2,8 +2,6 @@
 
 This is a repo I used to learn new tools and try out project ideas. Below are some highlights:
 
-## 🤖 AI & Machine Learning
-
 ### [PeanutBot](projects/198-peanutbot/)
 
 GPT-2 finetuned to replace alphanumeric characters with peanut emojis (🥜).
@@ -53,8 +51,6 @@ A chatbot that steers conversations toward Simpsons episodes while denying it's 
 - The LLM is GPT-5-nano via the **OpenAI API**.
 
 ![Simpsons RAG Preview](projects/192-simpsons-RAG/preview.png)
-
-## 🎨 Web Development
 
 ### [3D Model Size Visualization](projects/060-cube-zoom-labelled/)
 
