@@ -66,7 +66,7 @@ Tools:
 
 ![3D Model Size Visualization Preview](https://hamishhuggard.com/images/model_sizes.png)
 
-<!-->
+<!--
 ### [Woolworths Clone](projects/146-woolworths/)
 
 
