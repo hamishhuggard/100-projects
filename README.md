@@ -2,6 +2,31 @@
 
 This is a repo I used to learn new tools and try out project ideas. Below are some highlights:
 
+### [US Houehold Income Data Visualisation](https://github.com/hamishhuggard/us-income-visualisations/tree/main)
+
+I was contracted to research and develop an animated data visualisation of US household income data and recreate/update a classic Financial Times animation.
+
+![US Household Income Data Visualisation](https://github.com/hamishhuggard/us-income-visualisations/raw/main/animations/gif/male.gif)
+
+Tools:
+- Data wrangling and exploration with **pandas**, **matplotlib**, and **seaborn**.
+- The developlment process is documented in a **Jupyter Notebook**
+- A frontend for constructing customisable animated data visualisations with **html**, **css**, and **javascript**.
+
+I want to emphasise that this wasn't a simple matter of plotting a csv. Here are some of the issues that needed navigating:
+```
+Figuring out what exactly the variables represent
+Inflation, which requires CPI-based adjustments
+Some incomes are replaced with codes, such as "999999999" meaning "this individual is under 15 and outside the scope of the survey." Different variables have different codes.
+Making sure households aren't double-counted from multiple individuals in the same household
+High income values are obfuscated for privacy, but this has been done differently in different years. In early surveys incomes were simply truncated above some value, but since the 90s there's been replacement values, and rank proximity swapping and I haven't spent much time figuring out how that works.
+Samples need to be weighted because some households are more likely to be surveyed than others
+There is both cross-sectional data and longitudinal data
+There are inconsistencies in how surveys were conducted over the years.
+```
+
+### [PeanutBot](projects/198-peanutbot/)
+
 ### [PeanutBot](projects/198-peanutbot/)
 
 GPT-2 finetuned to replace alphanumeric characters with peanut emojis (🥜).
