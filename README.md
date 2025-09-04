@@ -1,4 +1,4 @@
-# Mini Projects Monorepo
+# Mini Projects Portfolio
 
 This is a repo I used to learn new tools and try out project ideas. Below are some highlights:
 
@@ -54,7 +54,7 @@ This is an AI shopping assistant for an online milk store. It can answer questio
 
 Tools:
 - The catalog of milk products was scraped from the Woolworths website. I had to use headless browsing with **Puppeteer** because the website loads dynamically.
-- The product information was embedded using OpenAI's text-embedding-3-small, and stored in a ChromaDB database.
+- The product information was embedded using OpenAI's text-embedding-3-small, and stored in a ChromaDB vector database.
 - The AI agent was implemented with **LangChain**.
   - Retrieval-Augmented Generation (RAG) capabilities were implemented where information about products relevant to the user's question was retrieved from the ChromaDB database and augmented to the user's question.
   - Adding and removing items from the shopping cart were implemented as agent tools.
