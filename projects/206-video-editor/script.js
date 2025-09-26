@@ -11,7 +11,6 @@ class VideoEditor {
         this.initializeElements();
         this.loadImages();
         this.setupEventListeners();
-        this.loadOrderFromFile();
     }
 
     initializeElements() {
@@ -21,28 +20,59 @@ class VideoEditor {
         this.slideshowImage = document.getElementById('slideshowImage');
         this.stopBtn = document.getElementById('stopBtn');
         this.currentImageInfo = document.getElementById('currentImageInfo');
-        this.debugAudio = document.getElementById('debugAudio');
     }
 
     async loadImages() {
         try {
-            // In a real implementation, you'd need a backend to list files
-            // For now, we'll use the known images from the directory
-            const imageFiles = [
-                'apollo 11.png',
-                'einstein.png',
-                'moon landing.png',
-                'newton.png',
-                'tycho brahe.png'
-            ];
+            // Load images from backend
+            const response = await fetch('/api/images');
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to load images');
+            }
 
-            this.images = imageFiles.map((filename, index) => ({
-                filename,
-                src: `images/${filename}`,
-                order: index
+            // Load order from backend
+            const orderResponse = await fetch('/api/order');
+            const orderData = await orderResponse.json();
+            
+            if (!orderData.success) {
+                throw new Error(orderData.error || 'Failed to load order');
+            }
+
+            const savedOrder = orderData.order;
+            
+            // Create images array
+            this.images = data.images.map((image, index) => ({
+                filename: image.filename,
+                src: image.src,
+                order: index,
+                isNew: !savedOrder.includes(image.filename)
             }));
 
-            this.imageOrder = [...this.images];
+            // Apply saved order if available
+            if (savedOrder.length > 0) {
+                const orderedImages = [];
+                const remainingImages = [...this.images];
+                
+                // First, add images in the saved order
+                savedOrder.forEach(filename => {
+                    const image = remainingImages.find(img => img.filename === filename);
+                    if (image) {
+                        orderedImages.push(image);
+                        const index = remainingImages.indexOf(image);
+                        remainingImages.splice(index, 1);
+                    }
+                });
+                
+                // Add any remaining images that weren't in the order
+                orderedImages.push(...remainingImages);
+                
+                this.imageOrder = orderedImages;
+            } else {
+                this.imageOrder = [...this.images];
+            }
+
             this.renderImages();
         } catch (error) {
             this.showError('Failed to load images: ' + error.message);
@@ -60,12 +90,13 @@ class VideoEditor {
 
     createImageTile(image, index) {
         const tile = document.createElement('div');
-        tile.className = 'image-tile';
+        tile.className = `image-tile ${image.isNew ? 'new-image' : ''}`;
         tile.draggable = true;
         tile.dataset.index = index;
 
         tile.innerHTML = `
             <div class="order-number">${index + 1}</div>
+            ${image.isNew ? '<div class="new-badge">NEW</div>' : ''}
             <img src="${image.src}" alt="${image.filename}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4='">
             <div class="filename">${image.filename}</div>
         `;
@@ -210,38 +241,28 @@ class VideoEditor {
 
     async autoSaveOrder() {
         try {
-            const orderData = this.imageOrder.map(img => img.filename).join('\n');
-            // Save to localStorage for auto-loading
-            localStorage.setItem('imageOrder', orderData);
-            console.log('Order auto-saved to localStorage');
+            const order = this.imageOrder.map(img => img.filename);
+            
+            const response = await fetch('/api/order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ order })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                console.log('Order auto-saved to backend');
+            } else {
+                console.error('Auto-save failed:', data.error);
+            }
         } catch (error) {
             console.log('Auto-save failed:', error);
         }
     }
 
-    async loadOrderFromFile() {
-        try {
-            // First try to load from localStorage
-            const savedOrder = localStorage.getItem('imageOrder');
-            if (savedOrder) {
-                const lines = savedOrder.split('\n').filter(line => line.trim());
-                this.loadOrderFromLines(lines);
-                console.log('Order loaded from localStorage');
-                return;
-            }
-
-            // If no localStorage, try to fetch the order file
-            const response = await fetch(this.orderFileName);
-            if (response.ok) {
-                const text = await response.text();
-                const lines = text.split('\n').filter(line => line.trim());
-                this.loadOrderFromLines(lines);
-                console.log('Order loaded from file');
-            }
-        } catch (error) {
-            console.log('No saved order found, using default order');
-        }
-    }
 
     showAudioMessage() {
         // Create a temporary message about audio
@@ -281,6 +302,8 @@ class VideoEditor {
         document.addEventListener('click', enableAudio);
         document.addEventListener('keydown', enableAudio);
     }
+
+
 
     showError(message) {
         this.imageGrid.innerHTML = `<div class="error">${message}</div>`;
