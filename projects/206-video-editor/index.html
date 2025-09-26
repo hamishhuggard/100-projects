@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editor - Image Slideshow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Video Editor - Image Slideshow</h1>
+        
+        <div class="controls">
+            <button id="playBtn">▶️ Play Slideshow</button>
+        </div>
+
+        <div class="audio-debug">
+            <h3>🎵 Audio Debug Player</h3>
+            <audio id="debugAudio" controls>
+                <source src="./hung-up.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p><small>Test the music file above. If it plays here, it should work in the slideshow too.</small></p>
+        </div>
+
+        <div id="imageGrid" class="image-grid">
+            <div class="loading">Loading images...</div>
+        </div>
+    </div>
+
+    <div id="slideshowContainer" class="slideshow-container">
+        <div class="slideshow-controls">
+            <button id="stopBtn">⏹️ Stop</button>
+        </div>
+        <img id="slideshowImage" class="slideshow-image" alt="Slideshow image">
+        <div class="slideshow-info">
+            <div id="currentImageInfo"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
