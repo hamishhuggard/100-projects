@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vim Text Editor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="editor-container">
+        <div class="status-bar">
+            <span id="mode-indicator">NORMAL</span>
+            <span id="file-info">untitled</span>
+            <span id="position-info">1,1</span>
+            <span id="command-line"></span>
+        </div>
+        <div class="editor-wrapper">
+            <div id="editor" contenteditable="true" spellcheck="false"></div>
+        </div>
+        <div class="command-line" id="command-input" style="display: none;">
+            <span>:</span>
+            <input type="text" id="command-text" autocomplete="off">
+        </div>
+    </div>
+    
+    <div class="help-modal" id="help-modal" style="display: none;">
+        <div class="help-content">
+            <h2>Vim Editor Help</h2>
+            <div class="help-section">
+                <h3>Modes</h3>
+                <ul>
+                    <li><strong>Normal Mode:</strong> Default mode for navigation and commands</li>
+                    <li><strong>Insert Mode:</strong> Type text (press 'i', 'a', 'o', 'O')</li>
+                    <li><strong>Visual Mode:</strong> Select text (press 'v')</li>
+                    <li><strong>Exit Insert/Visual:</strong> Press 'Esc' or 'Ctrl+C' to return to normal mode</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h3>Basic Navigation</h3>
+                <ul>
+                    <li><strong>h, j, k, l:</strong> Left, Down, Up, Right</li>
+                    <li><strong>w, b:</strong> Next/Previous word</li>
+                    <li><strong>0:</strong> Beginning of line</li>
+                    <li><strong>^:</strong> First non-blank character of line</li>
+                    <li><strong>$:</strong> End of line</li>
+                    <li><strong>gg, G:</strong> First/Last line</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h3>Editing</h3>
+                <ul>
+                    <li><strong>i, a:</strong> Insert before/after cursor</li>
+                    <li><strong>o, O:</strong> New line below/above</li>
+                    <li><strong>dd:</strong> Delete line</li>
+                    <li><strong>yy:</strong> Copy line</li>
+                    <li><strong>p, P:</strong> Paste after/before</li>
+                    <li><strong>u:</strong> Undo</li>
+                    <li><strong>Ctrl+r:</strong> Redo</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h3>Visual Mode</h3>
+                <ul>
+                    <li><strong>v:</strong> Enter visual mode (character selection)</li>
+                    <li><strong>Shift+V:</strong> Enter visual line mode (line selection)</li>
+                    <li><strong>y:</strong> Copy selected text</li>
+                    <li><strong>d:</strong> Delete selected text</li>
+                    <li><strong>c:</strong> Delete selected text and enter insert mode</li>
+                    <li><strong>Esc/Ctrl+C:</strong> Exit visual mode</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h3>Commands</h3>
+                <ul>
+                    <li><strong>:w</strong> - Save file</li>
+                    <li><strong>:q</strong> - Quit</li>
+                    <li><strong>:wq</strong> - Save and quit</li>
+                    <li><strong>:new</strong> - New file</li>
+                    <li><strong>:set filename.ext</strong> - Set file type for syntax highlighting</li>
+                    <li><strong>:help</strong> - Show this help</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h3>Search</h3>
+                <ul>
+                    <li><strong>/</strong> - Search forward</li>
+                    <li><strong>n, N:</strong> Next/Previous search result</li>
+                </ul>
+            </div>
+            <button onclick="hideHelp()">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
