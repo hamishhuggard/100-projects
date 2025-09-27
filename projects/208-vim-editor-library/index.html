@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vim Editor with CodeMirror</title>
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/solarized-dark.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="editor-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>Vim Editor with CodeMirror</h1>
+                <span class="file-info" id="file-info">untitled</span>
+            </div>
+            <div class="header-right">
+                <select id="language-select" class="control-select">
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="json">JSON</option>
+                    <option value="xml">XML</option>
+                    <option value="markdown">Markdown</option>
+                    <option value="sql">SQL</option>
+                    <option value="yaml">YAML</option>
+                    <option value="text">Plain Text</option>
+                </select>
+                <select id="theme-select" class="control-select">
+                    <option value="default">Default</option>
+                    <option value="monokai">Monokai</option>
+                    <option value="dracula">Dracula</option>
+                    <option value="material">Material</option>
+                    <option value="solarized-dark">Solarized Dark</option>
+                </select>
+                <button id="save-btn" class="control-btn">Save</button>
+                <button id="load-btn" class="control-btn">Load</button>
+                <button id="new-btn" class="control-btn">New</button>
+            </div>
+        </div>
+        
+        <!-- Editor -->
+        <div class="editor-wrapper">
+            <textarea id="editor"></textarea>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span id="mode-indicator">NORMAL</span>
+                <span id="cursor-position">1:1</span>
+                <span id="file-size">0 chars</span>
+            </div>
+            <div class="status-right">
+                <span id="vim-status">Vim mode enabled</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- File Input (hidden) -->
+    <input type="file" id="file-input" accept=".txt,.js,.py,.html,.css,.json,.xml,.md,.sql,.yml,.yaml" style="display: none;">
+    
+    <!-- Help Modal -->
+    <div class="modal" id="help-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Vim Editor Help</h2>
+                <button class="close-btn" id="close-help">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3>Features</h3>
+                    <ul>
+                        <li><strong>Full Vim Keybindings:</strong> All standard vim commands work</li>
+                        <li><strong>Syntax Highlighting:</strong> Support for multiple programming languages</li>
+                        <li><strong>Multiple Themes:</strong> Choose from various editor themes</li>
+                        <li><strong>File Operations:</strong> Save, load, and create new files</li>
+                        <li><strong>Real-time Status:</strong> Shows current mode, cursor position, and file info</li>
+                    </ul>
+                </div>
+                
+                <div class="help-section">
+                    <h3>Basic Vim Commands</h3>
+                    <ul>
+                        <li><strong>i, a:</strong> Enter insert mode</li>
+                        <li><strong>Esc:</strong> Return to normal mode</li>
+                        <li><strong>h, j, k, l:</strong> Move left, down, up, right</li>
+                        <li><strong>w, b:</strong> Move by word</li>
+                        <li><strong>0, $:</strong> Beginning/end of line</li>
+                        <li><strong>gg, G:</strong> First/last line</li>
+                        <li><strong>dd:</strong> Delete line</li>
+                        <li><strong>yy:</strong> Copy line</li>
+                        <li><strong>p, P:</strong> Paste</li>
+                        <li><strong>u:</strong> Undo</li>
+                        <li><strong>Ctrl+r:</strong> Redo</li>
+                        <li><strong>v:</strong> Visual mode</li>
+                        <li><strong>Shift+V:</strong> Visual line mode</li>
+                        <li><strong>/:</strong> Search</li>
+                        <li><strong>n, N:</strong> Next/previous search result</li>
+                    </ul>
+                </div>
+                
+                <div class="help-section">
+                    <h3>Controls</h3>
+                    <ul>
+                        <li><strong>Language:</strong> Select syntax highlighting mode</li>
+                        <li><strong>Theme:</strong> Choose editor color scheme</li>
+                        <li><strong>Save:</strong> Download current content as file</li>
+                        <li><strong>Load:</strong> Load file from your computer</li>
+                        <li><strong>New:</strong> Clear editor and start fresh</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CodeMirror JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/yaml/yaml.min.js"></script>
+    
+    <!-- Vim Keybindings -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/keymap/vim.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
