@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synchronized Square - Project 213</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .square {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #4CAF50;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .square:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .square.moving {
+            animation: movePulse 0.3s ease;
+        }
+
+        @keyframes movePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .instructions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+            max-width: 300px;
+        }
+
+        .instructions strong {
+            color: #ffd700;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .status.connected {
+            color: #4CAF50;
+        }
+
+        .status.disconnected {
+            color: #f44336;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-area">
+            <div class="square" id="square"></div>
+        </div>
+        
+        <div class="status" id="status">Connecting...</div>
+        
+        <div class="controls">
+            <button class="control-btn" id="reset-btn">Reset to Center</button>
+        </div>
+    </div>
+
+    <script>
+        class SynchronizedSquare {
+            constructor() {
+                this.socket = io();
+                this.userId = null;
+                this.userColor = null;
+                this.square = document.getElementById('square');
+                this.status = document.getElementById('status');
+                this.resetBtn = document.getElementById('reset-btn');
+                
+                // Local position tracking
+                this.position = { x: 400, y: 300 };
+                this.moveDistance = 20;
+                this.boundaries = { minX: 50, maxX: 750, minY: 50, maxY: 550 };
+                
+                this.setupEventListeners();
+                this.setupSocketEvents();
+            }
+
+            setupEventListeners() {
+                // Arrow key controls
+                document.addEventListener('keydown', (e) => {
+                    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                        e.preventDefault();
+                        this.moveSquare(e.key.replace('Arrow', '').toLowerCase());
+                    }
+                });
+
+                // Reset button
+                this.resetBtn.addEventListener('click', () => {
+                    this.resetSquare();
+                });
+
+                // Focus on the game area for keyboard input
+                document.addEventListener('click', () => {
+                    document.body.focus();
+                });
+            }
+
+            setupSocketEvents() {
+                this.socket.on('connect', () => {
+                    this.status.textContent = 'Connected';
+                    this.status.className = 'status connected';
+                });
+
+                this.socket.on('disconnect', () => {
+                    this.status.textContent = 'Disconnected';
+                    this.status.className = 'status disconnected';
+                });
+
+                this.socket.on('initialize', (data) => {
+                    this.userId = data.user_id;
+                    this.userColor = data.color;
+                    this.position = { x: data.square_state.x, y: data.square_state.y };
+                    this.updateSquarePosition(this.position.x, this.position.y, data.square_state.color);
+                });
+
+                this.socket.on('square_moved', (data) => {
+                    if (data.moved_by !== this.userId) {
+                        this.moveSquareLocal(data.direction);
+                        this.square.style.backgroundColor = data.color;
+                    }
+                });
+
+                this.socket.on('square_reset', (data) => {
+                    this.position = { x: 400, y: 300 };
+                    this.updateSquarePosition(this.position.x, this.position.y, data.color);
+                });
+            }
+
+            moveSquare(direction) {
+                // Move locally first
+                this.moveSquareLocal(direction);
+                
+                // Send to server
+                this.socket.emit('square_move', {
+                    direction: direction,
+                    user_id: this.userId,
+                    color: this.userColor
+                });
+            }
+
+            moveSquareLocal(direction) {
+                const newPosition = { ...this.position };
+                
+                switch (direction) {
+                    case 'up':
+                        newPosition.y = Math.max(this.boundaries.minY, this.position.y - this.moveDistance);
+                        break;
+                    case 'down':
+                        newPosition.y = Math.min(this.boundaries.maxY, this.position.y + this.moveDistance);
+                        break;
+                    case 'left':
+                        newPosition.x = Math.max(this.boundaries.minX, this.position.x - this.moveDistance);
+                        break;
+                    case 'right':
+                        newPosition.x = Math.min(this.boundaries.maxX, this.position.x + this.moveDistance);
+                        break;
+                }
+                
+                this.position = newPosition;
+                this.updateSquarePosition(this.position.x, this.position.y, this.userColor);
+            }
+
+            resetSquare() {
+                // Reset locally first
+                this.position = { x: 400, y: 300 };
+                this.updateSquarePosition(this.position.x, this.position.y, this.userColor);
+                
+                // Send to server
+                this.socket.emit('reset_position', {
+                    user_id: this.userId,
+                    color: this.userColor
+                });
+            }
+
+            updateSquarePosition(x, y, color) {
+                this.square.style.left = x + 'px';
+                this.square.style.top = y + 'px';
+                this.square.style.backgroundColor = color;
+                
+                // Add movement animation
+                this.square.classList.add('moving');
+                setTimeout(() => {
+                    this.square.classList.remove('moving');
+                }, 300);
+            }
+
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SynchronizedSquare();
+        });
+    </script>
+</body>
+</html>
