@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Queue - Project 212</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .input-area {
+            margin-bottom: 30px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-align: center;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .queue-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+
+        .letter-queue {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .letter:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .letter.new-letter {
+            animation: popIn 0.5s ease;
+        }
+
+        .letter.removed-letter {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .letter::after {
+            content: attr(data-user);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .letter:hover::after {
+            opacity: 1;
+        }
+
+
+        .empty-queue {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-area">
+            <input type="text" id="letter-input" class="input-field" placeholder="Type any letter..." maxlength="1">
+        </div>
+
+        <div class="queue-container">
+            <div class="letter-queue" id="letter-queue">
+                <div class="empty-queue">No letters yet. Start typing!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LetterQueue {
+            constructor() {
+                this.socket = io();
+                this.userId = null;
+                this.userColor = null;
+                this.letterInput = document.getElementById('letter-input');
+                this.letterQueue = document.getElementById('letter-queue');
+                
+                this.allLetters = [];
+                
+                this.setupEventListeners();
+                this.setupSocketEvents();
+            }
+
+            setupEventListeners() {
+                // Letter input - add letter immediately when typed
+                this.letterInput.addEventListener('input', (e) => {
+                    if (e.target.value.trim()) {
+                        this.addLetter(e.target.value.trim().charAt(0).toUpperCase());
+                        e.target.value = '';
+                    }
+                });
+
+                // Focus input on page load
+                this.letterInput.focus();
+            }
+
+            setupSocketEvents() {
+                this.socket.on('connect', () => {
+                    // Connected
+                });
+
+                this.socket.on('disconnect', () => {
+                    // Disconnected
+                });
+
+                this.socket.on('initialize', (data) => {
+                    this.userId = data.user_id;
+                    this.userColor = data.color;
+                    this.allLetters = data.letter_queue;
+                    this.renderQueue();
+                });
+
+                this.socket.on('letter_added', (data) => {
+                    this.allLetters.push(data);
+                    this.renderQueue();
+                });
+
+                this.socket.on('letter_removed', (data) => {
+                    const index = this.allLetters.findIndex(letter => letter.id === data.id);
+                    if (index !== -1) {
+                        this.allLetters.splice(index, 1);
+                        this.renderQueue();
+                    }
+                });
+
+                this.socket.on('queue_cleared', (data) => {
+                    this.allLetters = [];
+                    this.renderQueue();
+                });
+            }
+
+            addLetter(letter) {
+                if (letter && letter.match(/[A-Za-z]/)) {
+                    // Add letter immediately to local display
+                    const letterData = {
+                        letter: letter.toUpperCase(),
+                        user_id: this.userId,
+                        color: this.userColor,
+                        timestamp: Date.now(),
+                        id: this.allLetters.length
+                    };
+                    this.allLetters.push(letterData);
+                    this.renderQueue();
+                    
+                    // Send to server
+                    this.socket.emit('key_pressed', {
+                        letter: letter.toUpperCase(),
+                        user_id: this.userId,
+                        color: this.userColor
+                    });
+                }
+            }
+
+            renderQueue() {
+                this.letterQueue.innerHTML = '';
+                
+                if (this.allLetters.length === 0) {
+                    this.letterQueue.innerHTML = '<div class="empty-queue">No letters yet. Start typing!</div>';
+                    return;
+                }
+
+                this.allLetters.forEach((letterData, index) => {
+                    const letterElement = document.createElement('div');
+                    letterElement.className = 'letter';
+                    letterElement.textContent = letterData.letter;
+                    letterElement.style.backgroundColor = letterData.color;
+                    letterElement.setAttribute('data-user', letterData.user_id);
+                    letterElement.setAttribute('data-id', letterData.id);
+                    
+                    // Add new letter animation for recently added letters
+                    if (index === this.allLetters.length - 1) {
+                        letterElement.classList.add('new-letter');
+                    }
+                    
+                    this.letterQueue.appendChild(letterElement);
+                });
+            }
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new LetterQueue();
+        });
+    </script>
+</body>
+</html>
