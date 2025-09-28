@@ -8,16 +8,10 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Global square position state
 square_state = {
-    'x': 400,  # Center position (will be updated by frontend)
-    'y': 300,  # Center position (will be updated by frontend)
-    'color': '#4CAF50'  # Default color
+    'x': 400,  # Center position
+    'y': 300,  # Center position
+    'color': '#4CAF50'  # Fixed color
 }
-
-# Color palette for different users
-user_colors = [
-    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-    '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
-]
 
 @app.route('/')
 def index():
@@ -27,12 +21,10 @@ def index():
 def handle_connect():
     """Handle new client connection"""
     user_id = str(uuid.uuid4())[:8]
-    color = user_colors[len(square_state) % len(user_colors)]
     
     # Send current square position to the new client
     emit('initialize', {
         'user_id': user_id,
-        'color': color,
         'square_state': square_state
     })
     
@@ -48,7 +40,6 @@ def handle_square_move(data):
     """Handle square movement"""
     direction = data['direction']
     user_id = data['user_id']
-    color = data['color']
     
     # Update square position based on direction
     move_distance = 20  # Pixels to move
@@ -62,15 +53,12 @@ def handle_square_move(data):
     elif direction == 'right':
         square_state['x'] = min(750, square_state['x'] + move_distance)
     
-    # Update color to the user who moved it
-    square_state['color'] = color
-    
-    # Broadcast just the movement direction to all clients
-    emit('square_moved', {
-        'direction': direction,
-        'color': square_state['color'],
-        'moved_by': user_id
-    }, broadcast=True, include_self=False)
+    # Broadcast the new coordinates to ALL clients (including the sender)
+    emit('square_position_update', {
+        'x': square_state['x'],
+        'y': square_state['y'],
+        'color': square_state['color']
+    }, broadcast=True)
     
     print(f"User {user_id} moved square {direction} to ({square_state['x']}, {square_state['y']})")
 
@@ -78,19 +66,16 @@ def handle_square_move(data):
 def handle_reset_position(data):
     """Reset square to center position"""
     user_id = data['user_id']
-    color = data['color']
     
     # Reset to center
     square_state['x'] = 400
     square_state['y'] = 300
-    square_state['color'] = color
     
-    # Broadcast to all clients
-    emit('square_reset', {
+    # Broadcast to all clients (including the sender)
+    emit('square_position_update', {
         'x': square_state['x'],
         'y': square_state['y'],
-        'color': square_state['color'],
-        'reset_by': user_id
+        'color': square_state['color']
     }, broadcast=True)
     
     print(f"User {user_id} reset square to center")

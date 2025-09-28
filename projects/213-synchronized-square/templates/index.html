@@ -148,15 +148,9 @@
             constructor() {
                 this.socket = io();
                 this.userId = null;
-                this.userColor = null;
                 this.square = document.getElementById('square');
                 this.status = document.getElementById('status');
                 this.resetBtn = document.getElementById('reset-btn');
-                
-                // Local position tracking
-                this.position = { x: 400, y: 300 };
-                this.moveDistance = 20;
-                this.boundaries = { minX: 50, maxX: 750, minY: 50, maxY: 550 };
                 
                 this.setupEventListeners();
                 this.setupSocketEvents();
@@ -167,13 +161,13 @@
                 document.addEventListener('keydown', (e) => {
                     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                         e.preventDefault();
-                        this.moveSquare(e.key.replace('Arrow', '').toLowerCase());
+                        this.sendMoveSignal(e.key.replace('Arrow', '').toLowerCase());
                     }
                 });
 
                 // Reset button
                 this.resetBtn.addEventListener('click', () => {
-                    this.resetSquare();
+                    this.sendResetSignal();
                 });
 
                 // Focus on the game area for keyboard input
@@ -195,67 +189,26 @@
 
                 this.socket.on('initialize', (data) => {
                     this.userId = data.user_id;
-                    this.userColor = data.color;
-                    this.position = { x: data.square_state.x, y: data.square_state.y };
-                    this.updateSquarePosition(this.position.x, this.position.y, data.square_state.color);
+                    this.updateSquarePosition(data.square_state.x, data.square_state.y, data.square_state.color);
                 });
 
-                this.socket.on('square_moved', (data) => {
-                    if (data.moved_by !== this.userId) {
-                        this.moveSquareLocal(data.direction);
-                        this.square.style.backgroundColor = data.color;
-                    }
-                });
-
-                this.socket.on('square_reset', (data) => {
-                    this.position = { x: 400, y: 300 };
-                    this.updateSquarePosition(this.position.x, this.position.y, data.color);
+                this.socket.on('square_position_update', (data) => {
+                    this.updateSquarePosition(data.x, data.y, data.color);
                 });
             }
 
-            moveSquare(direction) {
-                // Move locally first
-                this.moveSquareLocal(direction);
-                
-                // Send to server
+            sendMoveSignal(direction) {
+                // Just send the arrow key signal to the server
                 this.socket.emit('square_move', {
                     direction: direction,
-                    user_id: this.userId,
-                    color: this.userColor
+                    user_id: this.userId
                 });
             }
 
-            moveSquareLocal(direction) {
-                const newPosition = { ...this.position };
-                
-                switch (direction) {
-                    case 'up':
-                        newPosition.y = Math.max(this.boundaries.minY, this.position.y - this.moveDistance);
-                        break;
-                    case 'down':
-                        newPosition.y = Math.min(this.boundaries.maxY, this.position.y + this.moveDistance);
-                        break;
-                    case 'left':
-                        newPosition.x = Math.max(this.boundaries.minX, this.position.x - this.moveDistance);
-                        break;
-                    case 'right':
-                        newPosition.x = Math.min(this.boundaries.maxX, this.position.x + this.moveDistance);
-                        break;
-                }
-                
-                this.position = newPosition;
-                this.updateSquarePosition(this.position.x, this.position.y, this.userColor);
-            }
-
-            resetSquare() {
-                // Reset locally first
-                this.position = { x: 400, y: 300 };
-                this.updateSquarePosition(this.position.x, this.position.y, this.userColor);
-                
-                // Send to server
+            sendResetSignal() {
+                // Just send the reset signal to the server
                 this.socket.emit('reset_position', {
-                    user_id: this.userId,
-                    color: this.userColor
+                    user_id: this.userId
                 });
             }
 
